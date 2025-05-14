@@ -1,19 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Configuración de íconos (Nerd Fonts)
-ICON_WIFI=" "  # WiFi
-ICON_ETH=" "   # Ethernet
-ICON_OFF=" "   # Sin conexión
+# Íconos Nerd Font
+ICON_WIFI=" "   # WiFi
+ICON_ETH=" "    # Ethernet
+ICON_OFF=" "    # Sin conexión
 
-# Obtener la IP activa (WiFi o Ethernet)
-ACTIVE_IP=$(ip -4 addr show wlp0s20f3 2>/dev/null | grep -oP 'inet \K[\d.]+')
-[ -z "$ACTIVE_IP" ] && ACTIVE_IP=$(ip -4 addr show enp6s0 2>/dev/null | grep -oP 'inet \K[\d.]+')
+# Detectar la interfaz activa que no sea loopback (127.0.0.1)
+IFACE=$(ip -o -4 addr show up | awk '$4 !~ /^127\./ {print $2; exit}')
 
-# Determinar el tipo de conexión y mostrar resultado
-if ip link show wlp0s20f3 | grep -q "state UP" && [ -n "$ACTIVE_IP" ]; then
-    echo "$ICON_WIFI$ACTIVE_IP"
-elif ip link show enp6s0 | grep -q "state UP" && [ -n "$ACTIVE_IP" ]; then
-    echo "$ICON_ETH$ACTIVE_IP"
+# Obtener la IP asociada a esa interfaz
+if [[ -n "$IFACE" ]]; then
+    ACTIVE_IP=$(ip -o -4 addr show dev "$IFACE" | awk '{print $4}' | cut -d/ -f1)
+
+    # Mostrar icono según tipo de interfaz
+    if [[ "$IFACE" == wl* ]]; then
+        echo "$ICON_WIFI $ACTIVE_IP"
+    elif [[ "$IFACE" == en* || "$IFACE" == eth* ]]; then
+        echo "$ICON_ETH $ACTIVE_IP"
+    else
+        echo "$ACTIVE_IP"
+    fi
 else
-    echo "$ICON_OFF"
+    echo "$ICON_OFF Disconnected"
 fi
