@@ -11,7 +11,9 @@ autoload -Uz promptinit
 promptinit
 prompt adam1
 
+# Shell options
 setopt histignorealldups sharehistory
+setopt autocd       # <--- Activar autocd
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
@@ -48,8 +50,9 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # --- Manual configuration ---
 
-# PATH configuration: ensure Go binaries are always accessible
-export PATH=$PATH:$HOME/go/bin
+# PATH configuration: ensure user-local and Go binaries are always accessible
+# Prioritize $HOME/.local/bin so pipx/user-installed tools are found first.
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
 
 # Custom Aliases
 alias ll='lsd -lh --group-dirs=first'
@@ -63,11 +66,16 @@ alias catnl='batcat'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Plugins
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-#source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh-sudo/sudo.plugin.zsh
+# Plugins (verifica que las rutas existen en tu sistema)
+[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Opcional: descomenta si están instalados
+# [ -f /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ] && source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -f /usr/share/zsh-sudo/sudo.plugin.zsh ] && \
+  source /usr/share/zsh-sudo/sudo.plugin.zsh
 
 # Functions
 function mkt() {
@@ -135,5 +143,16 @@ bindkey "^[[3~" delete-char
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
-# Source Powerlevel10k theme
-source ~/.powerlevel10k/powerlevel10k.zsh-theme
+# Source Powerlevel10k theme if exists
+[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
+
+# Ensure pipx-created path is available for current user (useful si pipx creó algo)
+# pipx normalmente sugiere `pipx ensurepath`, pero añadir esto no hace daño
+# (esto no reemplaza a la línea de PATH de arriba, solo una referencia)
+# export PIPX_BIN="$HOME/.local/bin"
+
+# Fin del archivo
+# Cargar esquema de pywal al iniciar
+(cat ~/.cache/wal/sequences &)
+
+export PATH=$PATH:/usr/sbin
