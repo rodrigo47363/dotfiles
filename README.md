@@ -1,5 +1,6 @@
 # ⚙️ Dotfiles — Cross-Platform Dev Environment
 ### 💻 Advanced setup for Linux & Windows
+![Example de mis dotfiles](Example1.png)
 
 ---
 
@@ -155,6 +156,9 @@ MIT License — free for personal and professional use, attribution appreciated.
 
 # ⚙️ Dotfiles — Entorno Multiplataforma
 ### 💻 Configuración avanzada para Linux y Windows
+
+![Example de mis dotfiles](Example1.png)
+
 
 ---
 
