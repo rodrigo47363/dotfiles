@@ -42,6 +42,8 @@ chmod +x bootstrap.sh || true
 ├── Microsoft.PowerShell_profile.ps1      # PowerShell profile for Windows
 ├── bootstrap.sh                          # Installer / symlinker (recommended)
 └── dotfiles_backup.rar                   # Backup archive (REVIEW: may contain sensitive data)
+└── 📁poolybar
+└── 📁rofi 
 ```
 
 **Note:** When multiple files share a base name (e.g., `current*.ini` or `.zshrc` variants), prefer the **most recently updated** file. Use symlinks like `current.active.ini` to mark the active config.
