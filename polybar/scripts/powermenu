@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# ========================================
+# Powermenu Mejorado - Rodrigo
+# ========================================
+
+rofi_command="rofi -theme ~/.config/polybar/scripts/themes/powermenu_alt.rasi"
+uptime=$(uptime -p | sed -e 's/up //g')
+
+# Opciones del menú
+shutdown=" Shutdown"
+reboot=" Restart"
+lock=" Lock"
+suspend=" Sleep"
+logout=" Logout"
+
+options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
+
+# Función de confirmación
+confirm() {
+    rofi -dmenu -p "$1 (y/n)" <<< "n"
+}
+
+# Función principal
+chosen="$(echo -e "$options" | $rofi_command -p "UP - $uptime" -dmenu -selected-row 0)"
+
+case $chosen in
+    $shutdown)
+        if [[ $(confirm "Are you sure you want to shutdown?") == "y" ]]; then
+            notify-send "Power Menu" "Shutting down..." -i system-shutdown
+            systemctl poweroff
+        fi
+        ;;
+    $reboot)
+        if [[ $(confirm "Are you sure you want to reboot?") == "y" ]]; then
+            notify-send "Power Menu" "Rebooting..." -i system-reboot
+            systemctl reboot
+        fi
+        ;;
+    $lock)
+        i3lock -c 000000
+        ;;
+    $suspend)
+        mpc -q pause
+        amixer set Master mute
+        systemctl suspend
+        ;;
+    $logout)
+        if [[ $(confirm "Are you sure you want to logout?") == "y" ]]; then
+            openbox --exit
+        fi
+        ;;
+esac
+
