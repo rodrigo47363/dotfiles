@@ -1,0 +1,244 @@
+;==========================================================
+;
+;   POLYBAR CONFIGURATION (FULLSCREEN FIX)
+;   Se agregó 'wm-restack' para ocultar la barra en pantalla completa.
+;
+;==========================================================
+
+[colors]
+background = #2e3436
+background-alt = #444444
+foreground = #dfdfdf
+foreground-alt = #555555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+disabled = #707880
+
+occupied-fg = #00ffff
+urgent-fg = #ff5555
+green = #4be349
+
+[bar/parrot]
+width = 100%
+height = 24pt
+radius = 0
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3pt
+border-size = 0pt
+border-color = #00000000
+
+padding-left = 0
+padding-right = 1
+
+module-margin = 1
+
+separator = |
+separator-foreground = ${colors.disabled}
+
+;==========================================================
+; SOLUCIÓN PANTALLA COMPLETA
+;==========================================================
+; Esto le dice a Polybar que bspwm controla el orden de las ventanas.
+; Al poner un video en full screen, la barra quedará detrás.
+wm-restack = bspwm
+; override-redirect = true ; Descomenta esto SOLO si la barra sigue molestando, aunque wm-restack suele bastar.
+
+;==========================================================
+; CONFIGURACIÓN DE FUENTES (REDUNDANCIA)
+;==========================================================
+; 1. Fuente principal (Texto)
+font-0 = "Cantarell:size=11;2"
+; 2. Font Awesome 6 (Intentamos cargar la versión específica)
+font-1 = "Font Awesome 6 Free:style=Solid:size=11;2"
+font-2 = "Font Awesome 6 Brands:style=Regular:size=11;2"
+; 3. Font Awesome 5 / Genérico (Por si el sistema no detecta la v6)
+font-3 = "FontAwesome:style=Regular:size=11;2"
+; 4. Nerd Fonts (Salvavidas: suele tener todos los iconos)
+font-4 = "Symbols Nerd Font:size=11;2"
+; 5. Fallback final
+font-5 = "unifont:fontformat=truetype:size=8:antialias=false;0"
+
+modules-left = bspwm xwindow
+modules-right = filesystem pulseaudio memory cpu battery wlan eth date powermenu systray
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+enable-ipc = true
+
+;==========================================================
+; MÓDULO BSPWM
+;==========================================================
+[module/bspwm]
+type = internal/bspwm
+pin-workspaces = true
+enable-click = true
+enable-scroll = true
+reverse-scroll = true
+
+format = <label-state> <label-mode>
+
+label-focused = %name%
+label-focused-background = ${colors.background-alt}
+label-focused-underline = ${colors.primary}
+label-focused-padding = 1
+
+label-occupied = %name%
+label-occupied-foreground = ${colors.occupied-fg}
+label-occupied-padding = 1
+
+label-urgent = %name%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+;==========================================================
+; MÓDULO xWINDOW
+;==========================================================
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:40:...%
+label-foreground = ${colors.primary}
+
+;==========================================================
+; MÓDULO FILESYSTEM
+;==========================================================
+[module/filesystem]
+type = internal/fs
+interval = 25
+mount-0 = /
+label-mounted = %{F#ffb52a}DISK%{F-} %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.disabled}
+
+;==========================================================
+; MÓDULO VOLUMEN (Con Padding Extra)
+;==========================================================
+[module/pulseaudio]
+type = internal/pulseaudio
+; Agregamos espacios al formato para separarlo visualmente
+format-volume = <label-volume> 
+format-volume-padding = 1
+
+label-volume =  %percentage%%
+label-muted =  mute
+label-muted-foreground = #666
+
+;==========================================================
+; MÓDULO MEMORIA
+;==========================================================
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.primary}
+label = %percentage_used%%
+
+;==========================================================
+; MÓDULO CPU
+;==========================================================
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.primary}
+label = %percentage:2%%
+
+;==========================================================
+; MÓDULO WIFI
+;==========================================================
+[module/wlan]
+type = internal/network
+interface-type = wireless
+interval = 5
+format-connected = %{F#4be349}%{F-} <label-connected>
+label-connected = %essid% %local_ip%
+label-disconnected = %{F#707880}%{F-} disconnected
+
+[module/eth]
+type = internal/network
+interface-type = wired
+interval = 5
+format-connected-prefix = "ETH "
+format-connected-prefix-foreground = ${colors.primary}
+label-connected = %local_ip%
+label-disconnected = ""
+
+;==========================================================
+; MÓDULO BATERÍA
+;==========================================================
+[module/battery]
+type = internal/battery
+; NOTA: Si usas máquina virtual, este módulo SIEMPRE dará error.
+; Si es PC real, asegúrate que es BAT0 o BAT1
+battery = BAT0
+adapter = AC
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <label-discharging>
+label-charging = %percentage%%
+label-discharging =  %percentage%%
+label-full =  %percentage%%
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-framerate = 750
+
+;==========================================================
+; FECHA (Con Padding Extra y Calendario)
+;==========================================================
+[module/date]
+type = internal/date
+interval = 1
+date = %I:%M %p
+date-alt = %d-%m-%Y
+
+; Padding añadido con %{O5} (offset de 5 pixeles)
+label = %{A1:gsimplecal:}%{O5} %date%%{O5}%{A}
+label-foreground = ${colors.foreground}
+
+;==========================================================
+; POWER MENU
+;==========================================================
+[module/powermenu]
+type = custom/menu
+expand-right = true
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.secondary}
+label-close =  cancel
+label-close-foreground = ${colors.foreground-alt}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = systemctl reboot
+menu-0-1 = shutdown
+menu-0-1-exec = systemctl poweroff
+
+;==========================================================
+; SYSTEM TRAY
+;==========================================================
+[module/systray]
+type = internal/tray
+format-margin = 4px
+tray-spacing = 8px
+tray-size = 66%
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
