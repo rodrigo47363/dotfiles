@@ -1,7 +1,7 @@
 ;==========================================================
 ;
 ;   POLYBAR CONFIGURATION (FULLSCREEN FIX)
-;   Se agregó 'wm-restack' para ocultar la barra en pantalla completa.
+;   Configuración optimizada para Parrot OS / BSPWM
 ;
 ;==========================================================
 
@@ -42,26 +42,22 @@ separator-foreground = ${colors.disabled}
 ;==========================================================
 ; SOLUCIÓN PANTALLA COMPLETA
 ;==========================================================
-; Esto le dice a Polybar que bspwm controla el orden de las ventanas.
-; Al poner un video en full screen, la barra quedará detrás.
 wm-restack = bspwm
-; override-redirect = true ; Descomenta esto SOLO si la barra sigue molestando, aunque wm-restack suele bastar.
 
-;==========================================================
-; CONFIGURACIÓN DE FUENTES (REDUNDANCIA)
-;==========================================================
-; 1. Fuente principal (Texto)
+; ==========================================================
+; CORRECCIÓN DE FUENTES (Reemplaza tu bloque de fuentes con este)
+; ==========================================================
 font-0 = "Cantarell:size=11;2"
-; 2. Font Awesome 6 (Intentamos cargar la versión específica)
 font-1 = "Font Awesome 6 Free:style=Solid:size=11;2"
 font-2 = "Font Awesome 6 Brands:style=Regular:size=11;2"
-; 3. Font Awesome 5 / Genérico (Por si el sistema no detecta la v6)
 font-3 = "FontAwesome:style=Regular:size=11;2"
-; 4. Nerd Fonts (Salvavidas: suele tener todos los iconos)
-font-4 = "Symbols Nerd Font:size=11;2"
-; 5. Fallback final
+
+; AQUÍ ESTÁ EL CAMBIO CLAVE:
+font-4 = "Hack Nerd Font:style=Regular:size=13;3"
+
 font-5 = "unifont:fontformat=truetype:size=8:antialias=false;0"
 
+; Orden de los módulos
 modules-left = bspwm xwindow
 modules-right = filesystem pulseaudio memory cpu battery wlan eth date powermenu systray
 
@@ -118,14 +114,12 @@ label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.disabled}
 
 ;==========================================================
-; MÓDULO VOLUMEN (Con Padding Extra)
+; MÓDULO VOLUMEN
 ;==========================================================
 [module/pulseaudio]
 type = internal/pulseaudio
-; Agregamos espacios al formato para separarlo visualmente
 format-volume = <label-volume> 
 format-volume-padding = 1
-
 label-volume =  %percentage%%
 label-muted =  mute
 label-muted-foreground = #666
@@ -158,8 +152,8 @@ type = internal/network
 interface-type = wireless
 interval = 5
 format-connected = %{F#4be349}%{F-} <label-connected>
-label-connected = %essid% %local_ip%
-label-disconnected = %{F#707880}%{F-} disconnected
+label-connected = %essid%
+label-disconnected = %{F#707880}%{F-} off
 
 [module/eth]
 type = internal/network
@@ -170,41 +164,79 @@ format-connected-prefix-foreground = ${colors.primary}
 label-connected = %local_ip%
 label-disconnected = ""
 
-;==========================================================
-; MÓDULO BATERÍA
-;==========================================================
 [module/battery]
 type = internal/battery
-; NOTA: Si usas máquina virtual, este módulo SIEMPRE dará error.
-; Si es PC real, asegúrate que es BAT0 o BAT1
-battery = BAT0
-adapter = AC
+
+; ==========================================================
+; HARDWARE
+; ==========================================================
+battery = BAT1
+adapter = ACAD
 full-at = 98
+low-at = 20
 
+; ==========================================================
+; FORMATO Y ESTILO
+; ==========================================================
+time-format = %H:%M
+
+; --- ESTADO: CARGANDO ---
+; Muestra: [Animación] [Porcentaje]
 format-charging = <animation-charging> <label-charging>
-format-discharging = <label-discharging>
+format-charging-foreground = ${colors.green}
 label-charging = %percentage%%
-label-discharging =  %percentage%%
-label-full =  %percentage%%
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
+; --- ESTADO: DESCARGANDO ---
+; Muestra: [Icono Nivel] [Porcentaje]
+format-discharging = <ramp-capacity> <label-discharging>
+label-discharging = %percentage%%
+
+; --- ESTADO: LLENO ---
+; Antes decía "Full", ahora dirá "100%" (o el % real)
+format-full = <label-full>
+format-full-prefix = "󰁹 "
+format-full-prefix-foreground = ${colors.green}
+label-full = %percentage%%
+
+; --- ESTADO: BATERÍA BAJA ---
+format-low = <label-low> <animation-low>
+label-low-foreground = ${colors.alert}
+label-low = "LOW %percentage%% "
+
+; ==========================================================
+; ICONOS VERTICALES (Nerd Font)
+; ==========================================================
+
+; Rampa de capacidad (Descargando) - Iconos Verticales
+ramp-capacity-0 = "󰁺"
+ramp-capacity-1 = "󰁻"
+ramp-capacity-2 = "󰁼"
+ramp-capacity-3 = "󰁽"
+ramp-capacity-4 = "󰁾"
+ramp-capacity-5 = "󰁿"
+ramp-capacity-6 = "󰂀"
+ramp-capacity-7 = "󰂁"
+ramp-capacity-8 = "󰂂"
+ramp-capacity-9 = "󰁹"
+ramp-capacity-foreground = ${colors.foreground}
+
+; Animación de carga (Ciclado vertical)
+animation-charging-0 = "󰢜"
+animation-charging-1 = "󰂆"
+animation-charging-2 = "󰂇"
+animation-charging-3 = "󰂈"
+animation-charging-4 = "󰢝"
+animation-charging-5 = "󰂉"
+animation-charging-6 = "󰢞"
+animation-charging-7 = "󰂊"
+animation-charging-8 = "󰂋"
+animation-charging-9 = "󰂅"
 animation-charging-framerate = 750
 
-;==========================================================
-; FECHA (Con Padding Extra y Calendario)
-;==========================================================
-[module/date]
-type = internal/date
-interval = 1
-date = %I:%M %p
-date-alt = %d-%m-%Y
-
-; Padding añadido con %{O5} (offset de 5 pixeles)
-label = %{A1:gsimplecal:}%{O5} %date%%{O5}%{A}
-label-foreground = ${colors.foreground}
+; Animación de alerta (Parpadeo)
+animation-low-0 = "󰂃"
+animation-low-1 = " "
+animation-low-framerate = 200
 
 ;==========================================================
 ; POWER MENU
