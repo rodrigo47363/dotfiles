@@ -1,0 +1,161 @@
+;==========================================================
+;   POLYBAR CONFIG - CORRECCIÓN DE COLORES Y BOTÓN INVISIBLE
+;==========================================================
+
+[colors]
+background = #2e3436
+background-alt = #3b4252
+foreground = #eceff4
+primary = #81a1c1
+red = #ff5555
+green = #a3be8c
+yellow = #ebcb8b
+purple = #b48ead
+cyan = #88c0d0
+disabled = #707880
+
+[bar/parrot]
+width = 100%
+height = 24pt
+background = ${colors.background}
+foreground = ${colors.foreground}
+line-size = 3pt
+padding-left = 1
+padding-right = 1
+module-margin = 1
+separator = |
+separator-foreground = ${colors.disabled}
+
+wm-restack = bspwm
+
+; --- FUENTES (He añadido FontAwesome como respaldo principal) ---
+font-0 = "Cantarell:size=11;2"
+font-1 = "Font Awesome 6 Free:style=Solid:size=11;2"
+font-2 = "FontAwesome:size=11;2"
+font-3 = "Symbols Nerd Font:size=12;3"
+
+modules-left = bspwm xwindow
+modules-right = filesystem pulseaudio memory cpu battery wlan eth date powermenu systray
+
+cursor-click = pointer
+enable-ipc = true
+
+;==========================================================
+; MÓDULO POWERMENU (Botón de Apagado - CORREGIDO)
+;==========================================================
+[module/powermenu]
+type = custom/menu
+expand-right = true
+
+; El icono de apagado ahora tiene FONDO ROJO para que NO sea invisible
+label-open = "    "
+label-open-foreground = #ffffff
+label-open-background = ${colors.red}
+label-open-padding = 1
+
+label-close = "  󰜺 cancelar  "
+label-close-foreground = ${colors.foreground}
+label-close-background = ${colors.background-alt}
+label-separator = |
+
+menu-0-0 = " Reiniciar "
+menu-0-0-exec = systemctl reboot
+menu-0-1 = " Apagar "
+menu-0-1-exec = systemctl poweroff
+
+;==========================================================
+; MÓDULO BATERÍA
+;==========================================================
+[module/battery]
+type = internal/battery
+full-at = 98
+low-at = 20
+battery = BAT1
+adapter = ACAD
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-full = %{F#a3be8c}%{F-} %percentage%%
+
+ramp-capacity-0 = %{F#ff5555}%{F-}
+ramp-capacity-1 = %{F#ffb52a}%{F-}
+ramp-capacity-2 = %{F#ffb52a}%{F-}
+ramp-capacity-3 = %{F#a3be8c}%{F-}
+ramp-capacity-4 = %{F#a3be8c}%{F-}
+
+animation-charging-0 = %{F#a3be8c}%{F-}
+animation-charging-1 = %{F#a3be8c}%{F-}
+animation-charging-2 = %{F#a3be8c}%{F-}
+animation-charging-3 = %{F#a3be8c}%{F-}
+animation-charging-4 = %{F#a3be8c}%{F-}
+animation-charging-framerate = 750
+
+;==========================================================
+; MÓDULO WLAN
+;==========================================================
+[module/wlan]
+type = internal/network
+interface = wlp0s20f3
+interval = 5
+format-connected = %{A1:~/.config/polybar/scripts/wifi-menu.sh:}%{F#81a1c1}%{F-} <label-connected>%{A}
+label-connected = %essid%
+format-disconnected = %{F#707880}%{F-} off
+
+;==========================================================
+; MÓDULO FECHA
+;==========================================================
+[module/date]
+type = internal/date
+interval = 1
+date = %I:%M %p
+label = %{F#ebcb8b}%{F-} %date%
+
+;==========================================================
+; OTROS MÓDULOS (Con iconos coloreados forzados)
+;==========================================================
+[module/filesystem]
+type = internal/fs
+mount-0 = /
+label-mounted = %{F#88c0d0}%{F-} %percentage_used%%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+label-volume = %{F#81a1c1}%{F-} %percentage%%
+label-muted =  mute
+label-muted-foreground = ${colors.disabled}
+
+[module/memory]
+type = internal/memory
+label = %{F#b48ead}%{F-} %percentage_used%%
+
+[module/cpu]
+type = internal/cpu
+label = %{F#ebcb8b}%{F-} %percentage%%
+
+[module/bspwm]
+type = internal/bspwm
+label-focused = %name%
+label-focused-background = ${colors.background-alt}
+label-focused-underline = ${colors.primary}
+label-focused-padding = 1
+label-occupied = %name%
+label-occupied-padding = 1
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+label-foreground = ${colors.primary}
+
+[module/systray]
+type = internal/tray
+tray-size = 66%
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
