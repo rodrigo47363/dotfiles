@@ -1,0 +1,110 @@
+/************************************************
+ * ROFI Modern Theme 2026 
+ * stellar_void.rofi BY Rodrigo47363
+ * https://github.com/rodrigo47363
+ * Style: Rounded, Deep Space, Neon Contrast
+ ***********************************************/
+
+* {
+    /* Paleta Deep Space Aesthetic */
+    bg0:    #030303e6; /* Negro casi absoluto (vacío) con 90% opacidad */
+    bg1:    #0f111a;   /* Azul/Gris muy oscuro (espacio profundo) para inputbar */
+    fg0:    #e0e0e0;   /* Blanco estelar suave para texto principal */
+    accent: #00ffff;   /* Cian Eléctrico (plasma/estrellas jóvenes) */
+    violet: #8a2be2;   /* Violeta Nebulosa (para detalles sutiles) */
+    urgent: #ff4500;   /* Naranja Supernova */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0;
+    padding:            0;
+    spacing:            0;
+    font:               "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @violet; /* Borde violeta nebulosa sutil */
+    border-radius:      15px;    /* Bordes muy redondeados futuristas */
+    width:              650px;
+    location:           center;
+    anchor:             center;
+}
+
+mainbox {
+    padding:            15px;
+    children:           [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:   @bg1;
+    border:             1px;
+    border-color:       @accent; /* Borde cian eléctrico en la búsqueda */
+    border-radius:      10px;
+    margin:             0px 0px 15px 0px;
+    padding:            12px;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   @accent; /* Fondo cian eléctrico para el prompt */
+    text-color:         #000000; /* Texto negro para máximo contraste */
+    padding:            5px 15px;
+    border-radius:      7px;
+    margin:             0px 12px 0px 0px;
+    font:               "JetBrainsMono Nerd Font Bold 12";
+}
+
+entry {
+    placeholder:        "Explorando la galaxia...";
+    placeholder-color:  #4c566a; /* Gris azulado oscuro */
+    vertical-align:     0.5;
+}
+
+listview {
+    fixed-height:       false;
+    lines:              10;
+    columns:            1;
+    scrollbar:          false;
+    spacing:            5px;
+}
+
+element {
+    padding:            10px 15px;
+    border-radius:      10px;
+    cursor:             pointer;
+}
+
+element normal.normal {
+    background-color:   transparent;
+}
+
+/* El elemento seleccionado resalta en cian eléctrico, con texto negro */
+element selected.normal {
+    background-color:   @accent;
+    text-color:         #000000;
+}
+
+/* Elementos urgentes usan naranja supernova */
+element normal.urgent {
+    text-color: @urgent;
+}
+
+element-text {
+    background-color:   inherit;
+    text-color:         inherit;
+    vertical-align:     0.5;
+}
+
+element-icon {
+    size:               28px;
+    cursor:             inherit;
+    padding:            0px 12px 0px 0px;
+}
+
+/* FIX: Reset estricto para anular fondos blancos de fábrica */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}

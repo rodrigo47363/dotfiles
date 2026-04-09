@@ -1,0 +1,67 @@
+/************************************************
+ * ROFI Modern Theme 2026 
+ * hacker_green.rofi BY Rodrigo47363
+ * https://github.com/rodrigo47363
+ * Style: Rounded, Pure Terminal, Matrix
+ ***********************************************/
+
+* {
+    bg0:    #000000f2; /* Negro puro con ligero desenfoque */
+    bg1:    #050f05;   /* Verde extremadamente oscuro para input */
+    fg0:    #00aa00;   /* Texto verde terminal clásico */
+    accent: #00ff00;   /* Verde brillante/fósforo */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0; padding: 0; spacing: 0;
+    font:               "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @accent;
+    border-radius:      10px; /* Un poco más cuadrado, clásico */
+    width:              600px;
+    location:           center; anchor: center;
+}
+
+mainbox { padding: 12px; children: [ inputbar, listview ]; }
+
+inputbar {
+    background-color:   @bg1;
+    border-radius:      6px;
+    margin:             0px 0px 12px 0px;
+    padding:            10px;
+    border:             1px;
+    border-color:       @fg0;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   @accent;
+    text-color:         #000000;
+    padding:            4px 12px;
+    border-radius:      4px;
+    margin:             0px 10px 0px 0px;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:        "root@kali:~# ...";
+    placeholder-color:  #005500;
+    vertical-align:     0.5;
+}
+
+listview { fixed-height: false; lines: 8; columns: 1; scrollbar: false; spacing: 4px; }
+element { padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+element normal.normal { background-color: transparent; }
+element selected.normal { background-color: @accent; text-color: #000000; }
+element-text { background-color: inherit; text-color: inherit; vertical-align: 0.5; }
+element-icon { size: 24px; cursor: inherit; padding: 0px 10px 0px 0px; }
+
+/* FIX: Reset estricto para anular fondos blancos de fábrica */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}

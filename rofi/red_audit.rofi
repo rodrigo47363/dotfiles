@@ -1,0 +1,101 @@
+/************************************************
+ * ROFI Modern Dark Theme 2026 
+ * red_audit.rofi BY Rodrigo47363
+ * https://github.com/rodrigo47363
+ * Style: Rounded, Floating, Red Team Offensive
+ ***********************************************/
+
+* {
+    /* Paleta de colores - Estética Pitch Black / Blood Red */
+    bg0:    #0a0a0ee6; /* Fondo ultra oscuro con 90% opacidad */
+    bg1:    #15151e;   /* Contraste sutil para la barra de búsqueda */
+    fg0:    #e2e2e3;   /* Texto en gris muy claro, no blanco puro para no cansar la vista */
+    accent: #ff3333;   /* Rojo brillante y agresivo */
+    urgent: #ff9e64;   /* Naranja de advertencia */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0;
+    padding:            0;
+    spacing:            0;
+}
+
+window {
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @accent;
+    border-radius:      12px;
+    width:              600px;
+    location:           center;
+    anchor:             center;
+}
+
+mainbox {
+    padding:            12px;
+    children:           [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:   @bg1;
+    border-radius:      8px;
+    margin:             0px 0px 12px 0px;
+    padding:            10px;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   @accent;
+    text-color:         #000000; /* Texto negro sobre fondo rojo para máximo contraste */
+    padding:            4px 12px;
+    border-radius:      6px;
+    margin:             0px 10px 0px 0px;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:        "Execute payload or search...";
+    placeholder-color:  #5c5c66;
+    vertical-align:     0.5;
+}
+
+listview {
+    fixed-height:       false;
+    lines:              8;
+    columns:            1;
+    scrollbar:          false;
+    spacing:            4px;
+}
+
+element {
+    padding:            8px 12px;
+    border-radius:      8px;
+    cursor:             pointer;
+}
+
+element normal.normal {
+    background-color:   transparent;
+}
+
+/* El elemento seleccionado resalta con el color accent */
+element selected.normal {
+    background-color:   @accent;
+    text-color:         #000000;
+}
+
+element-text {
+    background-color:   inherit;
+    text-color:         inherit;
+    vertical-align:     0.5;
+}
+
+element-icon {
+    size:               24px;
+    cursor:             inherit;
+    padding:            0px 10px 0px 0px;
+}
+
+/* FIX: Reset estricto para anular fondos blancos de fábrica */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}
