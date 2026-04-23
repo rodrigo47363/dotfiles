@@ -1,75 +1,47 @@
-
-# ⚙️ Dotfiles — Cross-Platform Dev Environment
+# ⚙️ Dotfiles — Entorno de Desarrollo y Pentesting (Cross-Platform)
 
 ![Dotfiles Preview](Example1.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![OS](https://img.shields.io/badge/OS-Linux%20%7C%20Windows-blue)](https://www.linux.org/)
-[![Status](https://img.shields.io/badge/Status-Active-success)]()
+[![OS: Linux | Windows](https://img.shields.io/badge/OS-Parrot%20%7C%20Kali%20%7C%20Windows-blue)](https://parrotsec.org/)
+[![Status: Active](https://img.shields.io/badge/Status-Active-success)]()
+
+## 🧩 Descripción
+
+Repositorio personal diseñado para **personalizar, automatizar y optimizar** entornos de seguridad ofensiva y desarrollo multiplataforma. 
+Construido y auditado para distribuciones orientadas al pentesting (Parrot OS / Kali Linux) usando **BSPWM, Sxhkd, Polybar y Rofi**, e incluye perfiles optimizados para PowerShell en Windows.
+
+Este entorno prioriza la eficiencia, el uso de atajos de teclado y la automatización de tareas que no agregan valor analítico en auditorías.
 
 ---
 
-## 🧩 Description
+## 🛡️ OPSEC y Seguridad del Repositorio
 
-Personal dotfiles repository to **customize, automate, and optimize** development and pentesting environments across **Linux (Parrot/Kali)** and **Windows**.
-Includes configurations and helper scripts for **Zsh, PowerShell, Polybar, Rofi, BSPWM**, and common productivity/pentest utilities.
-
-This repo prioritizes recent configs and provides a modular `bootstrap.sh` for safe installation.
+Como profesional de la seguridad, la protección de credenciales es primordial. 
+* **Regla Zero-Trust:** Asegúrate de no incluir claves privadas, tokens de API, historiales de Bash (`.bash_history`) o archivos `.rar` con información personal en los commits.
+* Si clonas este repositorio, utiliza un `.gitignore` robusto para excluir archivos de volcado o copias de seguridad locales (ej. `echo "*.rar" >> .gitignore`).
 
 ---
 
-## 📌 Quick Start
+## 🚀 Inicio Rápido
+
+El repositorio cuenta con un script de arranque seguro (`bootstrap.sh`) que genera los enlaces simbólicos (symlinks) necesarios sin destruir tus configuraciones previas de forma inadvertida.
 
 ```bash
-# Clone repository
+# 1. Clonar el repositorio
 git clone [https://github.com/rodrigo47363/dotfiles.git](https://github.com/rodrigo47363/dotfiles.git) ~/dotfiles
 cd ~/dotfiles
 
-# Minimal bootstrap (creates symlinks, prioritizes latest versions)
+# 2. Asignar permisos de ejecución e instalar
 chmod +x bootstrap.sh
 ./bootstrap.sh --minimal
+````
 
-```
+-----
 
----
+## 🧰 Dependencias del Entorno (Debian/Parrot/Kali)
 
-## 📁 Repository Structure
-
-```text
-.
-├── .zshrc                        # Main Zsh configuration (latest)
-├── .zshrc_autocd                 # Auto-cd helper module
-├── sxhkdrc                       # sxhkd / BSPWM keybindings
-├── powermenu_alt.rasi            # Rofi theme for power menu
-├── launch.sh                     # Startup script (Polybar, Rofi)
-├── ethernet_status.sh            # Ethernet status helper (Polybar)
-├── 12Hourscurrent.ini            # Polybar layout (12-hour clock)
-├── "FIx battery and volume..."   # Polybar fix for battery & volume
-├── current.ini / current2.ini    # Older Polybar variants
-├── Microsoft.PowerShell...       # PowerShell profile for Windows
-├── bootstrap.sh                  # Installer / Symlinker script
-├── polybar/                      # Polybar specific themes
-└── rofi/                         # Rofi specific themes
-
-```
-
-> **Note:** When multiple files share a base name (e.g., `current*.ini`), prefer the **most recently updated** file.
-
----
-
-## 🔧 Hardware Fixes (Touchpad)
-
-If you are using a laptop (e.g., Acer Nitro) and the touchpad click doesn't work, run this fix or add it to your startup script:
-
-```bash
-# Fix 'Tap-to-click' on synaptics/libinput touchpads (adjust ID '15' if needed)
-xinput set-prop 15 "libinput Tapping Enabled" 1
-
-```
-
----
-
-## 🧰 Dependencies (Debian/Parrot/Kali)
+Para replicar el entorno al 100%, instala los siguientes paquetes base y herramientas de auditoría. *(Nota: Algunas herramientas modernas como `fastfetch` pueden requerir instalación vía GitHub Releases si tu repositorio APT está desactualizado).*
 
 ```bash
 sudo apt update && sudo apt install -y \
@@ -80,91 +52,89 @@ sudo apt update && sudo apt install -y \
   libxcb-image0-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev \
   libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev \
   libmpdclient-dev libuv1-dev libnl-genl-3-dev meson picom \
-  feh scrot scrub xclip bat locate ranger  wmname acpi bspwm sxhkd \
+  feh scrot scrub xclip bat locate ranger wmname acpi bspwm sxhkd \
   imagemagick cmatrix zsh-syntax-highlighting zsh-autosuggestions \
-  texlive-latex-recommended hcxdumptool hcxtools neovim tmux brightnessctl fastfetch
-
+  texlive-latex-recommended hcxdumptool hcxtools neovim tmux brightnessctl
 ```
 
-*Note: Some modern tools like `lsd` or `fastfetch` might need to be installed via GitHub releases or Snap.*
+-----
 
----
+## 🎨 Selector Dinámico de Temas (Rofi)
 
-## 👤 Author
+Este entorno incluye un script avanzado en Bash (`theme-selector.sh`) que inyecta configuraciones de Rofi al vuelo utilizando `sed`, evitando la corrupción de archivos y manteniendo la persistencia de los temas.
 
-**Rodrigo Vil** — Ethical Hacker & Pentester | Red Team & Bug Bounty Researcher
+### Requisitos y Despliegue
 
-* **Focus:** Offensive security, automation, custom Linux environments.
-* **GitHub:** [rodrigo47363](https://github.com/rodrigo47363)
+Para que el script de inyección funcione, la estructura de directorios en tu sistema local debe ser exacta.
 
----
-
-# ⚙️ Dotfiles — Entorno Multiplataforma (Español)
-
-### 💻 Configuración avanzada para Linux y Windows
-
----
-
-## 🧩 Descripción
-
-Repositorio de dotfiles personales para **optimizar, automatizar y estandarizar** entornos de desarrollo y pentesting.
-Incluye configuraciones para **Zsh, PowerShell, Polybar, Rofi, BSPWM**, y utilidades de auditoría.
-
----
-
-## 📌 Inicio Rápido
+**1. Inicializar la infraestructura (Si es una máquina nueva):**
 
 ```bash
-# Clonar
-git clone [https://github.com/rodrigo47363/dotfiles.git](https://github.com/rodrigo47363/dotfiles.git) ~/dotfiles
-cd ~/dotfiles
-
-# Instalación mínima
-chmod +x bootstrap.sh
-./bootstrap.sh --minimal
-
+mkdir -p ~/.config/rofi/themes
+touch ~/.config/rofi/config.rasi
 ```
 
----
-
-## 🔧 Solución de Hardware (Touchpad)
-
-Si el "clic por toque" (tap-to-click) no funciona en tu laptop, utiliza el siguiente comando o agrégalo a tu `bspwmrc`:
+**2. Desplegar los archivos desde el repositorio:**
+Copia los temas preservando sus atributos y permisos originales (`-p`):
 
 ```bash
-# Habilita el clic en touchpad (ajusta el ID '15' según tu hardware 'xinput list')
+cp -vp ~/dotfiles/rofi/*.rofi ~/.config/rofi/themes/
+cp -vp ~/dotfiles/rofi/*.rasi ~/.config/rofi/themes/
+```
+
+**3. Ejecución:**
+
+```bash
+chmod +x ~/.config/rofi/themes/theme-selector.sh
+~/.config/rofi/themes/theme-selector.sh
+```
+
+> **⚠️ Advertencia de Privilegios:** **NUNCA** ejecutes el selector de temas utilizando `sudo`. Modificar configuraciones de interfaz gráfica con privilegios elevados reasignará los inodos al superusuario, bloqueando el acceso de tu usuario estándar y corrompiendo la configuración de Rofi (Denegación de Servicio Local).
+
+-----
+
+## 🔧 Fixes de Hardware (Touchpad)
+
+En ciertos equipos portátiles (ej. Acer Nitro), el entorno BSPWM no levanta la configuración de *Tap-to-click* por defecto. Puedes solucionarlo inyectando esto en tu script de inicio (`bspwmrc`):
+
+```bash
+# Habilita el 'clic por toque'. 
+# IMPORTANTE: Verifica el ID de tu touchpad usando el comando 'xinput list' (ej. ID 15)
 xinput set-prop 15 "libinput Tapping Enabled" 1
-
 ```
 
----
+-----
 
-## 🔒 Notas de Seguridad
+## 📁 Estructura del Repositorio
 
-* **Importante:** Revisa el archivo `dotfiles_backup.rar` antes de usarlo.
-* **No** subas credenciales, claves privadas o secretos al repositorio.
-* Se recomienda usar `.gitignore` para excluir archivos `.rar` o backups sensibles.
+Se prioriza el uso de configuraciones modulares. Si existen múltiples versiones de un layout (ej. `current.ini`), el `bootstrap.sh` enlazará automáticamente la iteración más reciente.
 
----
+```text
+.
+├── .zshrc                        # Configuración principal de Zsh y alias ofensivos
+├── sxhkdrc                       # Mapeo de atajos de teclado (Sxhkd / BSPWM)
+├── rofi/                         # Entorno de Rofi
+│   ├── theme-selector.sh         # Script inyector de configuración dinámica
+│   ├── powermenu_alt.rasi        # UI del menú de apagado
+│   └── themes/                   # Colección de archivos .rofi y .rasi
+├── polybar/                      # Entorno de Polybar
+│   ├── launch.sh                 # Script de arranque
+│   ├── ethernet_status.sh        # Módulo de auditoría de red
+│   └── layouts/                  # Variantes de visualización (12H / 24H)
+├── powershell/                   # Perfiles unificados para entornos Windows
+└── bootstrap.sh                  # Motor de instalación y symlinks
+```
 
-## 📜 Licencia
+-----
 
-MIT License — libre para uso personal y profesional.
+## 👤 Autor & Licencia
+
+**Rodrigo Vil** — Ethical Hacker | Pentester | Red Team Specialist
+
+  * **Enfoque:** Seguridad ofensiva, auditorías de red (wireless security), bug bounty y automatización.
+  * **GitHub:** [rodrigo47363](https://github.com/rodrigo47363)
+
+[](https://opensource.org/licenses/MIT)
+*Libre para uso personal, profesional y modificación bajo la Licencia MIT.*
 
 > ⚡ *"Customize everything. Automate what you can. Hack ethically."*
-> — **Rodrigo Vil**
-
-```
-
-### Recomendación extra para tu repositorio:
-El archivo `dotfiles_backup.rar` es un riesgo de seguridad (podrías subir sin querer claves SSH, historial de bash con contraseñas, etc.).
-
-Te sugiero encarecidamente que:
-1.  Lo elimines del repositorio remoto: `git rm dotfiles_backup.rar`.
-2.  Lo añadas al `.gitignore`:
-    ```bash
-    echo "*.rar" >> .gitignore
-    ```
-3.  Si necesitas tener un backup privado, usa un repositorio privado separado o guárdalo en la nube (Google Drive/Mega), no en tu repo público de dotfiles.
-
-```
