@@ -80,9 +80,9 @@ sudo apt update && sudo apt install -y \
   libxcb-image0-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev \
   libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev \
   libmpdclient-dev libuv1-dev libnl-genl-3-dev meson picom \
-  feh scrot scrub xclip bat locate ranger neofetch wmname acpi bspwm sxhkd \
+  feh scrot scrub xclip bat locate ranger  wmname acpi bspwm sxhkd \
   imagemagick cmatrix zsh-syntax-highlighting zsh-autosuggestions \
-  texlive-latex-recommended hcxdumptool hcxtools neovim tmux
+  texlive-latex-recommended hcxdumptool hcxtools neovim tmux brightnessctl fastfetch
 
 ```
 
