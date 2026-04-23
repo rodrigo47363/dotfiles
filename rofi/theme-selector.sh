@@ -1,25 +1,30 @@
 #!/bin/bash
 # Autor: Rodrigo47363
-# Descripción: Selector dinámico de temas Rofi para dotfiles
+# Descripción: Selector dinámico universal de temas Rofi (.rofi y .rasi)
 
-# Define la ruta absoluta de la carpeta donde están tus temas
-THEME_DIR="$(pwd)" 
+THEME_DIR="$HOME/.config/rofi/themes"
 CONFIG_FILE="$HOME/.config/rofi/config.rasi"
 
-# 1. Lista los archivos .rofi, quita la extensión para que el menú se vea limpio
-# 2. Usa el propio rofi para mostrar el menú de selección
-selected_theme=$(ls -1 "$THEME_DIR" | grep '\.rofi$' | sed 's/\.rofi$//' | rofi -dmenu -i -p "󰄛 Theme:" -theme "$CONFIG_FILE")
+# 1. Menú de selección: Captura tanto .rofi como .rasi, manteniendo la extensión
+selected_file=$(ls -1 "$THEME_DIR" | grep -E '\.(rofi|rasi)$' | rofi -dmenu -i -p "󰄛 Theme:")
 
-# Si el usuario seleccionó un tema y no presionó Escape
-if [[ -n "$selected_theme" ]]; then
-    # Crea un enlace simbólico forzado hacia el archivo de configuración principal
-    ln -sf "$THEME_DIR/${selected_theme}.rofi" "$CONFIG_FILE"
+# 2. Lógica de inyección segura
+if [[ -n "$selected_file" ]]; then
     
-    # Imprime un mensaje en la terminal (útil si lo corres sin atajo de teclado)
-    echo -e "\e[32m[+] Rofi theme successfully updated to: $selected_theme\e[0m"
+    # Construimos la ruta absoluta completa hacia el archivo seleccionado
+    NEW_THEME_PATH="${THEME_DIR}/${selected_file}"
     
-    # Opcional: Notificación del sistema
-    notify-send "Rofi Config" "Tema actualizado a: $selected_theme" -u low
+    # Reemplazo dinámico o inyección de nueva línea
+    if grep -Eq "^[[:space:]]*@theme" "$CONFIG_FILE"; then
+        sed -i "s|^[[:space:]]*@theme.*|@theme \"${NEW_THEME_PATH}\"|" "$CONFIG_FILE"
+    else
+        echo "@theme \"${NEW_THEME_PATH}\"" >> "$CONFIG_FILE"
+    fi
+    
+    # Feedback en terminal y sistema
+    echo -e "\e[32m[+] Rofi theme successfully updated to: $selected_file\e[0m"
+    notify-send "Rofi Config" "Tema actualizado a: $selected_file" -u low
+
 else
     echo -e "\e[31m[-] Selección cancelada.\e[0m"
 fi
