@@ -1,32 +1,59 @@
-# Fix the Java Problem
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-# Enable Powerlevel10k instant prompt. Should stay at the top of ~/.zshrc.
+# ==============================================================================
+# 1. POWERLEVEL10K INSTANT PROMPT (DEBE SER LO PRIMERO)
+# ==============================================================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Set up the prompt
+# ==============================================================================
+# 2. VARIABLES DE ENTORNO (EXPORTS)
+# ==============================================================================
+# Fix para GUIs de Java (Burp Suite, Ghidra) en tiling WMs
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# PATH configuration
+export PATH="$HOME/.local/bin:$HOME/go/bin:/usr/sbin:$PATH"
+
+# Pyenv Configuration
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+
+# ==============================================================================
+# 3. INICIALIZACIÓN DE ENTORNOS (SILENCIADOS PARA P10K)
+# ==============================================================================
+# Pywal
+if command -v cat &> /dev/null && [ -f ~/.cache/wal/sequences ]; then
+  (cat ~/.cache/wal/sequences &)
+fi
+
+# Pyenv init
+if command -v pyenv >/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+  # Silenciar virtualenv-init para evitar el error de P10k
+  if pyenv help virtualenv-init >/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
+
+# ==============================================================================
+# 4. CONFIGURACIÓN DE ZSH, ALIAS Y FUNCIONES
+# ==============================================================================
 autoload -Uz promptinit
 promptinit
 prompt adam1
 
-# Shell options
 setopt histignorealldups sharehistory
-setopt autocd       # <--- Activar autocd
-
-# Use emacs keybindings even if our EDITOR is set to vi
+setopt autocd
 bindkey -e
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
-# Use modern completion system
+# Autocompletado
 autoload -Uz compinit
 compinit
-
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -41,53 +68,36 @@ zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
-
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+# Alias eza
+alias l='eza -1 --group-directories-first'
+alias ll='eza -lh --group-directories-first'
+alias la='eza -a --group-directories-first'
+alias lla='eza -lha --group-directories-first'
+alias ls='eza --group-directories-first'
+alias lt='eza --tree --level=2 --group-directories-first'
+alias ltg='eza --tree --level=2 --git-ignore --group-directories-first'
 
-# --- Manual configuration ---
-
-# PATH configuration: ensure user-local and Go binaries are always accessible
-# Prioritize $HOME/.local/bin so pipx/user-installed tools are found first.
-export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
-
-# Custom Aliases for eza
-alias l='eza -1 --group-directories-first'               # list, one per line
-alias ll='eza -lh --group-directories-first'             # long list
-alias la='eza -a --group-directories-first'              # list all
-alias lla='eza -lha --group-directories-first'           # long list all
-alias ls='eza --group-directories-first'                 # just eza
-alias lt='eza --tree --level=2 --group-directories-first' # tree view
-alias ltg='eza --tree --level=2 --git-ignore --group-directories-first' # tree view ignoring git files
-
-# Custom Aliases for bat
+# Alias bat
 alias cat='batcat --paging=never --style=plain'
 alias catn='batcat --paging=never --style=plain'
 alias catnl='batcat'
 alias catp='batcat --style=header,grid'
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Keybindings
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[3~" delete-char
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
 
-# Plugins (verifica que las rutas existen en tu sistema)
-[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
-  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Opcional: descomenta si están instalados
-# [ -f /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ] && source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
-  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-[ -f /usr/share/zsh-sudo/sudo.plugin.zsh ] && \
-  source /usr/share/zsh-sudo/sudo.plugin.zsh
-
-# Functions
+# Funciones de Pentesting
 function mkt() {
     mkdir -p {nmap,content,exploits,scripts}
 }
 
-# Extract nmap information
 function extractPorts() {
     ports="$(grep -oP '\d{1,5}/open' "$1" | awk '{print $1}' FS='/' | xargs | tr ' ' ',')"
     ip_address="$(grep -oP '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' "$1" | sort -u | head -n 1)"
@@ -96,11 +106,10 @@ function extractPorts() {
     echo -e "\t[*] Open ports: $ports\n"  >> extractPorts.tmp
     echo "$ports" | tr -d '\n' | xclip -sel clip
     echo -e "[*] Ports copied to clipboard\n"  >> extractPorts.tmp
-    cat extractPorts.tmp
+    command cat extractPorts.tmp # Usa el binario real, no el alias 'cat' de batcat
     rm extractPorts.tmp
 }
 
-# Settarget
 function settarget() {
     if [ $# -eq 1 ]; then
         echo "$1" > ~/.config/bin/target
@@ -111,7 +120,6 @@ function settarget() {
     fi
 }
 
-# Set 'man' colors
 function man() {
     env \
     LESS_TERMCAP_mb=$'\e[01;31m' \
@@ -124,12 +132,11 @@ function man() {
     man "$@"
 }
 
-# fzf improvement
 function fzf-lovely() {
     if [ "$1" = "h" ]; then
-        fzf -m --reverse --preview-window down:20 --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500'
+        fzf -m --reverse --preview-window down:20 --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (batcat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500'
     else
-        fzf -m --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500'
+        fzf -m --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (batcat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -500'
     fi
 }
 
@@ -138,29 +145,17 @@ function rmk() {
     shred -zun 10 -v "$1"
 }
 
-# Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
-(( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
-
-# Keybindings
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey "^[[3~" delete-char
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
-
-# Source Powerlevel10k theme if exists
+# ==============================================================================
+# 5. PLUGINS Y TEMAS
+# ==============================================================================
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -f /usr/share/zsh-sudo/sudo.plugin.zsh ] && source /usr/share/zsh-sudo/sudo.plugin.zsh
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 [ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
-# Ensure pipx-created path is available for current user (useful si pipx creó algo)
-# pipx normalmente sugiere `pipx ensurepath`, pero añadir esto no hace daño
-# (esto no reemplaza a la línea de PATH de arriba, solo una referencia)
-# export PIPX_BIN="$HOME/.local/bin"
-
-# Fin del archivo
-# Cargar esquema de pywal al iniciar
-(cat ~/.cache/wal/sequences &)
-
-export PATH=$PATH:/usr/sbin
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
+# ==============================================================================
+# 6. POWERLEVEL10K FINALIZE (DEBE SER ABSOLUTAMENTE LO ÚLTIMO)
+# ==============================================================================
+(( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
