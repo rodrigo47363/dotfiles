@@ -44,17 +44,19 @@ chmod +x bootstrap.sh
 Para replicar el entorno al 100%, instala los siguientes paquetes base y herramientas de auditoría. *(Nota: Algunas herramientas modernas como `fastfetch` pueden requerir instalación vía GitHub Releases si tu repositorio APT está desactualizado).*
 
 ```bash
-sudo apt update && sudo apt install -y \
-  git curl wget zsh unzip php build-essential ruby rofi kitty \
-  aircrack-ng airgeddon cmake pkg-config python3-sphinx \
-  libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-ewmh-dev \
-  libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto \
-  libxcb-image0-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev \
-  libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev \
-  libmpdclient-dev libuv1-dev libnl-genl-3-dev meson picom \
-  feh scrot scrub xclip bat locate ranger wmname acpi bspwm sxhkd \
-  imagemagick cmatrix zsh-syntax-highlighting zsh-autosuggestions \
-  texlive-latex-recommended hcxdumptool hcxtools neovim tmux brightnessctl
+sudo apt update -y && sudo apt install -y \
+    git curl wget zsh unzip build-essential cmake pkg-config meson \
+    kitty tmux neovim jq bat locate ranger xclip scrub acpi brightnessctl wmname \
+    bspwm sxhkd rofi picom feh scrot imagemagick \
+    libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-ewmh-dev \
+    libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto \
+    libxcb-image0-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev \
+    libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev \
+    libmpdclient-dev libuv1-dev libnl-genl-3-dev \
+    openvpn aircrack-ng airgeddon hcxdumptool hcxtools \
+    php ruby python3-sphinx zsh-syntax-highlighting zsh-autosuggestions \
+    texlive-latex-recommended cmatrix nmcli golang hashcat seclists wordlists \
+    && sudo updatedbb
 ```
 
 -----
