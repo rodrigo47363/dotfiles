@@ -1,3 +1,67 @@
-//@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+configuration {
+    /* ==========================================
+       1. CORE Y EJECUCIÓN
+       ========================================== */
+    modi: "combi,window,run,drun";
+    combi-modi: "window,drun";
+    terminal: "kitty";
+    /* Asegura que los comandos de consola (Run) se abran correctamente en Kitty */
+    run-command: "{terminal} -e {cmd}";
+    run-shell-command: "{terminal} -e {cmd}";
 
-@theme "/usr/local/share/rofi/themes/Arc-Dark.rasi"
+    /* ==========================================
+       2. BÚSQUEDA Y FILTRADO TÁCTICO (FZF)
+       ========================================== */
+    matching: "fuzzy";
+    sort: true;
+    sorting-method: "fzf";
+    /* Permite buscar herramientas por su categoría (ej. "crypto" para hashcat) */
+    drun-match-fields: "name,generic,exec,categories,keywords";
+
+    /* ==========================================
+       3. OPSEC Y PRIVACIDAD
+       ========================================== */
+    disable-history: true; /* Mitiga fuga de comandos locales */
+
+    /* ==========================================
+       4. UI Y FORMATO VISUAL
+       ========================================== */
+    font: "JetBrainsMono Nerd Font 11";
+    show-icons: true;
+    icon-theme: "Papirus"; /* Altamente recomendado tenerlo instalado para consistencia visual */
+    
+    display-drun: "   Apps ";
+    display-run: "   Run ";
+    display-window: " 󰕰  Window ";
+    display-combi: " 󰕘 All ";
+    
+    /* Muestra el nombre y su descripción genérica para mejor contexto */
+    drun-display-format: "{icon} {name} [<span weight='light' size='small'><i>({generic})</i></span>]";
+    /* Muestra: Espacio de trabajo · Clase de aplicación · Título de la ventana */
+    window-format: "{w} · {c} · {t}";
+    
+    sidebar-mode: true;
+    hide-scrollbar: true;
+
+    /* ==========================================
+       5. INTERACCIÓN Y KEYBINDINGS (Vim-Style)
+       ========================================== */
+    hover-select: true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+    
+    /* Navegación con teclado sin mover las manos de la posición base (hjkl) */
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+    /* Rofi usa Ctrl+J y Ctrl+M por defecto para otras cosas, las reasignamos */
+    kb-remove-to-eol: "Control+Shift+e";
+    kb-accept-entry: "Control+m,Return,KP_Enter";
+    /* Navegación rápida entre pestañas (Apps, Run, Window) */
+    kb-mode-next: "Shift+Right,Control+Tab";
+    kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
+}
+
+/* ==========================================
+   6. TEMA (Importación externa)
+   ========================================== */
+@theme "~/.config/rofi/themes/neo_tokyo.rofi"
