@@ -1,16 +1,15 @@
 configuration {
     /* ==========================================
-       1. CORE Y EJECUCIÓN (CORREGIDO)
+       1. CORE Y EJECUCIÓN (PRIORIDAD GRÁFICA)
        ========================================== */
-    modi: "combi,window,run,drun";
-    combi-modi: "window,drun";
+    /* drun va primero para que sea el modo por defecto si no se especifica otro */
+    modi: "drun,combi,run,window";
+    
+    /* En el modo combi, Rofi buscará primero apps gráficas, luego ventanas, y al final comandos CLI */
+    combi-modi: "drun,window,run";
+    
     terminal: "kitty";
     
-    /* 
-       ELIMINAMOS el forzado de terminal en run-command.
-       Rofi detecta automáticamente si una aplicación (.desktop) 
-       necesita terminal mediante la flag 'Terminal=true'.
-    */
     run-command: "{cmd}";
     run-shell-command: "{terminal} -e {cmd}";
 
@@ -43,8 +42,6 @@ configuration {
     window-format: "{w} · {c} · {t}";
     
     sidebar-mode: true;
-    /* Rofi moderno usa 'scrollbar: false' dentro del elemento listview en el tema, 
-       pero mantenemos compatibilidad si el tema lo soporta */
 
     /* ==========================================
        5. INTERACCIÓN Y KEYBINDINGS (Vim-Style)
