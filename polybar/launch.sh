@@ -1,4 +1,4 @@
-quiero el atajo con alt f4 #!/usr/bin/env sh
+#!/usr/bin/env sh
 
 ## Add this to your wm startup file.
 
