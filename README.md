@@ -45,7 +45,7 @@ Para replicar el entorno al 100%, instala los siguientes paquetes base y herrami
 
 ```bash
 sudo apt update -y && sudo apt install -y \
-    git curl wget zsh unzip build-essential cmake pkg-config meson \
+    xinput git curl wget zsh unzip build-essential cmake pkg-config meson \
     kitty tmux neovim jq bat locate ranger xclip scrub acpi brightnessctl wmname \
     bspwm sxhkd rofi picom feh scrot imagemagick \
     libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-ewmh-dev \
