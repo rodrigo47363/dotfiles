@@ -50,5 +50,7 @@ xinput set-prop "ELAN050A:01 04F3:3158 Touchpad" "libinput Tapping Enabled" 1 &
 # Resolucion Arandr (Tu script de monitores iría aquí)
 
 # Wallpaper y Barra
-feh --bg-fill ~/Wallpaper/s4vitar.png
+feh --bg-fill ~/Wallpaper/rodrigo47363.png
 ~/.config/polybar/launch.sh
+
+$HOME/.config/polybar/launch.sh &
