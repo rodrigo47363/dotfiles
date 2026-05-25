@@ -141,9 +141,13 @@ super + {o,i}
     bspc node {older,newer} -f; \
     bspc wm -h on
 
-# focus or send to the given desktop
-super + {_,shift + }{1-9,0}
-    bspc {desktop -f,node -d} '^{1-9,10}'
+# focus the given desktop
+super + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
+
+# send to the given desktop and follow it automatically
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
 
 #############
 # preselect #
