@@ -1,25 +1,16 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-## Add this to your wm startup file.
-
-# Terminate already running bar instances
+# Terminar instancias actuales de Polybar
 killall -q polybar
+pkill -u $UID -x polybar 2>/dev/null
 
-## Wait until the processes have been shut down
-while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
+# Esperar a que los procesos se cierren completamente
+while pgrep -u $UID -x polybar >/dev/null; do sleep 0.2; done
 
-## Launch
+# Lanzar la barra 'parrot' especificando el archivo de configuración correcto
+export DISPLAY="${DISPLAY:-:0}"
+polybar parrot -c ~/.config/polybar/config.ini </dev/null >/dev/null 2>&1 &
+disown
 
-## Left bar
-polybar log -c ~/.config/polybar/current.ini &
-polybar secondary -c ~/.config/polybar/current.ini &
-polybar terciary -c ~/.config/polybar/current.ini &
-polybar quaternary -c ~/.config/polybar/current.ini &
-polybar quinary -c ~/.config/polybar/current.ini &
-
-## Right bar
-polybar top -c ~/.config/polybar/current.ini &
-polybar primary -c ~/.config/polybar/current.ini &
-
-## Center bar
-polybar primary -c ~/.config/polybar/workspace.ini &
+# Confirmación en consola
+echo "Polybar [parrot] cargada."

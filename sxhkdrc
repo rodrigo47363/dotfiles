@@ -31,8 +31,13 @@ super + shift + space
 # SYSTEM CONTROLS      #
 ########################
 
+# Recargar configuración sxhkd de forma robusta
 super + Escape
-    pkill -USR1 -x sxhkd
+    pkill sxhkd && sxhkd -c ~/.config/sxhkd/sxhkdrc &
+
+# Kill switch de emergencia para procesos GUI bloqueados
+super + shift + Escape
+    pkill -9 stremio || pkill -9 burpsuite || pkill -9 firefox
 
 @Print
     flameshot gui -c
@@ -64,11 +69,24 @@ XF86AudioMute
 # CUSTOM PENTEST APPS  #
 ########################
 
+# Pomodoro (Pomoc)
+super + alt + p
+    ~/.config/polybar/scripts/pomodoro.sh toggle &
+super + alt + e
+    ~/.config/polybar/scripts/pomodoro.sh end &
+super + alt + s
+    ~/.config/polybar/scripts/pomodoro.sh stop &
+
+# Ejecución en background (&) obligatoria para no bloquear sxhkd
 super + shift + f
-    firefox-esr
+    firefox-esr &
 
 super + shift + b
-    burpsuite
+    burpsuite &
+
+# Lanzar Stremio (Integrado con wrapper fix)
+super + alt + s
+    /home/rodrigo47363/.local/bin/stremio-fix.sh &
 
 ########################
 # BSPWM HOTKEYS        #
