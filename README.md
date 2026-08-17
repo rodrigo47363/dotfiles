@@ -97,7 +97,7 @@ La barra está configurada con distribución modular en tres secciones:
 ```ini
 modules-left = launcher bspwm xwindow
 modules-center = target vpn pomodoro
-modules-right = filesystem cpu memory backlight pulseaudio wlan eth battery date powermenu systray
+modules-right = filesystem cpu temperature gpu memory backlight pulseaudio wlan eth battery date powermenu systray
 ```
 
 ### 🔴 Módulos Centrales Especiales:
@@ -157,6 +157,7 @@ fi
 │   ├── launch.sh                 # Script de arranque y recarga limpia
 │   ├── fonts/                    # Fuentes personalizadas y glifos
 │   └── scripts/                  # Scripts ejecutables de los módulos
+│       ├── gpu.sh                # Monitoreo de temperatura y uso de GPU NVIDIA
 │       ├── pomodoro.sh           # Controlador interactivo de Pomoc
 │       ├── target.sh             # Módulo de IP objetivo (HTB / THM / Pentest)
 │       ├── vpn.sh                # Detección inteligente de VPN

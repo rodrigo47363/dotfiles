@@ -1,34 +1,25 @@
 configuration {
-    /* ==========================================
-       1. CORE Y EJECUCIÓN (PRIORIDAD GRÁFICA)
-       ========================================== */
-    /* drun va primero para que sea el modo por defecto si no se especifica otro */
-    modi: "drun,combi,run,window";
-    
-    /* En el modo combi, Rofi buscará primero apps gráficas, luego ventanas, y al final comandos CLI */
-    combi-modi: "drun,window,run";
-    
+    /* --- 1. CORE --- */
+    modi: "drun,run,window,ssh";
     terminal: "kitty";
     
+    /* Usamos el flag --hold para herramientas de CLI */
     run-command: "{cmd}";
-    run-shell-command: "{terminal} -e {cmd}";
+    run-shell-command: "{terminal} --hold -e {cmd}";
+    ssh-command: "{terminal} -e ssh {host}";
 
-    /* ==========================================
-       2. BÚSQUEDA Y FILTRADO TÁCTICO (FZF)
-       ========================================== */
+    /* --- 2. MOTOR DE BÚSQUEDA Y RENDIMIENTO --- */
     matching: "fuzzy";
     sort: true;
     sorting-method: "fzf";
     drun-match-fields: "name,generic,exec,categories,keywords";
+    drun-use-desktop-cache: true;
+    max-history-size: 0; /* Deshabilitado por seguridad (OPSEC) */
 
-    /* ==========================================
-       3. OPSEC Y PRIVACIDAD
-       ========================================== */
+    /* --- 3. OPSEC --- */
     disable-history: true; 
 
-    /* ==========================================
-       4. UI Y FORMATO VISUAL
-       ========================================== */
+    /* --- 4. UI / APARIENCIA --- */
     font: "JetBrainsMono Nerd Font 11";
     show-icons: true;
     icon-theme: "Papirus"; 
@@ -36,26 +27,29 @@ configuration {
     display-drun: "   Apps ";
     display-run: "   Run ";
     display-window: " 󰕰  Window ";
-    display-combi: " 󰕘 All ";
+    display-ssh: " 󰣀  SSH ";
     
-    drun-display-format: "{icon} {name} [<span weight='light' size='small'><i>({generic})</i></span>]";
+    drun-display-format: "{icon} {name} <span weight='light' size='small'><i>({generic})</i></span>";
     window-format: "{w} · {c} · {t}";
-    
     sidebar-mode: true;
 
-    /* ==========================================
-       5. INTERACCIÓN Y KEYBINDINGS (Vim-Style)
-       ========================================== */
+    /* --- 5. KEYBINDINGS (Vim-like estricto) --- */
     hover-select: true;
     me-select-entry: "";
     me-accept-entry: "MousePrimary";
     
+    kb-remove-char-back: "BackSpace,Shift+BackSpace"; 
+    kb-remove-to-eol: "Control+Shift+e";
+    kb-mode-complete: ""; 
+    
     kb-row-up: "Up,Control+k";
     kb-row-down: "Down,Control+j";
-    kb-remove-to-eol: "Control+Shift+e";
     kb-accept-entry: "Control+m,Return,KP_Enter";
     kb-mode-next: "Shift+Right,Control+Tab";
     kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
+    
+    /* Mejora de usabilidad en Tiling Managers */
+    kb-cancel: "Escape,Control+g,Control+bracketleft";
 }
 
 @theme "~/.config/rofi/themes/neo_tokyo.rofi"
