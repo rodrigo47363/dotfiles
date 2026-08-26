@@ -6,6 +6,7 @@
 # Cambiamos wmname para compatibilidad con aplicaciones Java (ej: BurpSuite)
 wmname LG3D &
 xsetroot -cursor_name left_ptr &
+xmodmap -e "keycode 172 = Super_L NoSymbol Super_L" -e "add mod4 = Super_L" 2>/dev/null &
 
 # ==========================================
 # 2. CONFIGURACIÓN BSPWM
@@ -30,16 +31,24 @@ bspc rule -a mpv state=floating
 bspc rule -a Screenkey manage=off
 
 # ==========================================
-# 3. AUTOARRANQUE (Limpieza total)
+# 3. AUTOARRANQUE (Gestión limpia de procesos)
 # ==========================================
-# Usamos un bucle para matar procesos solo si existen, evitando errores
-for proc in sxhkd picom lxpolkit polybar; do
-    pkill -x "$proc"
-done
+# sxhkd: Recarga en caliente si ya corre, o lo inicia limpiamente
+if pgrep -x sxhkd >/dev/null; then
+    pkill -USR1 -x sxhkd
+else
+    sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
+fi
 
-sxhkd &
-picom --config ~/.config/picom/picom.conf &
-lxpolkit &
+# Compositor picom
+if ! pgrep -x picom >/dev/null; then
+    picom --config ~/.config/picom/picom.conf -b
+fi
+
+# Agente Polkit
+if ! pgrep -x lxpolkit >/dev/null; then
+    lxpolkit &
+fi
 
 # ==========================================
 # 4. HARDWARE E INTERFAZ

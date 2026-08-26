@@ -1,6 +1,7 @@
 configuration {
     /* --- 1. CORE --- */
-    modi: "drun,run,window,ssh";
+    modes: "drun,run,window,ssh,combi";
+    combi-modes: "drun,run";
     terminal: "kitty";
     
     /* Usamos el flag --hold para herramientas de CLI */
@@ -13,7 +14,7 @@ configuration {
     sort: true;
     sorting-method: "fzf";
     drun-match-fields: "name,generic,exec,categories,keywords";
-    drun-use-desktop-cache: true;
+    drun-use-desktop-cache: false;
     max-history-size: 0; /* Deshabilitado por seguridad (OPSEC) */
 
     /* --- 3. OPSEC --- */
@@ -28,6 +29,7 @@ configuration {
     display-run: "   Run ";
     display-window: " 󰕰  Window ";
     display-ssh: " 󰣀  SSH ";
+    display-combi: " 󰕘  Combi ";
     
     drun-display-format: "{icon} {name} <span weight='light' size='small'><i>({generic})</i></span>";
     window-format: "{w} · {c} · {t}";

@@ -67,22 +67,29 @@ sudo apt update -y && sudo apt install -y \
 
 ## ⌨️ Atajos de Teclado Clave (`sxhkdrc`)
 
-El archivo [`sxhkdrc`](sxhkdrc) gestiona todas las combinaciones de teclas del entorno:
+El archivo [`sxhkdrc`](sxhkdrc) gestiona todas las combinaciones de teclas del entorno.
+
+> 📖 **Guía de Diagnóstico y Fix:** Consulta el documento especializado [`KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md`](KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md) para la resolución de eventos X11, remapeo de tecla Super y fix de hardware.
 
 | Combinación | Acción |
 |---|---|
-| <kbd>Super</kbd> + <kbd>Enter</kbd> | Abrir terminal Kitty principal |
+| <kbd>Super</kbd> / <kbd>Alt</kbd> + <kbd>Enter</kbd> | Abrir terminal Kitty principal |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Abrir terminal Kitty flotante |
-| <kbd>Super</kbd> + <kbd>D</kbd> / <kbd>Espacio</kbd> | Lanzador de aplicaciones Rofi (`drun`) |
-| <kbd>Super</kbd> + <kbd>R</kbd> | Modo ejecución Rofi (`run`) |
-| <kbd>Super</kbd> + <kbd>Tab</kbd> | Conmutador de ventanas Rofi (`window`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> | Lanzar Firefox ESR en background |
-| <kbd>Super</kbd> + <kbd>Esc</kbd> | Recargar configuración de `sxhkd` al vuelo |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Kill-switch de emergencia para procesos GUI |
+| <kbd>Super</kbd> / <kbd>Alt</kbd> + <kbd>D</kbd> o <kbd>Espacio</kbd> | Lanzador de aplicaciones Rofi (`drun`) |
+| <kbd>Super</kbd> + <kbd>R</kbd> | Modo comandos Rofi (`run`) |
+| <kbd>Super</kbd> / <kbd>Alt</kbd> + <kbd>Tab</kbd> | Conmutador de ventanas Rofi (`window`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Espacio</kbd> | Lanzador combinado Rofi (`combi`) |
+| <kbd>Super</kbd> + <kbd>W</kbd> / <kbd>Shift</kbd> + <kbd>W</kbd> | Cerrar ventana actual / Matar proceso de ventana |
+| <kbd>Super</kbd> + <kbd>1-9, 0</kbd> | Cambiar al Workspace (1 al 10) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1-9, 0</kbd> | **Mover ventana enfocada al Workspace y seguir el foco** |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>1-9, 0</kbd> | Mover ventana enfocada al Workspace en segundo plano |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> | **Reiniciar la barra Polybar** (`launch.sh`) |
+| <kbd>Super</kbd> + <kbd>Esc</kbd> | Recargar configuración de `sxhkd` al vuelo (`SIGUSR1`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Kill-switch de emergencia para procesos GUI bloqueados |
 | **🍅 Pomodoro (Pomoc)** | |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>P</kbd> | Iniciar / Alternar Pausa-Reanudar |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>E</kbd> | Finalizar bloque de enfoque / Saltar a descanso |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> | Detener temporizador y demonio |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> | Detener temporizador Pomodoro |
 | **🔊 Control de Audio & Brillo** | |
 | <kbd>Super</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> | Subir / Bajar volumen (+5% / -5%) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> | Mutear / Desmutear audio |

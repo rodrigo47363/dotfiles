@@ -6,8 +6,10 @@
 # WM INDEPENDENT HOTKEYS #
 ##########################
 
-# Lanzar Kitty (Ruta absoluta)
+# Lanzar Kitty Terminal
 super + Return
+    /opt/kitty/bin/kitty
+alt + Return
     /opt/kitty/bin/kitty
 
 # Terminal flotante
@@ -18,27 +20,55 @@ super + shift + Return
 # ROFI LAUNCHERS       #
 ########################
 
-super + {d,space}
+# Abrir menú de aplicaciones (drun)
+super + d
     rofi -show drun
+super + space
+    rofi -show drun
+alt + space
+    rofi -show drun
+alt + d
+    rofi -show drun
+alt + F1
+    rofi -show drun
+
+# Modo comandos (run)
 super + r
     rofi -show run
+
+# Selector de ventanas activas (window)
 super + Tab
     rofi -show window
+alt + Tab
+    rofi -show window
+
+# Modo combinado (combi)
 super + shift + space
     rofi -show combi
 
 ########################
-# SYSTEM CONTROLS      #
+# SYSTEM & POLYBAR     #
 ########################
 
-# Recargar configuración sxhkd de forma robusta
+# Reiniciar Polybar
+super + alt + r
+    ~/.config/polybar/launch.sh &
+super + shift + r
+    ~/.config/polybar/launch.sh &
+alt + shift + r
+    ~/.config/polybar/launch.sh &
+
+# Recargar configuración sxhkd en caliente
 super + Escape
-    pkill sxhkd && sxhkd -c ~/.config/sxhkd/sxhkdrc &
+    pkill -USR1 -x sxhkd
+alt + Escape
+    pkill -USR1 -x sxhkd
 
 # Kill switch de emergencia para procesos GUI bloqueados
 super + shift + Escape
-    pkill -9 stremio || pkill -9 burpsuite || pkill -9 firefox
+    pkill -9 stremio; pkill -9 -f burpsuite; pkill -9 -f firefox
 
+# Capturas de pantalla
 @Print
     flameshot gui -c
 shift + @Print
@@ -77,26 +107,35 @@ super + alt + e
 super + alt + s
     ~/.config/polybar/scripts/pomodoro.sh stop &
 
-# Ejecución en background (&) obligatoria para no bloquear sxhkd
+# Herramientas ofensivas y navegador
 super + shift + f
     firefox-esr &
-
 super + shift + b
     burpsuite &
 
 # Lanzar Stremio (Integrado con wrapper fix)
-super + alt + s
+super + alt + v
     /home/rodrigo47363/.local/bin/stremio-fix.sh &
 
 ########################
-# BSPWM HOTKEYS        #
+# BSPWM WINDOW & NODES #
 ########################
 
-# Gestión de sesión y nodos
-super + alt + {q,r}
-    bspc {quit,wm -r}
-super + {_,shift + }w
-    bspc node -{c,k}
+# Cerrar ventana enfocada
+super + w
+    bspc node -c
+alt + w
+    bspc node -c
+
+# Forzar cierre (Kill) de ventana
+super + shift + w
+    bspc node -k
+alt + shift + w
+    bspc node -k
+
+# Salir de BSPWM (Cerrar sesión)
+super + alt + q
+    bspc quit
 
 # Layouts
 super + m
@@ -106,38 +145,82 @@ super + y
 super + g
     bspc node -s biggest.window
 
-# Estados, flags, foco y movimiento
-super + {t,shift + t,s,f}
-    bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+# Estados de ventana (Mosaico, Flotante, Pantalla completa)
+super + t
+    bspc node -t tiled
+super + shift + t
+    bspc node -t pseudo_tiled
+super + s
+    bspc node -t floating
+super + f
+    bspc node -t fullscreen
+alt + f
+    bspc node -t fullscreen
+alt + s
+    bspc node -t floating
+alt + t
+    bspc node -t tiled
+
+# Flags de ventana
 super + ctrl + {m,x,y,z}
     bspc node -g {marked,locked,sticky,private}
+
+# Foco y cambio de posición entre ventanas
 super + {_,shift + }{Left,Down,Up,Right}
     bspc node -{f,s} {west,south,north,east}
+alt + {_,shift + }{Left,Down,Up,Right}
+    bspc node -{f,s} {west,south,north,east}
+
 super + {p,b,comma,period}
     bspc node -f @{parent,brother,first,second}
+
 super + {_,shift + }c
     bspc node -f {next,prev}.local.!hidden.window
+
 super + bracket{left,right}
     bspc desktop -f {prev,next}.local
+
 super + grave
     bspc {node,desktop} -f last
+
 super + {o,i}
     bspc wm -h off; bspc node {older,newer} -f; bspc wm -h on
 
-# Escritorios y Preselección
-super + {1-9,0}
-    bspc desktop -f '^{1-9,10}'
-super + shift + {1-9,0}
-    bspc node -d '^{1-9,10}' --follow
+########################
+# WORKSPACES           #
+########################
+
+# Enfocar escritorio (1 al 10)
+super + {1,2,3,4,5,6,7,8,9,0}
+    bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
+alt + {1,2,3,4,5,6,7,8,9,0}
+    bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
+
+# Mover ventana enfocada a escritorio y seguir foco
+super + shift + {1,2,3,4,5,6,7,8,9,0}
+    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
+alt + shift + {1,2,3,4,5,6,7,8,9,0}
+    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
+
+# Mover ventana enfocada a escritorio sin cambiar de pantalla
+super + ctrl + shift + {1,2,3,4,5,6,7,8,9,0}
+    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}'
+alt + ctrl + shift + {1,2,3,4,5,6,7,8,9,0}
+    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}'
+
+# Preselección
 super + ctrl + alt + {Left,Down,Up,Right}
     bspc node -p {west,south,north,east}
+
 super + ctrl + {1-9}
     bspc node -o 0.{1-9}
+
 super + ctrl + {space,alt + space}
     bspc node -p {cancel, $(bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel)}
 
-# Move/Resize
+# Mover / Redimensionar
 super + ctrl + {Left,Down,Up,Right}
     bspc node -v {-20 0,0 20,0 -20,20 0}
+
 super + alt + {Left,Down,Up,Right}
     ~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
