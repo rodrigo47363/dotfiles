@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OS: Linux | Windows](https://img.shields.io/badge/OS-Parrot%20%7C%20Kali%20%7C%20Windows-blue)](https://parrotsec.org/)
-[![Status: Active](https://img.shields.io/badge/Status-Active-success)]()
+[![Status: Active](https://img.shields.io/badge/Status-Active-success)](https://github.com/rodrigo47363/dotfiles)
 
 ## 🧩 Descripción
 
@@ -33,11 +33,13 @@ git clone https://github.com/rodrigo47363/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # 2. Desplegar configuraciones a ~/.config
-mkdir -p ~/.config/{bspwm,sxhkd,polybar,rofi}
+mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar,rofi}
 cp -r polybar/* ~/.config/polybar/
+cp -r rofi/* ~/.config/rofi/
 cp sxhkdrc ~/.config/sxhkd/sxhkdrc
 cp bspwmrc ~/.config/bspwm/bspwmrc
-chmod +x ~/.config/bspwm/bspwmrc ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
+cp bspwm_resize ~/.config/bspwm/scripts/bspwm_resize
+chmod +x ~/.config/bspwm/bspwmrc ~/.config/bspwm/scripts/* ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
 ```
 
 ---
@@ -157,22 +159,26 @@ fi
 
 ```text
 .
-├── bspwmrc                       # Script de inicialización y reglas de ventanas (BSPWM)
-├── sxhkdrc                       # Mapeo de atajos de teclado y hotkeys
-├── polybar/                      # Entorno y módulos de Polybar
-│   ├── config.ini                # Configuración principal de la barra (Parrot Pentest Pro)
-│   ├── launch.sh                 # Script de arranque y recarga limpia
-│   ├── fonts/                    # Fuentes personalizadas y glifos
-│   └── scripts/                  # Scripts ejecutables de los módulos
-│       ├── gpu.sh                # Monitoreo de temperatura y uso de GPU NVIDIA
-│       ├── pomodoro.sh           # Controlador interactivo de Pomoc
-│       ├── target.sh             # Módulo de IP objetivo (HTB / THM / Pentest)
-│       ├── vpn.sh                # Detección inteligente de VPN
-│       ├── wifi-menu.sh          # Gestor interactivo WiFi vía Rofi
-│       └── launcher              # Lanzador rápido
-├── rofi/                         # Temas y menús Rofi
-├── .zshrc                        # Configuración principal de Zsh y alias
-└── README.md                     # Documentación completa del entorno
+├── bspwmrc                              # Script de inicialización y reglas de ventanas (BSPWM)
+├── sxhkdrc                              # Mapeo de atajos de teclado y hotkeys
+├── bspwm_resize                         # Script para redimensionar ventanas en mosaico
+├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # Guía técnica de diagnóstico y fix X11
+├── polybar/                             # Entorno y módulos de Polybar
+│   ├── config.ini                       # Configuración principal de la barra (Parrot Pentest Pro)
+│   ├── launch.sh                        # Script de arranque y recarga limpia
+│   ├── fonts/                           # Fuentes personalizadas y glifos Nerd Fonts
+│   └── scripts/                         # Scripts ejecutables de los módulos
+│       ├── gpu.sh                       # Monitoreo de temperatura y uso de GPU NVIDIA
+│       ├── pomodoro.sh                  # Controlador interactivo de Pomoc
+│       ├── target.sh                    # Módulo de IP objetivo (HTB / THM / Pentest)
+│       ├── vpn.sh                       # Detección inteligente de VPN
+│       ├── wifi-menu.sh                 # Gestor interactivo WiFi vía Rofi
+│       └── launcher                     # Lanzador rápido
+├── rofi/                                # Temas y menús Rofi
+│   ├── config.rasi                      # Configuración central (modos, fuentes, keybindings)
+│   └── themes/                          # Temas personalizados (neo_tokyo, etc.)
+├── .zshrc                               # Configuración principal de Zsh y alias
+└── README.md                            # Documentación completa del entorno
 ```
 
 ---
