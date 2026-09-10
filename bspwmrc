@@ -5,8 +5,9 @@
 # ==========================================
 # Cambiamos wmname para compatibilidad con aplicaciones Java (ej: BurpSuite)
 wmname LG3D &
-xsetroot -cursor_name left_ptr &
-xmodmap -e "keycode 172 = Super_L NoSymbol Super_L" -e "add mod4 = Super_L" 2>/dev/null &
+[ -f "$HOME/.Xmodmap" ] && xmodmap "$HOME/.Xmodmap"
+numlockx off 2>/dev/null || xset -led named "Num Lock" 2>/dev/null || true
+rm -f /run/user/$UID/rofi*.pid /tmp/rodrigo47363-rofi.lock 2>/dev/null || true
 
 # ==========================================
 # 2. CONFIGURACIÓN BSPWM
@@ -33,12 +34,9 @@ bspc rule -a Screenkey manage=off
 # ==========================================
 # 3. AUTOARRANQUE (Gestión limpia de procesos)
 # ==========================================
-# sxhkd: Recarga en caliente si ya corre, o lo inicia limpiamente
-if pgrep -x sxhkd >/dev/null; then
-    pkill -USR1 -x sxhkd
-else
-    sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
-fi
+# sxhkd: Inicia limpiamente
+pkill -9 -x sxhkd 2>/dev/null || true
+sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
 
 # Compositor picom
 if ! pgrep -x picom >/dev/null; then
@@ -53,11 +51,13 @@ fi
 # ==========================================
 # 4. HARDWARE E INTERFAZ
 # ==========================================
-# Tapping persistente (mejor con variable)
-TOUCHPAD_ID=$(xinput list --name-only | grep -i "touchpad")
-if [ -n "$TOUCHPAD_ID" ]; then
-    xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
-fi
+# Tapping persistente (Tap-to-click) y desplazamiento natural
+for dev_id in $(xinput list --id-only 2>/dev/null); do
+    if xinput list-props "$dev_id" 2>/dev/null | grep -q "libinput Tapping Enabled"; then
+        xinput set-prop "$dev_id" "libinput Tapping Enabled" 1 2>/dev/null
+        xinput set-prop "$dev_id" "libinput Natural Scrolling Enabled" 1 2>/dev/null
+    fi
+done
 
 # Wallpaper y Barra
 [ -f ~/Wallpaper/rodrigo47363.png ] && feh --bg-fill ~/Wallpaper/rodrigo47363.png &

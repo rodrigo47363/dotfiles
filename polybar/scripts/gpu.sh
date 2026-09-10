@@ -14,6 +14,20 @@ if [ "$1" = "open" ]; then
     exit 0
 fi
 
+# 1. Comprobar si la GPU dedicada está en suspensión de energía (D3cold)
+# para evitar despertarla innecesariamente y ahorrar batería en laptops híbridas
+for dev in /sys/bus/pci/devices/*; do
+    if [ -f "$dev/vendor" ] && [ "$(cat "$dev/vendor" 2>/dev/null)" = "0x10de" ]; then
+        if [ -f "$dev/power/runtime_status" ]; then
+            if [ "$(cat "$dev/power/runtime_status" 2>/dev/null)" = "suspended" ]; then
+                echo "%{F#5c6370}󰢮 GPU Off%{F-}"
+                exit 0
+            fi
+        fi
+        break
+    fi
+done
+
 # Consultar temperatura y utilización a través de nvidia-smi
 gpu_info=$(nvidia-smi --query-gpu=temperature.gpu,utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
 

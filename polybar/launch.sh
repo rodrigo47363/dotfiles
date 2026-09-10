@@ -10,7 +10,8 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 0.2; done
 # Lanzar la barra 'parrot' especificando el archivo de configuración correcto
 export DISPLAY="${DISPLAY:-:0}"
 export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
-nohup polybar parrot -c ~/.config/polybar/config.ini </dev/null >/dev/null 2>&1 &
+
+nohup polybar parrot -c "$HOME/.config/polybar/config.ini" >> /tmp/polybar.log 2>&1 &
 
 # Confirmación en consola
 echo "Polybar [parrot] cargada."

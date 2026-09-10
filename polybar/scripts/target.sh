@@ -24,7 +24,7 @@ if [ -f "$target_file" ]; then
     name_target=$(awk '{print $2}' "$target_file" 2>/dev/null)
 
     if [ -n "$ip_target" ]; then
-        if ping -c 1 -W 1 "$ip_target" > /dev/null 2>&1; then
+        if ping -c 1 -W 0.4 "$ip_target" > /dev/null 2>&1; then
             icon="%{F#98c379}󰓾%{F-}"
             text_color="%{F#e5e9f0}"
         else
@@ -33,6 +33,9 @@ if [ -f "$target_file" ]; then
         fi
 
         if [ -n "$name_target" ]; then
+            if [ ${#name_target} -gt 12 ]; then
+                name_target="${name_target:0:10}.."
+            fi
             echo "$icon $text_color$ip_target - $name_target%{F-}"
         else
             echo "$icon $text_color$ip_target%{F-}"

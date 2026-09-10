@@ -1,5 +1,8 @@
 ###########################################################
-# CONFIGURACIÓN SXHKD - ENTORNO DE PENTESTING (BSPWM)     #
+# CONFIGURACIÓN SXHKD - PURE SUPER (WINDOWS KEY) BINDINGS #
+# Entorno: BSPWM + Parrot OS                              #
+# Modificador Maestro: Super (Mod4 / Tecla Windows)       #
+# CERO interferencia con teclas Alt                       #
 ###########################################################
 
 ##########################
@@ -8,8 +11,6 @@
 
 # Lanzar Kitty Terminal
 super + Return
-    /opt/kitty/bin/kitty
-alt + Return
     /opt/kitty/bin/kitty
 
 # Terminal flotante
@@ -20,17 +21,11 @@ super + shift + Return
 # ROFI LAUNCHERS       #
 ########################
 
-# Abrir menú de aplicaciones (drun)
+# Abrir menú de aplicaciones (drun) - Single Instance Toggle
 super + d
-    rofi -show drun
+    pkill -x rofi || rofi -show drun
 super + space
-    rofi -show drun
-alt + space
-    rofi -show drun
-alt + d
-    rofi -show drun
-alt + F1
-    rofi -show drun
+    pkill -x rofi || rofi -show drun
 
 # Modo comandos (run)
 super + r
@@ -39,29 +34,27 @@ super + r
 # Selector de ventanas activas (window)
 super + Tab
     rofi -show window
-alt + Tab
-    rofi -show window
 
 # Modo combinado (combi)
 super + shift + space
     rofi -show combi
 
+# Menú de apagado (Power Menu)
+alt + F4
+    /home/rodrigo47363/.local/bin/powermenu
+
 ########################
 # SYSTEM & POLYBAR     #
 ########################
 
-# Reiniciar Polybar
+# Reiniciar Polybar (Super + Alt + R o Super + Shift + R)
 super + alt + r
-    ~/.config/polybar/launch.sh &
+    bash "$HOME/.config/polybar/launch.sh"
 super + shift + r
-    ~/.config/polybar/launch.sh &
-alt + shift + r
-    ~/.config/polybar/launch.sh &
+    bash "$HOME/.config/polybar/launch.sh"
 
 # Recargar configuración sxhkd en caliente
 super + Escape
-    pkill -USR1 -x sxhkd
-alt + Escape
     pkill -USR1 -x sxhkd
 
 # Kill switch de emergencia para procesos GUI bloqueados
@@ -100,12 +93,16 @@ XF86AudioMute
 ########################
 
 # Pomodoro (Pomoc)
+super + ctrl + p
+    bash "$HOME/.config/polybar/scripts/pomodoro.sh" toggle &
+super + ctrl + e
+    bash "$HOME/.config/polybar/scripts/pomodoro.sh" end &
+super + ctrl + r
+    bash "$HOME/.config/polybar/scripts/pomodoro.sh" reset &
+super + ctrl + s
+    bash "$HOME/.config/polybar/scripts/pomodoro.sh" stop &
 super + alt + p
-    ~/.config/polybar/scripts/pomodoro.sh toggle &
-super + alt + e
-    ~/.config/polybar/scripts/pomodoro.sh end &
-super + alt + s
-    ~/.config/polybar/scripts/pomodoro.sh stop &
+    /home/rodrigo47363/.local/bin/rofi-pomodoro &
 
 # Herramientas ofensivas y navegador
 super + shift + f
@@ -113,8 +110,12 @@ super + shift + f
 super + shift + b
     burpsuite &
 
+# Centro de control AcerSense / NitroSense
+super + shift + a
+    /home/rodrigo47363/.local/bin/acersense-gui &
+
 # Lanzar Stremio (Integrado con wrapper fix)
-super + alt + v
+super + v
     /home/rodrigo47363/.local/bin/stremio-fix.sh &
 
 ########################
@@ -124,16 +125,14 @@ super + alt + v
 # Cerrar ventana enfocada
 super + w
     bspc node -c
-alt + w
-    bspc node -c
 
 # Forzar cierre (Kill) de ventana
 super + shift + w
     bspc node -k
-alt + shift + w
-    bspc node -k
 
-# Salir de BSPWM (Cerrar sesión)
+# Salir de BSPWM (Cerrar sesión - Super + Shift + Q o Super + Alt + Q)
+super + shift + q
+    bspc quit
 super + alt + q
     bspc quit
 
@@ -154,12 +153,6 @@ super + s
     bspc node -t floating
 super + f
     bspc node -t fullscreen
-alt + f
-    bspc node -t fullscreen
-alt + s
-    bspc node -t floating
-alt + t
-    bspc node -t tiled
 
 # Flags de ventana
 super + ctrl + {m,x,y,z}
@@ -168,7 +161,8 @@ super + ctrl + {m,x,y,z}
 # Foco y cambio de posición entre ventanas
 super + {_,shift + }{Left,Down,Up,Right}
     bspc node -{f,s} {west,south,north,east}
-alt + {_,shift + }{Left,Down,Up,Right}
+
+super + {_,shift + }{h,j,k,l}
     bspc node -{f,s} {west,south,north,east}
 
 super + {p,b,comma,period}
@@ -181,7 +175,7 @@ super + bracket{left,right}
     bspc desktop -f {prev,next}.local
 
 super + grave
-    bspc {node,desktop} -f last
+    bspc node -f last.local
 
 super + {o,i}
     bspc wm -h off; bspc node {older,newer} -f; bspc wm -h on
@@ -193,34 +187,50 @@ super + {o,i}
 # Enfocar escritorio (1 al 10)
 super + {1,2,3,4,5,6,7,8,9,0}
     bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
-alt + {1,2,3,4,5,6,7,8,9,0}
-    bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
 
 # Mover ventana enfocada a escritorio y seguir foco
 super + shift + {1,2,3,4,5,6,7,8,9,0}
-    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
-alt + shift + {1,2,3,4,5,6,7,8,9,0}
     bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
 
 # Mover ventana enfocada a escritorio sin cambiar de pantalla
 super + ctrl + shift + {1,2,3,4,5,6,7,8,9,0}
     bspc node -d '^{1,2,3,4,5,6,7,8,9,10}'
-alt + ctrl + shift + {1,2,3,4,5,6,7,8,9,0}
-    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}'
 
 # Preselección
-super + ctrl + alt + {Left,Down,Up,Right}
+super + ctrl + {Left,Down,Up,Right}
     bspc node -p {west,south,north,east}
 
 super + ctrl + {1-9}
     bspc node -o 0.{1-9}
 
-super + ctrl + {space,alt + space}
-    bspc node -p {cancel, $(bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel)}
+# Cancelar preselección de la ventana enfocada
+super + ctrl + space
+    bspc node -p cancel
+
+# Cancelar todas las preselecciones del escritorio actual
+super + ctrl + shift + space
+    bspc query -N -d | xargs -I {} bspc node {} -p cancel
 
 # Mover / Redimensionar
-super + ctrl + {Left,Down,Up,Right}
+super + ctrl + shift + {h,j,k,l}
     bspc node -v {-20 0,0 20,0 -20,20 0}
 
-super + alt + {Left,Down,Up,Right}
-    ~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
+###########################################################
+# ACERSENSE PRO - TECLA FÍSICA NITRO / HOTKEYS            #
+###########################################################
+
+# Tecla física NitroSense [N] (Comportamiento idéntico a Windows -> Abrir App)
+XF86Launch1
+    /home/rodrigo47363/.local/bin/acersense-gui &
+
+XF86Presentation
+    /home/rodrigo47363/.local/bin/acersense-gui &
+
+# Atajo con Tecla Windows: Super + N (Abrir App)
+super + n
+    /home/rodrigo47363/.local/bin/acersense-gui &
+
+# Atajo alternativo: Super + Shift + N (Alternar Turbo / Auto sin abrir ventana)
+super + shift + n
+    /home/rodrigo47363/.local/bin/toggle_nitro.sh
+

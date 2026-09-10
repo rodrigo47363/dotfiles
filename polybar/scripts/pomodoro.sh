@@ -21,19 +21,35 @@ case "$1" in
         pomoc end
         exit 0
         ;;
+    reset)
+        ensure_daemon
+        pomoc reset
+        notify-send -u low -a "Pomoc" -i "alarm" "Pomodoro Reset" "Temporizador restablecido a IDLE" 2>/dev/null
+        exit 0
+        ;;
+    restart)
+        pkill -x pomod
+        sleep 0.2
+        pomod &
+        notify-send -u normal -a "Pomoc" -i "alarm" "Pomodoro Daemon" "Demonio pomod reiniciado" 2>/dev/null
+        exit 0
+        ;;
+    menu)
+        /home/rodrigo47363/.local/bin/rofi-pomodoro &
+        exit 0
+        ;;
     stop)
         pkill -x pomod
         exit 0
         ;;
 esac
 
-if ! pgrep -x "pomod" >/dev/null 2>&1; then
+read -r state phase time_left <<< "$(pomoc status 2>/dev/null)"
+
+if [ -z "$state" ]; then
     echo "%{F#5c6370}󱎫 Pomo:%{F-} %{F#707880}Off%{F-}"
     exit 0
 fi
-
-state=$(pomoc status state 2>/dev/null)
-time_left=$(pomoc status time 2>/dev/null)
 
 case "$state" in
     running)
@@ -45,8 +61,11 @@ case "$state" in
     break)
         echo "%{F#c678dd}󰔟 Break:%{F-} %{F#e5e9f0}$time_left%{F-}"
         ;;
+    break_paused)
+        echo "%{F#e5c07b}󰔟 Pausado:%{F-} %{F#e5e9f0}$time_left%{F-}"
+        ;;
     idle)
-        echo "%{F#61afef}󱎫 Pomo:%{F-} %{F#abb2bf}25:00%{F-}"
+        echo "%{F#61afef}󱎫 Pomo:%{F-} %{F#abb2bf}${time_left:-25:00}%{F-}"
         ;;
     *)
         echo "%{F#5c6370}󱎫 Pomo:%{F-} %{F#707880}Off%{F-}"

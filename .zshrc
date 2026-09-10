@@ -135,12 +135,22 @@ function extractPorts() {
 function settarget() {
     if [ $# -eq 1 ]; then
         echo "$1" > ~/.config/bin/target
-    elif [ $# -gt 2 ]; then
-        echo "settarget [IP] [NAME] | settarget [IP]"
-    else
+        echo -e "[+] Objetivo configurado: \033[1;32m$1\033[0m"
+    elif [ $# -eq 2 ]; then
         echo "$1 $2" > ~/.config/bin/target
+        echo -e "[+] Objetivo configurado: \033[1;32m$1\033[0m ($2)"
+    else
+        echo "Uso: settarget [IP] [NOMBRE] | settarget [IP]"
     fi
 }
+
+function cleartarget() {
+    > ~/.config/bin/target
+    echo "[-] Objetivo limpiado."
+}
+
+alias settgt="settarget"
+alias cleartgt="cleartarget"
 
 function man() {
     env \
@@ -199,3 +209,4 @@ export PATH="$HOME/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="$HOME/.cargo/bin:$PATH"
