@@ -69,22 +69,22 @@ shift + @Print
 
 # Brillo
 XF86MonBrightnessUp
-    brightnessctl set +5%
+    brightnessctl set +1%
 XF86MonBrightnessDown
-    brightnessctl set 5%-
+    brightnessctl set 1%-
 
 # Audio
 super + Up
-    pamixer -i 5
+    pamixer -i 1
 super + Down
-    pamixer -d 5
+    pamixer -d 1
 super + shift + m
     pamixer -t
 
 XF86AudioRaiseVolume
-    pamixer -i 5
+    pamixer -i 1
 XF86AudioLowerVolume
-    pamixer -d 5
+    pamixer -d 1
 XF86AudioMute
     pamixer -t
 

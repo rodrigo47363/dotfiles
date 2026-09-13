@@ -2,7 +2,8 @@
 
 # ==========================================================
 # POWERMENU PRO - BSPWM & ROFI SUITE
-# Menú de apagado rápido, interactivo y estético
+# Menú de apagado horizontal con herencia dinámica del tema Rofi
+# Respeta automáticamente el tema configurado en config.rasi
 # ==========================================================
 
 # Single-instance toggle: Si Rofi ya está abierto, cerrarlo
@@ -15,24 +16,64 @@ shutdown="󰐥  Apagar"
 reboot="󰑓  Reiniciar"
 suspend="󰤄  Suspender"
 lock="󰌾  Bloquear"
-logout="󰗼  Cerrar Sesión"
+logout="󰗼  Salir"
 
 options="$shutdown\n$reboot\n$suspend\n$lock\n$logout"
 
 uptime_str=$(uptime -p 2>/dev/null | sed -e 's/up //g')
 
-# Invocar Rofi con estilo compacto centrado
+# Estilo horizontal dinámico (hereda colores, bordes y fondos del tema activo de Rofi)
+ROFI_THEME_HORIZONTAL='
+window { width: 680px; padding: 16px; }
+mainbox { children: [ inputbar, listview ]; spacing: 12px; background-color: transparent; }
+inputbar { children: [ prompt ]; enabled: true; padding: 6px 12px; }
+prompt { horizontal-align: 0.5; }
+listview { layout: horizontal; lines: 5; spacing: 10px; scrollbar: false; background-color: transparent; }
+element { orientation: horizontal; padding: 16px 8px; width: 120px; cursor: pointer; }
+element-text { horizontal-align: 0.5; vertical-align: 0.5; font: "JetBrainsMono Nerd Font Bold 11"; }
+'
+
+ROFI_THEME_CONFIRM='
+window { width: 380px; padding: 16px; }
+mainbox { children: [ inputbar, listview ]; spacing: 12px; background-color: transparent; }
+inputbar { children: [ prompt ]; enabled: true; padding: 6px 12px; }
+prompt { horizontal-align: 0.5; }
+listview { layout: horizontal; lines: 2; spacing: 10px; scrollbar: false; background-color: transparent; }
+element { orientation: horizontal; padding: 16px 8px; width: 160px; cursor: pointer; }
+element-text { horizontal-align: 0.5; vertical-align: 0.5; font: "JetBrainsMono Nerd Font Bold 11"; }
+'
+
+# Diálogo de confirmación dinámico
+confirm_action() {
+    local action="$1"
+    local prompt_text="$2"
+    local cancel="󰅖  Cancelar"
+    local confirm="󰄲  Confirmar"
+
+    local choice=$(echo -e "$cancel\n$confirm" | rofi -dmenu -i \
+        -theme-str "$ROFI_THEME_CONFIRM" \
+        -p " $prompt_text " \
+        -selected-row 0)
+
+    [[ "$choice" == "$confirm" ]]
+}
+
+# Invocar Rofi: Fila 3 preseleccionada por defecto (Bloquear)
 chosen=$(echo -e "$options" | rofi -dmenu -i \
-    -p " 󰐥 Apagado (${uptime_str:-activo}) " \
-    -theme-str 'window { width: 340px; } listview { lines: 5; }' \
-    -selected-row 0)
+    -theme-str "$ROFI_THEME_HORIZONTAL" \
+    -p " 󰐥 Power Menu (Activo: ${uptime_str:-online}) " \
+    -selected-row 3)
 
 case "$chosen" in
     "$shutdown")
-        systemctl poweroff
+        if confirm_action "Apagar" "¿Apagar el sistema?"; then
+            systemctl poweroff
+        fi
         ;;
     "$reboot")
-        systemctl reboot
+        if confirm_action "Reiniciar" "¿Reiniciar el sistema?"; then
+            systemctl reboot
+        fi
         ;;
     "$suspend")
         systemctl suspend
@@ -49,6 +90,8 @@ case "$chosen" in
         fi
         ;;
     "$logout")
-        bspc quit
+        if confirm_action "Salir" "¿Cerrar sesión de BSPWM?"; then
+            bspc quit
+        fi
         ;;
 esac
