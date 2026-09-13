@@ -26,7 +26,6 @@ bspc config focused_border_color "#81a1c1"
 
 # Reglas de Pentesting: Fuerza herramientas a escritorios específicos y estados
 bspc rule -a BurpSuite desktop='^10' state=tiled follow=on
-bspc rule -a Firefox desktop='^2'
 bspc rule -a Gimp state=floating follow=on
 bspc rule -a resolve state=floating follow=on
 bspc rule -a mpv state=floating

@@ -106,7 +106,7 @@ super + alt + p
 
 # Herramientas ofensivas y navegador
 super + shift + f
-    firefox-esr &
+    firefox &
 super + shift + b
     burpsuite &
 
@@ -223,8 +223,9 @@ super + ctrl + shift + {h,j,k,l}
 XF86Launch1
     /home/rodrigo47363/.local/bin/acersense-gui &
 
-XF86Presentation
-    /home/rodrigo47363/.local/bin/acersense-gui &
+# XF86Presentation (No es un keysym X11 estándar)
+# XF86Presentation
+#     /home/rodrigo47363/.local/bin/acersense-gui &
 
 # Atajo con Tecla Windows: Super + N (Abrir App)
 super + n
