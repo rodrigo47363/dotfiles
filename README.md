@@ -1,6 +1,8 @@
 # ⚙️ Dotfiles — Entorno de Auditoría Ofensiva, Pentesting y Desarrollo
 
-![Dotfiles Preview](Example1.png)
+<p align="center">
+  <img src="assets/preview.png" alt="Dotfiles Preview" width="100%">
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OS: Linux | Windows](https://img.shields.io/badge/OS-Parrot%20%7C%20Kali%20%7C%20Debian-blue)](https://parrotsec.org/)
@@ -121,6 +123,10 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 | <kbd>Super</kbd> + <kbd>V</kbd> | Lanzar Stremio con wrapper de inicialización |
 | <kbd>Alt</kbd> + <kbd>F4</kbd> | **Menú de apagado interactivo Rofi** (`powermenu`) |
 
+<p align="center">
+  <img src="assets/powermenu.png" alt="Power Menu Preview" width="85%">
+</p>
+
 ### 🍅 Control Pomodoro (`pomoc`)
 | Atajo | Acción Operativa |
 |---|---|
@@ -226,6 +232,9 @@ Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
 
 ```text
 dotfiles/
+├── assets/                               # Capturas de pantalla y showcases del entorno
+│   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch)
+│   └── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
 ├── bspwmrc                              # Script maestro de inicialización de BSPWM y reglas de ventanas
 ├── sxhkdrc                              # Mapeo de atajos de teclado globales (Pure Super Mod4)
 ├── bspwm_resize                         # Utilidad auxiliar para redimensionar ventanas en tiling

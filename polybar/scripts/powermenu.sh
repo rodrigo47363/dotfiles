@@ -24,13 +24,13 @@ uptime_str=$(uptime -p 2>/dev/null | sed -e 's/up //g')
 
 # Estilo horizontal dinámico (hereda colores, bordes y fondos del tema activo de Rofi)
 ROFI_THEME_HORIZONTAL='
-window { width: 680px; padding: 16px; }
+window { width: 780px; padding: 16px; }
 mainbox { children: [ inputbar, listview ]; spacing: 12px; background-color: transparent; }
 inputbar { children: [ prompt ]; enabled: true; padding: 6px 12px; }
 prompt { horizontal-align: 0.5; }
 listview { layout: horizontal; lines: 5; spacing: 10px; scrollbar: false; background-color: transparent; }
-element { orientation: horizontal; padding: 16px 8px; width: 120px; cursor: pointer; }
-element-text { horizontal-align: 0.5; vertical-align: 0.5; font: "JetBrainsMono Nerd Font Bold 11"; }
+element { orientation: horizontal; padding: 16px 6px; width: 140px; cursor: pointer; }
+element-text { horizontal-align: 0.5; vertical-align: 0.5; font: "JetBrainsMono Nerd Font Bold 10"; }
 '
 
 ROFI_THEME_CONFIRM='
