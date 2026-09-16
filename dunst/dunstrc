@@ -1,0 +1,106 @@
+[global]
+    ### Geometría y Posicionamiento ###
+    monitor = 0
+    follow = keyboard
+    width = (300, 450)
+    height = (20, 300)
+    origin = top-right
+    offset = (18, 48)
+    scale = 0
+    notification_limit = 5
+
+    ### Apariencia y Estilo Visual (One Dark / Cyberpunk Slate Hybrid) ###
+    progress_bar = true
+    progress_bar_height = 7
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 180
+    progress_bar_max_width = 320
+    progress_bar_corner_radius = 4
+    progress_bar_horizontal_alignment = center
+    highlight = "#61afef, #56b6c2"
+    indicate_hidden = yes
+    transparency = 5
+    separator_height = 2
+    padding = 12
+    horizontal_padding = 16
+    text_icon_padding = 12
+    frame_width = 2
+    frame_color = "#61afef"
+    gap_size = 8
+    separator_color = frame
+    sort = yes
+    corner_radius = 12
+
+    ### Tipografía y Formato ###
+    font = Hack Nerd Font 10
+    line_height = 3
+    markup = full
+    format = "<b><span foreground='#61afef'>%a</span>: %s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = middle
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+
+    ### Iconos ###
+    enable_recursive_icon_lookup = true
+    icon_theme = "Flat-Remix-Green-Dark, Adwaita"
+    icon_position = left
+    min_icon_size = 24
+    max_icon_size = 48
+    icon_path = /usr/share/icons/Flat-Remix-Green-Dark/status/scalable/:/usr/share/icons/Flat-Remix-Green-Dark/devices/scalable/:/usr/share/icons/Flat-Remix-Green-Dark/apps/scalable/:/usr/share/icons/Adwaita/scalable/status/:/usr/share/icons/hicolor/scalable/apps/
+
+    ### Historial e Interacción ###
+    sticky_history = yes
+    history_length = 20
+    dmenu = /usr/bin/rofi -dmenu -p "Notificaciones"
+    browser = /usr/bin/xdg-open
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+    ignore_dbusclose = false
+
+    ### Control con Ratón ###
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#141820"
+    foreground = "#abb2bf"
+    frame_color = "#56b6c2"
+    timeout = 4
+    format = "<b><span foreground='#56b6c2'>%a</span>: %s</b>\n%b"
+
+[urgency_normal]
+    background = "#141820"
+    foreground = "#e6edf3"
+    frame_color = "#61afef"
+    timeout = 6
+    format = "<b><span foreground='#61afef'>%a</span>: %s</b>\n%b"
+
+[urgency_critical]
+    background = "#141820"
+    foreground = "#ffffff"
+    frame_color = "#e06c75"
+    timeout = 0
+    format = "<b><span foreground='#e06c75'>⚠️ %a</span>: %s</b>\n%b"
+
+### Reglas Dedicadas OSD (Volumen & Brillo con Animación Fluida) ###
+[volume_osd]
+    appname = "volume_osd"
+    format = "<b>%s:</b> <span foreground='#61afef'><b>%b</b></span>"
+    history_ignore = yes
+    timeout = 2
+    highlight = "#61afef, #56b6c2"
+
+[brightness_osd]
+    appname = "brightness_osd"
+    format = "<b>%s:</b> <span foreground='#e5c07b'><b>%b</b></span>"
+    history_ignore = yes
+    timeout = 2
+    highlight = "#e5c07b, #d19a66"
+

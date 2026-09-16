@@ -67,26 +67,34 @@ super + shift + Escape
 shift + @Print
     flameshot gui
 
-# Brillo
+# Brillo (OSD y barra animada)
 XF86MonBrightnessUp
-    brightnessctl set +1%
+    /home/rodrigo47363/.local/bin/brightness up
 XF86MonBrightnessDown
-    brightnessctl set 1%-
+    /home/rodrigo47363/.local/bin/brightness down
 
-# Audio
+# Audio (OSD y barra animada)
 super + Up
-    pamixer -i 1
+    /home/rodrigo47363/.local/bin/volume up
 super + Down
-    pamixer -d 1
+    /home/rodrigo47363/.local/bin/volume down
 super + shift + m
-    pamixer -t
+    /home/rodrigo47363/.local/bin/volume mute
 
 XF86AudioRaiseVolume
-    pamixer -i 1
+    /home/rodrigo47363/.local/bin/volume up
 XF86AudioLowerVolume
-    pamixer -d 1
+    /home/rodrigo47363/.local/bin/volume down
 XF86AudioMute
-    pamixer -t
+    /home/rodrigo47363/.local/bin/volume mute
+XF86AudioMicMute
+    /home/rodrigo47363/.local/bin/volume mic
+
+# Sliders interactivos flotantes (Toggle con ratón o teclado)
+super + alt + v
+    /home/rodrigo47363/.local/bin/volume-slider
+super + alt + b
+    /home/rodrigo47363/.local/bin/brightness-slider
 
 ########################
 # CUSTOM PENTEST APPS  #

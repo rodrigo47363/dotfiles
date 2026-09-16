@@ -30,6 +30,8 @@ bspc rule -a Gimp state=floating follow=on
 bspc rule -a resolve state=floating follow=on
 bspc rule -a mpv state=floating
 bspc rule -a Screenkey manage=off
+bspc rule -a "OsdSlider_volume" state=floating border=off focus=on
+bspc rule -a "OsdSlider_brightness" state=floating border=off focus=on
 
 # ==========================================
 # 3. AUTOARRANQUE (Gestión limpia de procesos)
@@ -48,6 +50,12 @@ if ! pgrep -x lxpolkit >/dev/null; then
     lxpolkit &
 fi
 
+# Demonio de Notificaciones (Dunst)
+if which dunst >/dev/null 2>&1; then
+    killall -q dunst 2>/dev/null || true
+    dunst -config "$HOME/.config/dunst/dunstrc" &
+fi
+
 # ==========================================
 # 4. HARDWARE E INTERFAZ
 # ==========================================
@@ -60,5 +68,5 @@ for dev_id in $(xinput list --id-only 2>/dev/null); do
 done
 
 # Wallpaper y Barra
-[ -f ~/Wallpaper/rodrigo47363.png ] && feh --bg-fill ~/Wallpaper/rodrigo47363.png &
+[ -f "$HOME/.fehbg" ] && "$HOME/.fehbg" &
 $HOME/.config/polybar/launch.sh &

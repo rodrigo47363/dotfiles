@@ -49,7 +49,7 @@ cd ~/dotfiles
 ### 2. Desplegar Enlaces Simbólicos / Copiar a `~/.config`
 ```bash
 # Crear estructura base
-mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar/scripts,rofi/themes,kitty}
+mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar/scripts,rofi/themes,kitty,dunst,picom} ~/.local/bin
 
 # Desplegar configuraciones
 cp -r polybar/* ~/.config/polybar/
@@ -58,11 +58,15 @@ cp sxhkdrc ~/.config/sxhkd/sxhkdrc
 cp bspwmrc ~/.config/bspwm/bspwmrc
 cp bspwm_resize ~/.config/bspwm/scripts/bspwm_resize
 cp kitty.conf ~/.config/kitty/kitty.conf
+cp dunst/dunstrc ~/.config/dunst/dunstrc
+cp picom/picom.conf ~/.config/picom/picom.conf
+cp bin/* ~/.local/bin/
 cp .zshrc ~/.zshrc
 
 # Asignar permisos de ejecución a los binarios y scripts
 chmod +x ~/.config/bspwm/bspwmrc ~/.config/bspwm/scripts/*
 chmod +x ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
+chmod +x ~/.local/bin/*
 ```
 
 ---
@@ -143,6 +147,18 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 | <kbd>Super</kbd> + <kbd>N</kbd> | Atajo alternativo por software para abrir la GUI |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd> | Alternar ventiladores entre **Turbo Máximo** y **Automático** (notificación en pantalla) |
 
+### 🔊 Control de Audio, Brillo y Sliders OSD
+| Atajo | Acción Operativa |
+|---|---|
+| <kbd>XF86AudioRaiseVolume</kbd> o <kbd>Super</kbd> + <kbd>↑</kbd> | Subir volumen de 1 en 1 (1%) con OSD animado (`volume up`) |
+| <kbd>XF86AudioLowerVolume</kbd> o <kbd>Super</kbd> + <kbd>↓</kbd> | Bajar volumen de 1 en 1 (1%) con OSD animado (`volume down`) |
+| <kbd>XF86AudioMute</kbd> o <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> | Alternar silencio de audio (`volume mute`) |
+| <kbd>XF86AudioMicMute</kbd> | Alternar silencio de micrófono (`volume mic`) |
+| <kbd>XF86MonBrightnessUp</kbd> | Subir brillo de 1 en 1 (1%) con OSD animado (`brightness up`) |
+| <kbd>XF86MonBrightnessDown</kbd> | Bajar brillo de 1 en 1 (1%) con protección de pantalla (`brightness down`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>V</kbd> | **Abrir / Cerrar Slider flotante interactivo de Volumen** (`volume-slider`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> | **Abrir / Cerrar Slider flotante interactivo de Brillo** (`brightness-slider`) |
+
 ---
 
 ## 📊 Polybar — Suite Modular Táctica (`config.ini`)
@@ -204,6 +220,9 @@ Diseñado específicamente para flujos de trabajo de seguridad ofensiva:
   * Informa estado de RPM de ventiladores y temperatura de CPU/GPU.
   * **Click Izquierdo:** Alterna entre modo silencioso/automático y modo **MAX TURBO**.
   * **Click Derecho:** Abre la interfaz gráfica de AcerSense.
+* **Control Interactivo de Volumen y Brillo por Ratón & OSD:**
+  * **Volumen (`󰕾`):** Clic izquierdo abre el popup interactivo `volume-slider` para arrastre libre con ratón o presets rápidos (`20%` a `100%`). Rueda del ratón sube/baja de 1 en 1 mostrando la barra OSD animada en cian. Clic central conmuta silencio (`mute`) y clic derecho abre `alsamixer`.
+  * **Brillo (`󰃠`):** Clic izquierdo abre el popup interactivo `brightness-slider`. Rueda del ratón sube/baja de 1 en 1 mostrando la barra OSD animada en ámbar con protección contra apagado total de pantalla (`-n 1`).
 * **Gestor WiFi Interactivo ([`wifi-menu.sh`](polybar/scripts/wifi-menu.sh)):**
   * Menú Rofi para escanear redes inalámbricas, consultar fuerza de señal e ingresar contraseñas protegidas.
 
@@ -215,7 +234,8 @@ Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
 * **Fijación de Identidad Java:** `wmname LG3D &` para resolver incompatibilidades de renderizado y menús grises en aplicaciones Java como **Burp Suite Professional**.
 * **Gestión de Teclado y Teclas Huérfanas:** Remapeo de eventos X11 y desactivación de estados de bloqueo residuales (`xmodmap`, `numlockx`).
 * **Hardware Touchpad:** Detección automática en bucle para habilitar *Tap-to-click* y *Natural Scrolling* mediante `libinput` en cualquier ID de dispositivo señalador.
-* **Arranque Limpio:** Verificación de instancias previas antes de lanzar `sxhkd`, `picom`, `polybar` y gestores de fondo de pantalla (`feh`).
+* **Arranque Limpio:** Verificación de instancias previas antes de lanzar `sxhkd`, `picom`, `polybar`, `dunst` y gestores de fondo de pantalla (`feh`).
+* **Reglas Flotantes OSD:** Reglas dedicadas para que los popups interactivos (`OsdSlider_volume` y `OsdSlider_brightness`) floten siempre sin bordes y con foco automático.
 
 ---
 
@@ -235,7 +255,17 @@ dotfiles/
 ├── assets/                               # Capturas de pantalla y showcases del entorno
 │   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch)
 │   └── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
+├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
+│   ├── volume                           # Controlador CLI de audio con OSD Dunst y paso de 1%
+│   ├── brightness                       # Controlador CLI de brillo con OSD Dunst, paso de 1% y fail-safe
+│   ├── osd-slider.py                    # Popup GUI interactivo en PyQt5 para volumen y brillo con mouse
+│   ├── volume-slider                    # Wrapper lanzador/toggle del slider interactivo de volumen
+│   └── brightness-slider                # Wrapper lanzador/toggle del slider interactivo de brillo
 ├── bspwmrc                              # Script maestro de inicialización de BSPWM y reglas de ventanas
+├── dunst/                               # Configuración del demonio de notificaciones y OSD
+│   └── dunstrc                          # Reglas visuales One Dark, barras con esquinas redondeadas y timeouts
+├── picom/                               # Configuración del compositor gráfico
+│   └── picom.conf                       # Backend GLX acelerado, sombras y desvanecimiento suave (fading)
 ├── sxhkdrc                              # Mapeo de atajos de teclado globales (Pure Super Mod4)
 ├── bspwm_resize                         # Utilidad auxiliar para redimensionar ventanas en tiling
 ├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # Diagnóstico y resolución de incidencias en teclado y X11

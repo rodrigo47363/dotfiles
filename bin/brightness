@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Script de Control de Brillo y OSD con Barra Animada (Dunst + Brightnessctl)
+# Entorno: BSPWM / Parrot OS - Pentesting & Security Ops Edition
+# ==============================================================================
+
+# Dependencias requeridas
+for cmd in brightnessctl dunstify; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo -e "\e[1;31m[!] Error: '$cmd' no está instalado en el sistema.\e[0m" >&2
+        exit 1
+    fi
+done
+
+# Parámetros y constantes
+DEFAULT_STEP=1
+STEP="${2:-$DEFAULT_STEP}"
+NOTIFICATION_ID=2594
+TIMEOUT_MS=1500
+ACCENT_COLOR="#e5c07b"
+
+# Función para obtener el estado actual y enviar la notificación OSD
+send_notification() {
+    local brightness icon body
+
+    # Obtener porcentaje actual limpio
+    brightness=$(brightnessctl -m 2>/dev/null | cut -d, -f4 | tr -d '%')
+    [ -z "$brightness" ] && brightness=0
+
+    body="${brightness}%"
+
+    if [ "$brightness" -ge 70 ]; then
+        icon="display-brightness-high"
+    elif [ "$brightness" -ge 30 ]; then
+        icon="display-brightness-medium"
+    else
+        icon="display-brightness-low"
+    fi
+
+    # Envío de notificación atómica a Dunst con barra de progreso y reemplazo en caliente
+    dunstify \
+        -a "brightness_osd" \
+        -r "$NOTIFICATION_ID" \
+        -u low \
+        -t "$TIMEOUT_MS" \
+        -i "$icon" \
+        -h "int:value:${brightness}" \
+        -h "string:hlcolor:${ACCENT_COLOR}" \
+        -h "string:x-dunst-stack-tag:brightness" \
+        -h "string:synchronous:brightness" \
+        "Brillo" "$body"
+}
+
+# Manejo de acciones
+case "$1" in
+    up|raise|+)
+        brightnessctl set "+${STEP}%" >/dev/null 2>&1
+        send_notification
+        ;;
+    down|lower|-)
+        # Garantizamos un valor mínimo de 1 para evitar pantalla totalmente negra accidental
+        brightnessctl set "${STEP}%-" -n 1 >/dev/null 2>&1
+        send_notification
+        ;;
+    status|get)
+        brightnessctl -m | cut -d, -f4 | tr -d '%'
+        ;;
+    *)
+        echo "Uso: $(basename "$0") {up [step]|down [step]|status}"
+        exit 1
+        ;;
+esac

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Script de Control de Volumen y OSD con Barra Animada (Dunst + Pamixer)
+# Entorno: BSPWM / Parrot OS - Pentesting & Security Ops Edition
+# ==============================================================================
+
+# Dependencias requeridas
+for cmd in pamixer dunstify; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo -e "\e[1;31m[!] Error: '$cmd' no está instalado en el sistema.\e[0m" >&2
+        exit 1
+    fi
+done
+
+# Parámetros y constantes
+DEFAULT_STEP=1
+STEP="${2:-$DEFAULT_STEP}"
+NOTIFICATION_ID=2593
+TIMEOUT_MS=1500
+ACCENT_COLOR="#61afef"
+
+# Función para obtener el estado actual y enviar la notificación OSD
+send_notification() {
+    local is_muted volume icon body
+
+    is_muted=$(pamixer --get-mute 2>/dev/null)
+    volume=$(pamixer --get-volume 2>/dev/null || echo 0)
+
+    if [ "$is_muted" = "true" ] || [ "$volume" -eq 0 ]; then
+        icon="audio-volume-muted"
+        body="Silenciado (0%)"
+        volume=0
+    else
+        body="${volume}%"
+        if [ "$volume" -ge 70 ]; then
+            icon="audio-volume-high"
+        elif [ "$volume" -ge 30 ]; then
+            icon="audio-volume-medium"
+        else
+            icon="audio-volume-low"
+        fi
+    fi
+
+    # Envío de notificación atómica a Dunst con barra de progreso y reemplazo en caliente
+    dunstify \
+        -a "volume_osd" \
+        -r "$NOTIFICATION_ID" \
+        -u low \
+        -t "$TIMEOUT_MS" \
+        -i "$icon" \
+        -h "int:value:${volume}" \
+        -h "string:hlcolor:${ACCENT_COLOR}" \
+        -h "string:x-dunst-stack-tag:volume" \
+        -h "string:synchronous:volume" \
+        "Volumen" "$body"
+}
+
+# Manejo de acciones
+case "$1" in
+    up|raise|+)
+        pamixer -u -i "$STEP"
+        send_notification
+        ;;
+    down|lower|-)
+        pamixer -u -d "$STEP"
+        send_notification
+        ;;
+    mute|toggle|t)
+        pamixer -t
+        send_notification
+        ;;
+    mic|mic-mute)
+        pamixer --default-source -t
+        mic_muted=$(pamixer --default-source --get-mute 2>/dev/null)
+        if [ "$mic_muted" = "true" ]; then
+            dunstify -a "volume_osd" -r 2595 -u low -t "$TIMEOUT_MS" -i "mic-volume-muted" "Micrófono" "Silenciado"
+        else
+            dunstify -a "volume_osd" -r 2595 -u low -t "$TIMEOUT_MS" -i "mic-volume-high" "Micrófono" "Activo"
+        fi
+        ;;
+    status|get)
+        pamixer --get-volume
+        ;;
+    *)
+        echo "Uso: $(basename "$0") {up [step]|down [step]|mute|mic|status}"
+        exit 1
+        ;;
+esac
