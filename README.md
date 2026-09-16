@@ -159,6 +159,11 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>V</kbd> | **Abrir / Cerrar Slider flotante interactivo de Volumen** (`volume-slider`) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> | **Abrir / Cerrar Slider flotante interactivo de Brillo** (`brightness-slider`) |
 
+<p align="center">
+  <img src="assets/osd_volume.png" alt="Volume OSD & Interactive Slider" width="49%">
+  <img src="assets/osd_brightness.png" alt="Brightness OSD & Interactive Slider" width="49%">
+</p>
+
 ---
 
 ## 📊 Polybar — Suite Modular Táctica (`config.ini`)
@@ -253,8 +258,10 @@ Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
 ```text
 dotfiles/
 ├── assets/                               # Capturas de pantalla y showcases del entorno
-│   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch)
-│   └── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
+│   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch + OSD)
+│   ├── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
+│   ├── osd_volume.png                    # Showcase del slider flotante interactivo y OSD de volumen
+│   └── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
 ├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
 │   ├── volume                           # Controlador CLI de audio con OSD Dunst y paso de 1%
 │   ├── brightness                       # Controlador CLI de brillo con OSD Dunst, paso de 1% y fail-safe
