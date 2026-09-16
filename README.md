@@ -78,10 +78,13 @@ chmod +x ~/.local/bin/*
 ```bash
 sudo apt update -y && sudo apt install -y \
     bspwm sxhkd polybar rofi picom feh kitty zsh tmux neovim \
-    xinput brightnessctl pamixer xclip libnotify-bin curl wget jq bat \
-    python3-pyqt5 build-essential cmake pkg-config openvpn network-manager \
+    dunst lxpolkit numlockx suckless-tools i3lock flameshot scrot \
+    x11-xserver-utils x11-utils xinput alsa-utils brightnessctl pamixer \
+    eza fzf fastfetch bat jq xclip libnotify-bin curl wget plocate \
+    wireguard-tools openvpn network-manager \
+    python3-pyqt5 build-essential cmake pkg-config \
     zsh-syntax-highlighting zsh-autosuggestions \
-    fonts-noto fonts-font-awesome \
+    fonts-hack-ttf fonts-jetbrains-mono fonts-noto fonts-font-awesome \
     && sudo updatedb
 ```
 
