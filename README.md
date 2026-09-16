@@ -1,4 +1,4 @@
-# ⚙️ Dotfiles — Entorno de Auditoría Ofensiva, Pentesting y Desarrollo
+# ⚙️ Dotfiles — Offensive Security, Pentesting & Development Environment
 
 <p align="center">
   <img src="assets/preview.png" alt="Dotfiles Preview" width="100%">
@@ -11,47 +11,49 @@
 [![Bar: Polybar](https://img.shields.io/badge/Bar-Polybar%20Pro-cyan)](https://polybar.github.io/)
 [![Status: Active](https://img.shields.io/badge/Status-Active-success)](https://github.com/rodrigo47363/dotfiles)
 
----
-
-## 🧩 Descripción y Arquitectura del Entorno
-
-Este repositorio almacena y sincroniza la configuración integral de un entorno de trabajo de alto rendimiento optimizado para **Seguridad Ofensiva, Operaciones de Red Team, Bug Bounty y Desarrollo de Software**.
-
-Construido sobre distribuciones basadas en Debian/Parrot OS, el sistema utiliza una arquitectura de **gestión de ventanas en mosaico (Tiling Window Manager)** minimalista y desacoplada:
-
-* **Gestor de Ventanas:** [BSPWM](https://github.com/baskerville/bspwm) (árbol binario de división del espacio).
-* **Gestor de Atajos:** [SXHKD](https://github.com/baskerville/sxhkd) (arquitectura pura basada en tecla `Super` sin colisiones).
-* **Barra de Estado:** [Polybar](https://github.com/polybar/polybar) modular con telemetría en tiempo real y scripts tácticos para pentesting.
-* **Lanzador / Menú:** [Rofi](https://github.com/davatorium/rofi) con modo single-instance y soporte de temas dinámicos.
-* **Emulador de Terminal:** [Kitty](https://sw.kovidgoyal.net/kitty/) acelerado por GPU con fuente *Hack Nerd Font*, ligaduras y multiplexación nativa.
-* **Shell:** [Zsh](https://www.zsh.org/) con tema [Powerlevel10k](https://github.com/romkatv/powerlevel10k), autocompletado predictivo y sintaxis enriquecida.
-* **Hardware & Telemetría:** Integración nativa en Rust con **AcerSense / NitroSense** para control térmico y perfilado de ventiladores.
+> 🌐 **Languages:** [English](README.md) | [Español](README_es.md)
 
 ---
 
-## 🛡️ OPSEC y Seguridad del Repositorio
+## 🧩 Overview & System Architecture
 
-Como estándar de seguridad operativa (OPSEC):
-1. **Política Zero-Trust:** Ninguna clave privada SSH (`id_rsa`, `id_ed25519`), token de API (`ghp_`, `AWS_*`), cookie de sesión o historial de shell (`.zsh_history`, `.bash_history`) debe ser rastreado en Git.
-2. **Exclusión de volcados:** El archivo `.gitignore` debe excluir volcados comprimidos (`.rar`, `.zip`, `.tar.gz`) que contengan copias de respaldo locales.
-3. **Manejo de credenciales de red:** Toda configuración de red o VPN rastreada utiliza interfaces genéricas y variables dinámicas para evitar filtrar subredes internas.
+This repository hosts and synchronizes the comprehensive configuration of a high-performance workstation engineered for **Offensive Security, Red Team Operations, Bug Bounty, and Software Development**.
+
+Built on Debian/Parrot OS Linux distributions, the environment employs a minimal, decoupled **Tiling Window Manager** architecture:
+
+* **Window Manager:** [BSPWM](https://github.com/baskerville/bspwm) (binary space partitioning tree model).
+* **Hotkey Daemon:** [SXHKD](https://github.com/baskerville/sxhkd) (pure `Super`/Mod4 binding architecture, collision-free).
+* **Status Bar:** [Polybar](https://github.com/polybar/polybar) modular bar with real-time hardware telemetry and tactical pentesting scripts.
+* **Application Launcher / Menus:** [Rofi](https://github.com/davatorium/rofi) featuring single-instance toggles and dynamic themes.
+* **Terminal Emulator:** [Kitty](https://sw.kovidgoyal.net/kitty/) GPU-accelerated with *Hack Nerd Font*, ligatures, and native multiplexing.
+* **Shell:** [Zsh](https://www.zsh.org/) configured with [Powerlevel10k](https://github.com/romkatv/powerlevel10k), predictive autosuggestions, and syntax highlighting.
+* **Hardware & Telemetry:** Native compiled Rust backend for **AcerSense / NitroSense** fan profiling and thermal management.
 
 ---
 
-## 🚀 Despliegue Rápido (Instalación & Sincronización)
+## 🛡️ OPSEC & Repository Security Standards
 
-### 1. Clonar el Repositorio
+To adhere to strict Operational Security (OPSEC) practices:
+1. **Zero-Trust Tracking:** Private SSH keys (`id_rsa`, `id_ed25519`), API secrets (`ghp_`, `AWS_*`), browser cookies, and shell history files (`.zsh_history`, `.bash_history`) are strictly excluded.
+2. **Backup Sanitization:** Local archive dumps (`.rar`, `.zip`, `.tar.gz`) containing unredacted system backups are ignored via `.gitignore`.
+3. **Network Sanitization:** All tracked network and VPN scripts utilize generic interfaces and dynamic extraction to prevent internal corporate/lab subnet leakage.
+
+---
+
+## 🚀 Quick Deployment (Installation & Sync)
+
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/rodrigo47363/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Desplegar Enlaces Simbólicos / Copiar a `~/.config`
+### 2. Deploy Configurations to `~/.config`
 ```bash
-# Crear estructura base
+# Create directory tree
 mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar/scripts,rofi/themes,kitty,dunst,picom} ~/.local/bin
 
-# Desplegar configuraciones
+# Deploy dotfiles
 cp -r polybar/* ~/.config/polybar/
 cp -r rofi/* ~/.config/rofi/
 cp sxhkdrc ~/.config/sxhkd/sxhkdrc
@@ -63,7 +65,7 @@ cp picom/picom.conf ~/.config/picom/picom.conf
 cp bin/* ~/.local/bin/
 cp .zshrc ~/.zshrc
 
-# Asignar permisos de ejecución a los binarios y scripts
+# Grant executable permissions
 chmod +x ~/.config/bspwm/bspwmrc ~/.config/bspwm/scripts/*
 chmod +x ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
 chmod +x ~/.local/bin/*
@@ -71,13 +73,13 @@ chmod +x ~/.local/bin/*
 
 ---
 
-## 🧰 Dependencias Base del Sistema (Debian / Parrot / Kali)
+## 🧰 Base System Dependencies (Debian / Parrot / Kali)
 
 ```bash
 sudo apt update -y && sudo apt install -y \
     bspwm sxhkd polybar rofi picom feh kitty zsh tmux neovim \
     xinput brightnessctl pamixer xclip libnotify-bin curl wget jq bat \
-    build-essential cmake pkg-config openvpn network-manager \
+    python3-pyqt5 build-essential cmake pkg-config openvpn network-manager \
     zsh-syntax-highlighting zsh-autosuggestions \
     fonts-noto fonts-font-awesome \
     && sudo updatedb
@@ -85,79 +87,79 @@ sudo apt update -y && sudo apt install -y \
 
 ---
 
-## ⌨️ Mapa Táctico de Atajos de Teclado (`sxhkdrc`)
+## ⌨️ Tactical Hotkey Map (`sxhkdrc`)
 
-El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquitectura fue migrada a **Pure Super Bindings** (`Mod4` / Tecla Windows), eliminando por completo las colisiones con la tecla `Alt` requeridas en navegadores, Burp Suite y editores.
+Keybindings are centralized in [`sxhkdrc`](sxhkdrc). All shortcuts use **Pure Super Bindings** (`Mod4` / Windows Key), entirely eliminating conflicts with the `Alt` key required by web browsers, Burp Suite, and terminal editors.
 
-### 🖥️ Gestión de Ventanas y Sistema (BSPWM)
-| Atajo | Acción Operativa |
+### 🖥️ Window & System Management (BSPWM)
+| Shortcut | Action |
 |---|---|
-| <kbd>Super</kbd> + <kbd>Return</kbd> | Abrir terminal Kitty principal (`/opt/kitty/bin/kitty`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd> | Abrir terminal Kitty en ventana flotante |
-| <kbd>Super</kbd> + <kbd>W</kbd> | Cerrar ventana enfocada (`bspc node -c`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>W</kbd> | Forzar terminación inmediata del proceso (`bspc node -k`) |
-| <kbd>Super</kbd> + <kbd>T</kbd> | Cambiar ventana a modo Mosaico (*tiled*) |
-| <kbd>Super</kbd> + <kbd>S</kbd> | Cambiar ventana a modo Flotante (*floating*) |
-| <kbd>Super</kbd> + <kbd>F</kbd> | Alternar modo Pantalla Completa (*fullscreen*) |
-| <kbd>Super</kbd> + <kbd>Esc</kbd> | Recargar configuración de `sxhkd` al vuelo (`pkill -USR1 -x sxhkd`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Kill-switch de emergencia (`xkill`) para ventanas colgadas |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> | Reiniciar Polybar limpiamente (`launch.sh`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Q</kbd> | Cerrar sesión / Salir de BSPWM (`bspc quit`) |
+| <kbd>Super</kbd> + <kbd>Return</kbd> | Launch primary Kitty terminal (`/opt/kitty/bin/kitty`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd> | Launch floating Kitty terminal window |
+| <kbd>Super</kbd> + <kbd>W</kbd> | Close focused window cleanly (`bspc node -c`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>W</kbd> | Force-kill unresponsive process immediately (`bspc node -k`) |
+| <kbd>Super</kbd> + <kbd>T</kbd> | Set window state to Tiled |
+| <kbd>Super</kbd> + <kbd>S</kbd> | Set window state to Floating |
+| <kbd>Super</kbd> + <kbd>F</kbd> | Toggle Fullscreen mode |
+| <kbd>Super</kbd> + <kbd>Esc</kbd> | Reload `sxhkd` hotkeys on-the-fly (`pkill -USR1 -x sxhkd`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Emergency GUI kill-switch cursor (`xkill`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> | Cleanly restart Polybar instances (`launch.sh`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Q</kbd> | Quit BSPWM / End X11 session (`bspc quit`) |
 
-### 🧭 Navegación y Control de Espacios de Trabajo
-| Atajo | Acción Operativa |
+### 🧭 Navigation & Workspace Management
+| Shortcut | Action |
 |---|---|
-| <kbd>Super</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | Cambiar directamente al Espacio de Trabajo 1 al 10 |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | **Mover ventana enfocada al Workspace y transferir el foco** (`--follow`) |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | Mover ventana enfocada en segundo plano sin cambiar de escritorio |
-| <kbd>Super</kbd> + <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> | Cambiar foco de ventana (Oeste, Sur, Norte, Este) |
-| <kbd>Super</kbd> + <kbd>H</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> | Foco estilo Vim (Oeste, Sur, Norte, Este) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>H/J/K/L</kbd> | Intercambiar posición física de ventanas |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>H/J/K/L</kbd> | Redimensionar ventana activa en bloques de 20px |
+| <kbd>Super</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | Direct jump to Desktop Workspaces 1 through 10 |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | **Send focused window to Workspace and transfer focus** (`--follow`) |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> - <kbd>0</kbd> | Move focused window to Workspace silently in background |
+| <kbd>Super</kbd> + <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> | Change window focus (West, South, North, East) |
+| <kbd>Super</kbd> + <kbd>H</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> | Vim-style directional focus (West, South, North, East) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>H/J/K/L</kbd> | Swap physical window positions |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>H/J/K/L</kbd> | Resize active window in 20px steps |
 
-### 🚀 Lanzadores y Herramientas (Rofi & Apps)
-| Atajo | Acción Operativa |
+### 🚀 Application Launchers & Tools (Rofi & Apps)
+| Shortcut | Action |
 |---|---|
-| <kbd>Super</kbd> + <kbd>D</kbd> o <kbd>Espacio</kbd> | Alternar Menú de Aplicaciones Rofi (`drun` con toggle de instancia única) |
-| <kbd>Super</kbd> + <kbd>R</kbd> | Modo ejecución de comandos Rofi (`run`) |
-| <kbd>Super</kbd> + <kbd>Tab</kbd> | Selector de ventanas abiertas Rofi (`window`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Espacio</kbd> | Lanzador combinado Rofi (`combi`) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> | Lanzar navegador web (Firefox) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> | Lanzar Burp Suite Professional / Community |
-| <kbd>Super</kbd> + <kbd>V</kbd> | Lanzar Stremio con wrapper de inicialización |
-| <kbd>Alt</kbd> + <kbd>F4</kbd> | **Menú de apagado interactivo Rofi** (`powermenu`) |
+| <kbd>Super</kbd> + <kbd>D</kbd> or <kbd>Space</kbd> | Toggle Rofi Application Launcher (`drun` with single-instance lock) |
+| <kbd>Super</kbd> + <kbd>R</kbd> | Rofi Command Runner (`run`) |
+| <kbd>Super</kbd> + <kbd>Tab</kbd> | Rofi Open Window Selector (`window`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> | Combined Launcher mode (`combi`) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> | Launch Firefox browser |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> | Launch Burp Suite Professional / Community |
+| <kbd>Super</kbd> + <kbd>V</kbd> | Launch Stremio with initialization wrapper |
+| <kbd>Alt</kbd> + <kbd>F4</kbd> | **Interactive Rofi Power Menu** (`powermenu`) |
 
 <p align="center">
   <img src="assets/powermenu.png" alt="Power Menu Preview" width="85%">
 </p>
 
-### 🍅 Control Pomodoro (`pomoc`)
-| Atajo | Acción Operativa |
+### 🍅 Pomodoro Work Timer (`pomoc`)
+| Shortcut | Action |
 |---|---|
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>P</kbd> | Iniciar / Alternar Pausa-Reanudar sesión de enfoque (`toggle`) |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>E</kbd> | Terminar bloque de concentración actual y saltar a descanso (`end`) |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>R</kbd> | **Reiniciar temporizador a tiempo inicial en IDLE** (`reset`) |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>S</kbd> | Detener por completo el demonio Pomodoro (`stop`) |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>P</kbd> | **Menú Rofi interactivo Pomodoro** (minutos personalizados, reset, etc.) |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>P</kbd> | Start / Toggle Pause-Resume focus block (`toggle`) |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>E</kbd> | Finish current focus session and skip to break (`end`) |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>R</kbd> | **Reset timer to default starting duration in IDLE** (`reset`) |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>S</kbd> | Stop the Pomodoro background daemon (`stop`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>P</kbd> | **Interactive Rofi Pomodoro Menu** (custom durations, resets, daemon controls) |
 
-### 🌀 Telemetría AcerSense / NitroSense
-| Atajo | Acción Operativa |
+### 🌀 AcerSense / NitroSense Telemetry
+| Shortcut | Action |
 |---|---|
-| <kbd>XF86Launch1</kbd> / <kbd>Tecla Nitro [N]</kbd> | Abrir GUI de AcerSense / NitroSense |
-| <kbd>Super</kbd> + <kbd>N</kbd> | Atajo alternativo por software para abrir la GUI |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd> | Alternar ventiladores entre **Turbo Máximo** y **Automático** (notificación en pantalla) |
+| <kbd>XF86Launch1</kbd> / <kbd>Nitro Key [N]</kbd> | Open AcerSense / NitroSense GUI |
+| <kbd>Super</kbd> + <kbd>N</kbd> | Software hotkey to launch the AcerSense GUI |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd> | Toggle fans between **MAX Turbo** and **Auto Quiet** mode (OSD feedback) |
 
-### 🔊 Control de Audio, Brillo y Sliders OSD
-| Atajo | Acción Operativa |
+### 🔊 Audio, Brightness & Interactive OSD Sliders
+| Shortcut | Action |
 |---|---|
-| <kbd>XF86AudioRaiseVolume</kbd> o <kbd>Super</kbd> + <kbd>↑</kbd> | Subir volumen de 1 en 1 (1%) con OSD animado (`volume up`) |
-| <kbd>XF86AudioLowerVolume</kbd> o <kbd>Super</kbd> + <kbd>↓</kbd> | Bajar volumen de 1 en 1 (1%) con OSD animado (`volume down`) |
-| <kbd>XF86AudioMute</kbd> o <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> | Alternar silencio de audio (`volume mute`) |
-| <kbd>XF86AudioMicMute</kbd> | Alternar silencio de micrófono (`volume mic`) |
-| <kbd>XF86MonBrightnessUp</kbd> | Subir brillo de 1 en 1 (1%) con OSD animado (`brightness up`) |
-| <kbd>XF86MonBrightnessDown</kbd> | Bajar brillo de 1 en 1 (1%) con protección de pantalla (`brightness down`) |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>V</kbd> | **Abrir / Cerrar Slider flotante interactivo de Volumen** (`volume-slider`) |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> | **Abrir / Cerrar Slider flotante interactivo de Brillo** (`brightness-slider`) |
+| <kbd>XF86AudioRaiseVolume</kbd> or <kbd>Super</kbd> + <kbd>↑</kbd> | Raise volume by 1% with live animated OSD bar (`volume up`) |
+| <kbd>XF86AudioLowerVolume</kbd> or <kbd>Super</kbd> + <kbd>↓</kbd> | Lower volume by 1% with live animated OSD bar (`volume down`) |
+| <kbd>XF86AudioMute</kbd> or <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> | Toggle audio mute status (`volume mute`) |
+| <kbd>XF86AudioMicMute</kbd> | Toggle microphone mute status (`volume mic`) |
+| <kbd>XF86MonBrightnessUp</kbd> | Raise brightness by 1% with live animated OSD bar (`brightness up`) |
+| <kbd>XF86MonBrightnessDown</kbd> | Lower brightness by 1% with hardware blackout floor protection (`brightness down`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>V</kbd> | **Open / Close Floating Interactive Volume Slider** (`volume-slider`) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> | **Open / Close Floating Interactive Brightness Slider** (`brightness-slider`) |
 
 <p align="center">
   <img src="assets/osd_volume.png" alt="Volume OSD & Interactive Slider" width="49%">
@@ -166,9 +168,9 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 
 ---
 
-## 📊 Polybar — Suite Modular Táctica (`config.ini`)
+## 📊 Polybar — Tactical Modular Suite (`config.ini`)
 
-La barra de estado está estructurada en tres secciones ergonómicas:
+The top status bar is divided into three functional zones:
 
 ```ini
 modules-left   = launcher bspwm xwindow
@@ -176,135 +178,201 @@ modules-center = target vpn pomodoro
 modules-right  = filesystem cpu temperature gpu acersense memory backlight pulseaudio wlan eth battery date powermenu systray
 ```
 
-### 🎯 Módulos Centrales Ofensivos
+### 🎯 Offensive Security Core Modules
 
-#### 1. Módulo VPN Multientorno ([`vpn.sh`](polybar/scripts/vpn.sh))
-Diseñado específicamente para flujos de trabajo de seguridad ofensiva:
-* **Icono Estándar de VPN (`󰖀` / `U+F0580`):** Aplica para VPNs comerciales, genéricas o túneles privados (WireGuard, OpenVPN).
-* **Detección Nativa de Proton VPN:**
-  * Reconoce interfaces `proton*` (ej. `proton0`), daemons (`proton-vpn-daemon`) y clientes GTK/CLI.
-  * Etiqueta: `PROTON`, Icono: `󰖀`, Color: `#6d4aff` (púrpura corporativo).
-* **Identificación Automática de Plataformas:**
-  * **Hack The Box (HTB):** `󰆧 HTB: <IP>` en verde (`#98c379`).
-  * **TryHackMe (THM):** `󰅣 THM: <IP>` en rojo (`#e06c75`).
-  * **OffSec / Proving Grounds:** ` OFFSEC: <IP>` en naranja (`#d19a66`).
-  * **WireGuard General:** `󰒄 WG: <IP>` en azul (`#61afef`).
-  * **Tailscale:** `󰛳 TS: <IP>` en cyan (`#56b6c2`).
-* **Priorización Táctica de Interfaces (Dual-Homed):** Si estás conectado a Proton VPN para privacidad y levantas una VPN de laboratorio (`tun0` hacia HTB o THM), el script prioriza inmediatamente la IP del laboratorio para que dispongas de tu `LHOST` al instante. Al desconectar el laboratorio, vuelve de forma transparente a Proton VPN.
-* **Acciones Interactivas:**
-  * **Click Izquierdo:** Copia instantánea de la dirección IP (`LHOST`) al portapapeles y notificación con `notify-send`.
+#### 1. Multi-Environment VPN Module ([`vpn.sh`](polybar/scripts/vpn.sh))
+Specifically engineered for penetration testing and Red Team engagements:
+* **Standard VPN Indicator (`󰖀` / `U+F0580`):** Automatically maps commercial VPN tunnels, WireGuard, and standard OpenVPN.
+* **Proton VPN Native Recognition:**
+  * Detects `proton*` interfaces (e.g. `proton0`), daemons (`proton-vpn-daemon`), and desktop clients.
+  * Tag: `PROTON`, Icon: `󰖀`, Color: `#6d4aff` (corporate brand purple).
+* **Automated Lab Platform Detection:**
+  * **Hack The Box (HTB):** `󰆧 HTB: <IP>` in tactical green (`#98c379`).
+  * **TryHackMe (THM):** `󰅣 THM: <IP>` in red (`#e06c75`).
+  * **OffSec / Proving Grounds:** ` OFFSEC: <IP>` in amber (`#d19a66`).
+  * **WireGuard Generic:** `󰒄 WG: <IP>` in blue (`#61afef`).
+  * **Tailscale:** `󰛳 TS: <IP>` in cyan (`#56b6c2`).
+* **Tactical Dual-Homed Interface Prioritization:** If you maintain a connected Proton VPN for privacy and launch a laboratory VPN (`tun0` to HTB/THM), the module instantly promotes the lab IP as your active `LHOST` display. Disconnecting the lab reverts seamlessly back to Proton VPN.
+* **Interactive Actions:**
+  * **Left Click:** Instantly copy active `LHOST` IP address to clipboard with desktop notification.
 
-#### 2. Rastreador de Máquina Objetivo ([`target.sh`](polybar/scripts/target.sh))
-* Monitorea el archivo `~/.config/bin/target` conteniendo `IP [Nombre_Maquina]`.
-* Comprueba la conectividad de la máquina con un ping ICMP rápido (timeout 1s):
-  * Si responde: Icono verde `󰓾` con texto claro.
-  * Si no responde: Icono rojo `󰓾` con texto tenue.
-* Trunca nombres largos a 10 caracteres con elipsis (`..`) para proteger el espacio de la barra.
-* **Click Izquierdo:** Copia la IP objetivo al portapapeles.
-* **Click Derecho:** Limpia el archivo de objetivo (`No target`).
+#### 2. Target Machine Tracker ([`target.sh`](polybar/scripts/target.sh))
+* Polls `~/.config/bin/target` containing `IP [Machine_Name]`.
+* Validates target host reachability with a fast ICMP ping check (1s timeout):
+  * Responsive: Bright green `󰓾` icon and crisp target name.
+  * Unreachable: Dim red `󰓾` icon.
+* Truncates long names to 10 characters with an ellipsis (`..`) to preserve bar real estate.
+* **Left Click:** Copies target IP to clipboard.
+* **Right Click:** Clears target file (`No target`).
 
-#### 3. Temporizador Pomodoro ([`pomodoro.sh`](polybar/scripts/pomodoro.sh))
-* Conexión directa mediante sockets UNIX con el binario [`pomoc`](https://github.com/dream-wa1ker/pomoc).
-* Muestra tiempo restante y estado: Trabajo (``), Pausa (`⏸`), Descanso (``).
-* **Tap 1 dedo (Click Izquierdo):** Iniciar / Pausar / Reanudar (`toggle`).
-* **Doble Tap 1 dedo:** **Reiniciar temporizador a tiempo inicial en IDLE (`reset`)**.
-* **Tap 2 dedos (Click Derecho):** Concluir bloque y pasar a descanso (`end`).
-* **Deslizar 2 dedos Arriba (Scroll Up):** **Reiniciar temporizador a IDLE (`reset`)**.
-* **Deslizar 2 dedos Abajo (Scroll Down):** **Abrir Menú Rofi Pomodoro (`menu`)** (tiempos personalizados, reset, daemon kill/restart).
-* **Click Central (Rueda de ratón físico):** Reiniciar temporizador (`reset`).
+#### 3. Pomodoro Work Timer ([`pomodoro.sh`](polybar/scripts/pomodoro.sh))
+* Direct UNIX domain socket connection to the [`pomoc`](https://github.com/dream-wa1ker/pomoc) binary.
+* Displays remaining duration and phase: Work (``), Pause (`⏸`), Break (``).
+* **1-Finger Tap (Left Click):** Start / Pause / Resume (`toggle`).
+* **Double Tap:** **Reset timer to default starting duration in IDLE (`reset`)**.
+* **2-Finger Tap (Right Click):** Skip current block to break (`end`).
+* **2-Finger Swipe Up (Scroll Up):** **Reset timer to IDLE (`reset`)**.
+* **2-Finger Swipe Down (Scroll Down):** **Open Rofi Pomodoro Menu (`menu`)**.
+* **Middle Click (Physical Wheel):** Reset timer (`reset`).
 
 ---
 
-### 💻 Módulos de Hardware y Rendimiento
+### 💻 Hardware & Performance Telemetry
 
-* **GPU NVIDIA con D3cold Sleep Guard ([`gpu.sh`](polybar/scripts/gpu.sh)):**
-  * Lee `/sys/bus/pci/devices/*/power/runtime_status`.
-  * Si la GPU dedicada NVIDIA está suspendida en bajo consumo (`suspended`), muestra `󰢮 GPU Off` en gris `#5c6370` y **evita ejecutar `nvidia-smi`**, impidiendo que la GPU se despierte y ahorrando batería crítica en portátiles híbridos.
+* **NVIDIA GPU with D3cold Sleep Guard ([`gpu.sh`](polybar/scripts/gpu.sh)):**
+  * Reads `/sys/bus/pci/devices/*/power/runtime_status`.
+  * If the discrete GPU is power-gated in deep sleep (`suspended`), it outputs `󰢮 GPU Off` in muted gray `#5c6370` and **strictly skips invoking `nvidia-smi`**, preventing the discrete GPU from waking up and conserving critical battery life.
 * **AcerSense / NitroSense Telemetry ([`acersense.sh`](polybar/scripts/acersense.sh)):**
-  * Backend nativo compilado en Rust con tiempo de respuesta inferior a 2ms.
-  * Informa estado de RPM de ventiladores y temperatura de CPU/GPU.
-  * **Click Izquierdo:** Alterna entre modo silencioso/automático y modo **MAX TURBO**.
-  * **Click Derecho:** Abre la interfaz gráfica de AcerSense.
-* **Control Interactivo de Volumen y Brillo por Ratón & OSD:**
-  * **Volumen (`󰕾`):** Clic izquierdo abre el popup interactivo `volume-slider` para arrastre libre con ratón o presets rápidos (`20%` a `100%`). Rueda del ratón sube/baja de 1 en 1 mostrando la barra OSD animada en cian. Clic central conmuta silencio (`mute`) y clic derecho abre `alsamixer`.
-  * **Brillo (`󰃠`):** Clic izquierdo abre el popup interactivo `brightness-slider`. Rueda del ratón sube/baja de 1 en 1 mostrando la barra OSD animada en ámbar con protección contra apagado total de pantalla (`-n 1`).
-* **Gestor WiFi Interactivo ([`wifi-menu.sh`](polybar/scripts/wifi-menu.sh)):**
-  * Menú Rofi para escanear redes inalámbricas, consultar fuerza de señal e ingresar contraseñas protegidas.
+  * Native Rust binary backend with sub-2ms response times.
+  * Displays fan RPM telemetry and combined CPU/GPU thermals.
+  * **Left Click:** Toggles between quiet auto mode and **MAX TURBO**.
+  * **Right Click:** Launches AcerSense GUI.
+* **Interactive Mouse & OSD Controls:**
+  * **Volume (`󰕾`):** Left-click opens floating `volume-slider` for continuous drag or quick presets (`20%`-`100%`). Mouse wheel scroll raises/lowers level by 1% with live cyan Dunst OSD bar animation. Middle-click toggles mute; right-click opens `alsamixer`.
+  * **Brightness (`󰃠`):** Left-click opens floating `brightness-slider`. Mouse wheel scroll raises/lowers level by 1% with live amber Dunst OSD bar animation and safe minimum backlight floor protection (`-n 1`).
+* **WiFi Network Manager ([`wifi-menu.sh`](polybar/scripts/wifi-menu.sh)):**
+  * Rofi interface for scanning wireless networks, checking signal strength, and entering secured passphrases.
 
 ---
 
-## 🪟 Configuración de BSPWM (`bspwmrc`)
+## 🪟 BSPWM Architecture Highlights (`bspwmrc`)
 
-Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
-* **Fijación de Identidad Java:** `wmname LG3D &` para resolver incompatibilidades de renderizado y menús grises en aplicaciones Java como **Burp Suite Professional**.
-* **Gestión de Teclado y Teclas Huérfanas:** Remapeo de eventos X11 y desactivación de estados de bloqueo residuales (`xmodmap`, `numlockx`).
-* **Hardware Touchpad:** Detección automática en bucle para habilitar *Tap-to-click* y *Natural Scrolling* mediante `libinput` en cualquier ID de dispositivo señalador.
-* **Arranque Limpio:** Verificación de instancias previas antes de lanzar `sxhkd`, `picom`, `polybar`, `dunst` y gestores de fondo de pantalla (`feh`).
-* **Reglas Flotantes OSD:** Reglas dedicadas para que los popups interactivos (`OsdSlider_volume` y `OsdSlider_brightness`) floten siempre sin bordes y con foco automático.
-
----
-
-## 🖥️ Terminal Kitty (`kitty.conf`)
-
-* **Tipografía:** *Hack Nerd Font* con tamaño de 12pt y soporte completo de ligaduras.
-* **Renderizado & Transparencia:** Fondo con opacidad al 85% (`background_opacity 0.85`), sincronización vertical activa (`sync_to_monitor yes`) y latencia ultrabaja.
-* **Navegación:** Atajos mapeados con <kbd>Ctrl</kbd> + <kbd>Flechas</kbd> para navegar entre divisiones internas de la terminal.
-* **Buffers Múltiples:** Copia y pega en buffers dedicados `a` y `b` con teclas <kbd>F1</kbd> a <kbd>F4</kbd>.
+Key configurations implemented in [`bspwmrc`](bspwmrc):
+* **Java GUI Fix:** `wmname LG3D &` resolves gray/blank render issues on Java Swing/AWT applications such as **Burp Suite Professional**.
+* **X11 Keyboard State Cleanup:** Remaps orphaned keys and disables residual lock states (`xmodmap`, `numlockx`).
+* **Hardware Touchpad Detection:** Dynamic device loop applying *Tap-to-click* and *Natural Scrolling* via `libinput` across arbitrary pointer device IDs.
+* **Clean Process Lifecycle:** Verifies and kills orphan instances prior to spawning `sxhkd`, `picom`, `polybar`, `dunst`, and background wallpaper managers (`feh`).
+* **OSD Floating Rules:** Tailored window rules ensuring GUI sliders (`OsdSlider_volume` and `OsdSlider_brightness`) float borderless with immediate focus.
 
 ---
 
-## 📁 Estructura del Repositorio
+## 🖥️ Kitty Terminal Emulator (`kitty.conf`)
+
+* **Typography:** *Hack Nerd Font* at 12pt with full ligature rendering.
+* **Transparency & Rendering:** 85% background opacity (`background_opacity 0.85`), vertical sync enabled (`sync_to_monitor yes`), and zero perceptible input latency.
+* **Window Navigation:** Splits traversed effortlessly via <kbd>Ctrl</kbd> + <kbd>Arrow Keys</kbd>.
+* **Multi-Buffer System:** Dedicated copy-paste storage across buffers `a` and `b` using keys <kbd>F1</kbd> through <kbd>F4</kbd>.
+
+---
+
+## 🛠️ Troubleshooting & Frequently Asked Questions (FAQ)
+
+### 1. 🔤 Polybar or terminal icons display as missing glyphs or square boxes
+* **Root Cause:** Required *Nerd Fonts* or icon glyphs are not indexed in the system Fontconfig cache.
+* **Remedy:** Copy the fonts bundled within the repository to your local user font directory and rebuild the cache:
+  ```bash
+  mkdir -p ~/.local/share/fonts
+  cp ~/dotfiles/polybar/fonts/* ~/.local/share/fonts/
+  fc-cache -f -v
+  ```
+  Restart Polybar cleanly with <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd>.
+
+### 2. ☀️ Brightnessctl returns permission errors or screen turns completely black
+* **Permissions:** If `brightnessctl` requires root privileges, append your user account to the `video` and `input` groups:
+  ```bash
+  sudo usermod -aG video,input $USER
+  ```
+  *(Log out and log back in for group membership changes to take effect).*
+* **Blackout Floor Protection:** The custom controller `~/.local/bin/brightness` implements hardware clamp protection with `-n 1` (`brightnessctl set 1% -n 1`), preventing luminance from ever reaching 0% (complete blackout).
+
+### 3. 📜 Scrolling on Polybar brightness module does not show the Dunst OSD bar
+* **Root Cause:** Polybar's native `internal/backlight` module consumes mouse wheel events internally when `enable-scroll = true`, directly modifying `/sys/class/backlight` without notifying the user session.
+* **Remedy:** In `~/.config/polybar/config.ini`, set:
+  ```ini
+  enable-scroll = false
+  format = <ramp> %{A1:~/.local/bin/brightness-slider:}%{A4:~/.local/bin/brightness up 1:}%{A5:~/.local/bin/brightness down 1:}<label>%{A}%{A}%{A}
+  ```
+  This routes scroll actions (`A4`/`A5`) to our CLI controller, triggering atomic, animated Dunst progress notifications.
+
+### 4. 🎚️ Interactive sliders fail to launch with "ModuleNotFoundError: No module named 'PyQt5'"
+* **Root Cause:** Python 3 PyQt5 graphics runtime libraries are missing from the host system.
+* **Remedy:** Install the native Debian/Ubuntu package:
+  ```bash
+  sudo apt install -y python3-pyqt5
+  ```
+  Test manual execution from terminal to verify:
+  ```bash
+  python3 ~/.local/bin/osd-slider.py volume
+  ```
+
+### 5. ☕ Burp Suite or Java applications render as blank gray boxes in BSPWM
+* **Root Cause:** Java AWT/Swing toolkit historical incompatibilities with non-reparenting window managers such as BSPWM or XMonad.
+* **Remedy:** `bspwmrc` already exports the industry-standard workaround:
+  ```bash
+  wmname LG3D &
+  export _JAVA_AWT_WM_NONREPARENTING=1
+  ```
+  If launching standalone `.jar` tools manually from shell, append `export _JAVA_AWT_WM_NONREPARENTING=1` to your `~/.zshrc`.
+
+### 6. ⌨️ Keybindings become unresponsive after editing `sxhkdrc`
+* **Remedy:** Trigger an in-place configuration reload via USR1 signal:
+  ```bash
+  pkill -USR1 -x sxhkd
+  ```
+  If hotkeys remain locked, check for syntax errors or multiple running daemon instances:
+  ```bash
+  killall sxhkd && sxhkd -c ~/.config/sxhkd/sxhkdrc &
+  ```
+  For deep X11 modifier lock debugging (NumLock/CapsLock interference), refer to [`KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md`](KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md).
+
+### 7. 🔋 NVIDIA discrete GPU causes high battery drain while idle (Hybrid Laptops)
+* **Remedy:** The telemetry script [`polybar/scripts/gpu.sh`](polybar/scripts/gpu.sh) features an integrated D3cold power gate check. When `/sys/bus/pci/devices/*/power/runtime_status` is `suspended`, it halts calls to `nvidia-smi`, enabling the NVIDIA card to stay powered down (0W consumption) until 3D or CUDA workloads demand it.
+
+---
+
+## 📁 Repository Directory Structure
 
 ```text
 dotfiles/
-├── assets/                               # Capturas de pantalla y showcases del entorno
-│   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch + OSD)
-│   ├── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
-│   ├── osd_volume.png                    # Showcase del slider flotante interactivo y OSD de volumen
-│   └── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
-├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
-│   ├── volume                           # Controlador CLI de audio con OSD Dunst y paso de 1%
-│   ├── brightness                       # Controlador CLI de brillo con OSD Dunst, paso de 1% y fail-safe
-│   ├── osd-slider.py                    # Popup GUI interactivo en PyQt5 para volumen y brillo con mouse
-│   ├── volume-slider                    # Wrapper lanzador/toggle del slider interactivo de volumen
-│   └── brightness-slider                # Wrapper lanzador/toggle del slider interactivo de brillo
-├── bspwmrc                              # Script maestro de inicialización de BSPWM y reglas de ventanas
-├── dunst/                               # Configuración del demonio de notificaciones y OSD
-│   └── dunstrc                          # Reglas visuales One Dark, barras con esquinas redondeadas y timeouts
-├── picom/                               # Configuración del compositor gráfico
-│   └── picom.conf                       # Backend GLX acelerado, sombras y desvanecimiento suave (fading)
-├── sxhkdrc                              # Mapeo de atajos de teclado globales (Pure Super Mod4)
-├── bspwm_resize                         # Utilidad auxiliar para redimensionar ventanas en tiling
-├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # Diagnóstico y resolución de incidencias en teclado y X11
-├── kitty.conf                           # Configuración del emulador de terminal Kitty
-├── polybar/                             # Suite completa de Polybar
-│   ├── config.ini                       # Configuración principal de barras, módulos y paleta OneDark
-│   ├── launch.sh                        # Script de inicialización segura con logging a /tmp/polybar.log
-│   ├── fonts/                           # Fuentes TTF/OTF (Hack Nerd Font, Iosevka, feather)
-│   └── scripts/                         # Scripts operativos de Polybar
-│       ├── acersense.sh                 # Telemetría e interactividad de ventiladores (Rust backend)
-│       ├── gpu.sh                       # Monitoreo de GPU con detección de reposo D3cold
-│       ├── launcher                     # Lanzador Rofi con toggle single-instance
-│       ├── pomodoro.sh                  # Controlador Pomodoro vía sockets UNIX (pomoc)
-│       ├── target.sh                    # Rastreador de IP objetivo para pentesting con ICMP check
-│       ├── vpn.sh                       # Detección inteligente de VPN (Proton, HTB, THM, WireGuard)
-│       └── wifi-menu.sh                 # Menú interactivo de selección WiFi vía Rofi
-├── rofi/                                # Configuración de Rofi
-│   ├── config.rasi                      # Configuración de modos, atajos e interfaz
-│   └── themes/                          # Paletas y estilos visuales
-├── .zshrc                               # Configuración de Zsh con plugins, PATH y alias ofensivos
-└── README.md                            # Documentación técnica completa del entorno
+├── assets/                               # Environment screenshots and showcases
+│   ├── preview.png                       # Primary desktop showcase (BSPWM + Polybar + Fastfetch + OSD)
+│   ├── powermenu.png                     # Horizontal interactive power menu (Neo Tokyo Edition)
+│   ├── osd_volume.png                    # Interactive floating slider and volume OSD showcase
+│   └── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
+├── bin/                                  # Modular operational scripts (~/.local/bin)
+│   ├── volume                           # Volume CLI controller with Dunst OSD and 1% step
+│   ├── brightness                       # Brightness CLI controller with Dunst OSD, 1% step, and floor safety
+│   ├── osd-slider.py                    # Lightweight PyQt5 floating GUI slider for mouse-driven adjustments
+│   ├── volume-slider                    # Toggle launcher wrapper for volume slider
+│   └── brightness-slider                # Toggle launcher wrapper for brightness slider
+├── bspwmrc                              # BSPWM initialization and window rule engine
+├── dunst/                               # Notification daemon & OSD styling
+│   └── dunstrc                          # OneDark aesthetic, rounded progress bars, and transient rules
+├── picom/                               # Compositor configuration
+│   └── picom.conf                       # GLX backend, hardware shadows, and smooth fading transitions
+├── sxhkdrc                              # Global keybinding daemon configuration (Pure Super Mod4)
+├── bspwm_resize                         # Tiling window resizing utility
+├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # X11 modifier and keyboard troubleshooting guide
+├── kitty.conf                           # Kitty GPU terminal configuration
+├── polybar/                             # Polybar status bar suite
+│   ├── config.ini                       # Master bar layout, modules, and OneDark color definitions
+│   ├── launch.sh                        # Polybar multi-monitor safe initialization script
+│   ├── fonts/                           # TTF/OTF typography suite (Hack Nerd Font, Iosevka, feather)
+│   └── scripts/                         # Tactical Polybar scripts
+│       ├── acersense.sh                 # AcerSense fan telemetry & MAX turbo switcher (Rust backend)
+│       ├── gpu.sh                       # NVIDIA discrete GPU telemetry with D3cold idle sleep guard
+│       ├── launcher                     # Single-instance Rofi application launcher
+│       ├── pomodoro.sh                  # UNIX socket Pomodoro timer daemon client (pomoc)
+│       ├── target.sh                    # Offensive target IP tracker with fast ICMP ping check
+│       ├── vpn.sh                       # Multi-platform VPN detection (HTB, THM, OffSec, Proton)
+│       └── wifi-menu.sh                 # Interactive WiFi selection and connection utility
+├── rofi/                                # Rofi menus and styling
+│   ├── config.rasi                      # Modes, key navigation, and visual interface
+│   └── themes/                          # Custom colorways and Tokyo Night / OneDark themes
+├── .zshrc                               # Zsh configuration with Powerlevel10k, aliases, and toolpaths
+├── README.md                            # Comprehensive Technical Documentation (English)
+└── README_es.md                         # Documentación Técnica Completa (Español)
 ```
 
 ---
 
-## 👤 Autor & Licencia
+## 👤 Author & License
 
 **Rodrigo Villegas** — Ethical Hacker | Pentester | Red Team Specialist
 
-* **Especialidad:** Seguridad Ofensiva, Auditorías de Redes, Infraestructura de Laboratorios y Automatización.
+* **Focus Areas:** Offensive Security, Network Auditing, Lab Infrastructure & Automation.
 * **GitHub:** [@rodrigo47363](https://github.com/rodrigo47363)
 
-Distribuido bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
+Distributed under the [MIT License](https://opensource.org/licenses/MIT).
 
 > ⚡ *"Customize everything. Automate what you can. Hack ethically."*
