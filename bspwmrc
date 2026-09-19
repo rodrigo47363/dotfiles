@@ -32,6 +32,7 @@ bspc rule -a mpv state=floating
 bspc rule -a Screenkey manage=off
 bspc rule -a "OsdSlider_volume" state=floating border=off focus=on
 bspc rule -a "OsdSlider_brightness" state=floating border=off focus=on
+bspc rule -a taskmanager state=floating rectangle=1050x700+435+190 center=on follow=on
 
 # ==========================================
 # 3. AUTOARRANQUE (Gestión limpia de procesos)

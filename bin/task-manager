@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Task Manager Launcher (Windows Task Manager Lookalike / Ctrl + Shift + Esc)
+# ==============================================================================
+
+# Ensure dynamic rule for taskmanager floating geometry
+bspc rule -a taskmanager state=floating rectangle=1050x700+435+190 center=on follow=on 2>/dev/null
+
+# Check if taskmanager is already open; if so, bring it to focus
+wid=$(bspc query -N -n .floating.window 2>/dev/null | while read -r id; do
+    if xprop -id "$id" WM_CLASS 2>/dev/null | grep -qi '"taskmanager"'; then
+        echo "$id"
+        break
+    fi
+done)
+
+if [ -n "$wid" ]; then
+    bspc node "$wid" -f
+    exit 0
+fi
+
+# Launch btop inside kitty terminal with custom class and title
+exec /opt/kitty/bin/kitty --class taskmanager -T "Administrador de tareas" -e btop

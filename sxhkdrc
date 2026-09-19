@@ -17,6 +17,14 @@ super + Return
 super + shift + Return
     bspc rule -a kitty -o state=floating && /opt/kitty/bin/kitty
 
+# Explorador de archivos (Windows Explorer -> Win + E)
+super + e
+    /home/rodrigo47363/.local/bin/file-explorer &
+
+# Administrador de tareas (Windows Task Manager -> Ctrl + Shift + Esc)
+ctrl + shift + Escape
+    /home/rodrigo47363/.local/bin/task-manager &
+
 ########################
 # ROFI LAUNCHERS       #
 ########################
@@ -39,9 +47,9 @@ super + Tab
 super + shift + space
     rofi -show combi
 
-# Menú de apagado (Power Menu)
+# Cerrar ventana activa o Menú de apagado (Comportamiento Windows Alt + F4)
 alt + F4
-    /home/rodrigo47363/.local/bin/powermenu
+    [ -n "$(bspc query -N -d -n .window.focused)" ] && bspc node -c || /home/rodrigo47363/.local/bin/powermenu
 
 ########################
 # SYSTEM & POLYBAR     #

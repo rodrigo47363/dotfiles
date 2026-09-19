@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# File Explorer Launcher (Windows Explorer Lookalike / Win + E)
+# ==============================================================================
+TARGET="${1:-$HOME}"
+
+if command -v caja >/dev/null 2>&1; then
+    exec caja --no-desktop "$TARGET"
+elif command -v dolphin >/dev/null 2>&1; then
+    exec dolphin "$TARGET"
+elif command -v thunar >/dev/null 2>&1; then
+    exec thunar "$TARGET"
+elif command -v pcmanfm >/dev/null 2>&1; then
+    exec pcmanfm "$TARGET"
+else
+    exec xdg-open "$TARGET"
+fi

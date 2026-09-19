@@ -125,12 +125,14 @@ Keybindings are centralized in [`sxhkdrc`](sxhkdrc). All shortcuts use **Pure Su
 |---|---|
 | <kbd>Super</kbd> + <kbd>D</kbd> or <kbd>Space</kbd> | Toggle Rofi Application Launcher (`drun` with single-instance lock) |
 | <kbd>Super</kbd> + <kbd>R</kbd> | Rofi Command Runner (`run`) |
+| <kbd>Super</kbd> + <kbd>E</kbd> | Launch File Explorer (`file-explorer` - Caja / Dolphin) |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Launch Floating Task Manager (`task-manager` - Btop) |
 | <kbd>Super</kbd> + <kbd>Tab</kbd> | Rofi Open Window Selector (`window`) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> | Combined Launcher mode (`combi`) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> | Launch Firefox browser |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> | Launch Burp Suite Professional / Community |
 | <kbd>Super</kbd> + <kbd>V</kbd> | Launch Stremio with initialization wrapper |
-| <kbd>Alt</kbd> + <kbd>F4</kbd> | **Interactive Rofi Power Menu** (`powermenu`) |
+| <kbd>Alt</kbd> + <kbd>F4</kbd> | Contextual Window Close / Interactive Power Menu (`powermenu`) |
 
 <p align="center">
   <img src="assets/powermenu.png" alt="Power Menu Preview" width="85%">
@@ -258,6 +260,56 @@ Key configurations implemented in [`bspwmrc`](bspwmrc):
 
 ---
 
+## 🕵️‍♂️ Red Team Undercover Suite (Windows 11 & Windows 10 Chameleon Mode)
+
+Designed for physical security audits, on-site social engineering, and client-facing engagements, the **Chameleon Undercover Engine** transforms the desktop environment into a 100% authentic Windows 11 (Sun Valley & Fluent Mica) or Windows 10 (Metro UI) interface on-the-fly.
+
+<p align="center">
+  <img src="assets/preview_win11.png" alt="Windows 11 Undercover Mode Preview" width="100%">
+</p>
+
+### 🎭 Instant Mode Switchers
+
+Switch your entire desktop personality in milliseconds:
+
+```bash
+mode-win11   # Activates Full Windows 11 Fluent Mica environment
+mode-win10   # Activates Full Windows 10 Metro UI environment
+mode-normal  # Restores 100% of your tactical pentesting OneDark environment
+```
+
+Or trigger the interactive selector via Rofi:
+```bash
+~/dotfiles/rofi/theme-selector.sh
+```
+
+<p align="center">
+  <img src="assets/preview_win10.png" alt="Windows 10 Metro Mode Preview" width="49%">
+  <img src="assets/preview_taskmanager.png" alt="Floating Task Manager" width="49%">
+</p>
+
+### 🛠️ Architecture & Undercover Features
+
+1. **Rofi Start Menus:**
+   * **Windows 11 ([`windows_11.rofi`](rofi/windows_11.rofi)):** Bottom-docked floating menu (`y-offset: -50;`), 14px rounded corners, translucent Mica background (`#1f1f1ff6`), pill search bar, 6-column pinned apps grid with official icons, user profile footer, and shutdown button.
+   * **Windows 10 ([`windows_10.rofi`](rofi/windows_10.rofi)):** Left-anchored Metro start menu (`location: south west`), strict 0px corners, left utility rail (``, ``, ``, `⏻`), solid `#0078d7` blue active selection.
+2. **Bottom Taskbars (Polybar):**
+   * **Windows 11 ([`win11.ini`](polybar/win11.ini)):** Bottom-docked at 34pt height. Features a centered dock with Start logo (`󰍲`), Search capsule (` Buscar`), Task View (`󱂬`), numeric workspace tabs (1–10 with focused underline), interactive pinned apps (`󰉋`, ``, `󰈹`, `󰨞`), and active window title. Far-left hosts a live weather widget (` +25°C Soleado`) with a **stealth OPSEC right-click trigger** (reveals active VPN and Target IP discreetly via notification). Far-right hosts a unified Quick Settings pill (Wi-Fi, Volume slider, Battery), clock, and notifications bell.
+   * **Windows 10 ([`win10.ini`](polybar/win10.ini)):** Bottom-docked at 28pt height with classic left-alignment, wide search box (` Escribe aquí para buscar`), workspaces (1–10), system tray, audio/network/battery, and Action Center bubble (`󰍩`).
+3. **Native Windows Hotkeys:**
+   * <kbd>Super</kbd> + <kbd>E</kbd>: Launches File Explorer ([`file-explorer`](bin/file-explorer)) using GTK3 Caja with `We10X-dark` Fluent icons and `Segoe UI` fonts.
+   * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Launches Task Manager ([`task-manager`](bin/task-manager)) running `btop` in a centered, floating window (`1050x700`) with persistent focus.
+   * <kbd>Alt</kbd> + <kbd>F4</kbd>: Contextual close — closes active window (`bspc node -c`), or opens Power Menu if on empty desktop.
+4. **State-Aware Launcher ([`launch.sh`](polybar/launch.sh)):**
+   * Automatically detects active mode from `~/.config/polybar/current_mode` and `~/.config/rofi/config.rasi`.
+   * Pressing <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> or restarting BSPWM safely reloads the active Windows bar without ever leaking or resurrecting the top Parrot pentesting bar.
+5. **Assets & Official Media:**
+   * 4K Official Wallpapers (Bloom Dark & Windows 10 Theme).
+   * Segoe UI Variable & Segoe Fluent Icons typography suite.
+   * Genuine Windows WAV notification sounds executed via `paplay`.
+
+---
+
 ## 🛠️ Troubleshooting & Frequently Asked Questions (FAQ)
 
 ### 1. 🔤 Polybar or terminal icons display as missing glyphs or square boxes
@@ -329,10 +381,18 @@ Key configurations implemented in [`bspwmrc`](bspwmrc):
 dotfiles/
 ├── assets/                               # Environment screenshots and showcases
 │   ├── preview.png                       # Primary desktop showcase (BSPWM + Polybar + Fastfetch + OSD)
+│   ├── preview_win11.png                 # Windows 11 Undercover Mode showcase (Fluent Mica & Dock)
+│   ├── preview_win10.png                 # Windows 10 Metro UI Mode showcase (Start & Taskbar)
+│   ├── preview_taskmanager.png           # Floating Btop Task Manager window showcase
 │   ├── powermenu.png                     # Horizontal interactive power menu (Neo Tokyo Edition)
 │   ├── osd_volume.png                    # Interactive floating slider and volume OSD showcase
 │   └── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
 ├── bin/                                  # Modular operational scripts (~/.local/bin)
+│   ├── file-explorer                    # Dynamic file manager launcher (Caja / Dolphin / fallback)
+│   ├── task-manager                     # Floating centered task manager launcher (Btop)
+│   ├── mode-win11                       # Instant switcher to Windows 11 Undercover Mode
+│   ├── mode-win10                       # Instant switcher to Windows 10 Metro Mode
+│   ├── mode-normal                      # Instant restorer to tactical pentesting OneDark Mode
 │   ├── volume                           # Volume CLI controller with Dunst OSD and 1% step
 │   ├── brightness                       # Brightness CLI controller with Dunst OSD, 1% step, and floor safety
 │   ├── osd-slider.py                    # Lightweight PyQt5 floating GUI slider for mouse-driven adjustments
@@ -348,8 +408,10 @@ dotfiles/
 ├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # X11 modifier and keyboard troubleshooting guide
 ├── kitty.conf                           # Kitty GPU terminal configuration
 ├── polybar/                             # Polybar status bar suite
-│   ├── config.ini                       # Master bar layout, modules, and OneDark color definitions
-│   ├── launch.sh                        # Polybar multi-monitor safe initialization script
+│   ├── config.ini                       # Master tactical pentesting bar (OneDark, top docked)
+│   ├── win11.ini                        # Windows 11 Fluent Mica taskbar (bottom docked, center dock)
+│   ├── win10.ini                        # Windows 10 Metro UI taskbar (bottom docked, left aligned)
+│   ├── launch.sh                        # State-aware universal daemon launcher (setsid -f)
 │   ├── fonts/                           # TTF/OTF typography suite (Hack Nerd Font, Iosevka, feather)
 │   └── scripts/                         # Tactical Polybar scripts
 │       ├── acersense.sh                 # AcerSense fan telemetry & MAX turbo switcher (Rust backend)
@@ -358,9 +420,15 @@ dotfiles/
 │       ├── pomodoro.sh                  # UNIX socket Pomodoro timer daemon client (pomoc)
 │       ├── target.sh                    # Offensive target IP tracker with fast ICMP ping check
 │       ├── vpn.sh                       # Multi-platform VPN detection (HTB, THM, OffSec, Proton)
-│       └── wifi-menu.sh                 # Interactive WiFi selection and connection utility
+│       ├── wifi-menu.sh                 # Interactive WiFi selection and connection utility
+│       ├── win11-weather.sh             # Live weather widget with right-click stealth OPSEC trigger
+│       ├── win-calendar.sh              # Python Dunst monthly calendar popup helper
+│       └── win-show-desktop.sh          # Desktop window toggle utility (Win + D)
 ├── rofi/                                # Rofi menus and styling
 │   ├── config.rasi                      # Modes, key navigation, and visual interface
+│   ├── theme-selector.sh                # Undercover Engine dynamic theme & environment switcher
+│   ├── windows_11.rofi                  # Authentic Windows 11 Start Menu (Mica, pill search, 6-col grid)
+│   ├── windows_10.rofi                  # Authentic Windows 10 Metro Start Menu (left rail, blue accent)
 │   └── themes/                          # Custom colorways and Tokyo Night / OneDark themes
 ├── .zshrc                               # Zsh configuration with Powerlevel10k, aliases, and toolpaths
 ├── README.md                            # Comprehensive Technical Documentation (English)

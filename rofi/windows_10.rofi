@@ -1,0 +1,181 @@
+/************************************************
+ * ROFI Windows 10 Authentic Start Menu Theme
+ * windows_10.rofi BY Rodrigo47363
+ * https://github.com/rodrigo47363
+ * Style: 100% Genuine Windows 10 Metro UI & Dark Acrylic
+ ***********************************************/
+
+configuration {
+    font:                "Segoe UI 10";
+    show-icons:          true;
+    icon-theme:          "We10X-dark";
+    display-drun:        "";
+    display-run:         "";
+    display-window:      "";
+    drun-display-format: "{name}";
+}
+
+* {
+    /* Paleta Oficial Windows 10 Dark Acrylic */
+    bg0:         #181818fa; /* Fondo acrílico oscuro de Windows 10 */
+    bg1:         #232323;   /* Caja de búsqueda rectangular */
+    rail-bg:     #121212;   /* Barra lateral de utilidades (Windows 10 Left Rail) */
+    fg0:         #ffffff;   /* Blanco puro Metro UI */
+    fg1:         #8c8c8c;   /* Gris neutro para placeholder e iconos */
+    accent:      #0078d7;   /* Azul icónico Windows 10 (Accent Blue) */
+    border-col:  #333333;   /* Borde fino de ventana */
+    urgent:      #e81123;   /* Rojo de alerta del sistema */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0;
+    padding:            0;
+    spacing:            0;
+}
+
+window {
+    background-color:   @bg0;
+    border:             1px;
+    border-color:       @border-col;
+    border-radius:      0px; /* Estricto estilo Metro: esquinas 100% rectas */
+    width:              600px;
+    location:           south west; /* Esquina inferior izquierda (Start Menu genuino) */
+    anchor:             south west;
+    x-offset:           10;
+    y-offset:           -10;
+}
+
+mainbox {
+    orientation:        horizontal;
+    children:           [ box-rail, win10-body ];
+}
+
+/* --- Barra lateral izquierda icónica de Windows 10 (Menu, User, Settings, Power) --- */
+box-rail {
+    expand:             false;
+    width:              48px;
+    background-color:   @rail-bg;
+    orientation:        vertical;
+    padding:            8px 0px;
+    children:           [ textbox-menu, dummy, textbox-user, textbox-settings, textbox-power ];
+}
+
+dummy {
+    expand:             true;
+}
+
+textbox-menu {
+    expand:             false;
+    str:                "  ";
+    font:               "JetBrainsMono Nerd Font 13";
+    text-color:         #cccccc;
+    horizontal-align:   0.5;
+    padding:            10px 0px;
+}
+
+textbox-user {
+    expand:             false;
+    str:                "  ";
+    font:               "JetBrainsMono Nerd Font 13";
+    text-color:         #cccccc;
+    horizontal-align:   0.5;
+    padding:            10px 0px;
+}
+
+textbox-settings {
+    expand:             false;
+    str:                "  ";
+    font:               "JetBrainsMono Nerd Font 13";
+    text-color:         #cccccc;
+    horizontal-align:   0.5;
+    padding:            10px 0px;
+}
+
+textbox-power {
+    expand:             false;
+    str:                " ⏻ ";
+    font:               "JetBrainsMono Nerd Font 13";
+    text-color:         #cccccc;
+    horizontal-align:   0.5;
+    padding:            10px 0px;
+}
+
+/* --- Cuerpo principal del Menú de Inicio --- */
+win10-body {
+    orientation:        vertical;
+    expand:             true;
+    padding:            14px 16px;
+    children:           [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:   @bg1;
+    border:             1px;
+    border-color:       #383838;
+    border-radius:      0px;
+    padding:            8px 12px;
+    margin:             0px 0px 12px 0px;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   transparent;
+    text-color:         @fg1;
+    font:               "JetBrainsMono Nerd Font 11";
+    margin:             0px 8px 0px 2px;
+    vertical-align:     0.5;
+}
+
+entry {
+    background-color:   transparent;
+    text-color:         @fg0;
+    placeholder:        "Escribe aquí para buscar...";
+    placeholder-color:  @fg1;
+    vertical-align:     0.5;
+}
+
+listview {
+    columns:            1;
+    lines:              8;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    spacing:            2px;
+}
+
+element {
+    padding:            8px 12px;
+    border-radius:      0px;
+    cursor:             pointer;
+}
+
+element normal.normal {
+    background-color:   transparent;
+    text-color:         #e0e0e0;
+}
+
+/* Resaltado de selección sólida en Azul Windows 10 (#0078d7) */
+element selected.normal {
+    background-color:   @accent;
+    text-color:         #ffffff;
+}
+
+element-icon {
+    size:               26px;
+    cursor:             inherit;
+    padding:            0px 12px 0px 0px;
+    vertical-align:     0.5;
+}
+
+element-text {
+    background-color:   inherit;
+    text-color:         inherit;
+    vertical-align:     0.5;
+    cursor:             inherit;
+}
+
+/* FIX: Reset estricto para anular fondos blancos de fábrica */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}

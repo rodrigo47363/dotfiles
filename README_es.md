@@ -125,12 +125,14 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 |---|---|
 | <kbd>Super</kbd> + <kbd>D</kbd> o <kbd>Espacio</kbd> | Alternar Menú de Aplicaciones Rofi (`drun` con toggle de instancia única) |
 | <kbd>Super</kbd> + <kbd>R</kbd> | Modo ejecución de comandos Rofi (`run`) |
+| <kbd>Super</kbd> + <kbd>E</kbd> | Lanzar Explorador de Archivos (`file-explorer` - Caja / Dolphin) |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Lanzar Administrador de Tareas flotante (`task-manager` - Btop) |
 | <kbd>Super</kbd> + <kbd>Tab</kbd> | Selector de ventanas abiertas Rofi (`window`) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Espacio</kbd> | Lanzador combinado Rofi (`combi`) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> | Lanzar navegador web (Firefox) |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> | Lanzar Burp Suite Professional / Community |
 | <kbd>Super</kbd> + <kbd>V</kbd> | Lanzar Stremio con wrapper de inicialización |
-| <kbd>Alt</kbd> + <kbd>F4</kbd> | **Menú de apagado interactivo Rofi** (`powermenu`) |
+| <kbd>Alt</kbd> + <kbd>F4</kbd> | Cierre contextual de ventana / Menú de apagado interactivo (`powermenu`) |
 
 <p align="center">
   <img src="assets/powermenu.png" alt="Power Menu Preview" width="85%">
@@ -258,6 +260,56 @@ Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
 
 ---
 
+## 🕵️‍♂️ Red Team Undercover Suite (Modo Camaleón Windows 11 & Windows 10)
+
+Diseñado para auditorías de seguridad física, ingeniería social *in situ* y demostraciones ante clientes corporativos, el **Motor Camaleón Undercover** transforma el entorno operativo en una réplica 100% auténtica de **Windows 11 (Sun Valley & Fluent Mica)** o **Windows 10 (Metro UI)** al vuelo.
+
+<p align="center">
+  <img src="assets/preview_win11.png" alt="Vista Previa Modo Windows 11 Undercover" width="100%">
+</p>
+
+### 🎭 Conmutadores Instantáneos de Entorno
+
+Cambia la personalidad completa de tu estación de trabajo en milisegundos:
+
+```bash
+mode-win11   # Activa el entorno completo Windows 11 Fluent Mica
+mode-win10   # Activa el entorno completo Windows 10 Metro UI
+mode-normal  # Restaura al 100% el entorno táctico de pentesting OneDark
+```
+
+O despliega el selector gráfico interactivo mediante Rofi:
+```bash
+~/dotfiles/rofi/theme-selector.sh
+```
+
+<p align="center">
+  <img src="assets/preview_win10.png" alt="Vista Previa Modo Windows 10 Metro" width="49%">
+  <img src="assets/preview_taskmanager.png" alt="Administrador de Tareas Flotante" width="49%">
+</p>
+
+### 🛠️ Arquitectura & Características Tácticas
+
+1. **Menús de Inicio Rofi:**
+   * **Windows 11 ([`windows_11.rofi`](rofi/windows_11.rofi)):** Flotante anclado al borde inferior (`y-offset: -50;`), esquinas redondeadas de 14px, fondo translúcido estilo Mica (`#1f1f1ff6`), cápsula de búsqueda centrada, cuadrícula de aplicaciones de 6 columnas con iconos oficiales Fluent, pie de página con usuario y botón de apagado.
+   * **Windows 10 ([`windows_10.rofi`](rofi/windows_10.rofi)):** Menú Metro anclado al vértice inferior izquierdo (`location: south west`), esquinas rectas de 0px, riel lateral de iconos utilitarios (``, ``, ``, `⏻`) y selección activa en azul Metro `#0078d7`.
+2. **Barras de Tareas Inferiores (Polybar):**
+   * **Windows 11 ([`win11.ini`](polybar/win11.ini)):** Barra inferior de 34pt. Incluye dock central con isotipo de Windows (`󰍲`), cápsula ` Buscar`, Vista de Tareas (`󱂬`), escritorios virtuales numéricos (1–10 con subrayado activo), accesos directos anclados (`󰉋`, ``, `󰈹`, `󰨞`) y título de ventana en foco. A la izquierda integra un widget meteorológico (` +25°C Soleado`) con **disparador táctico OPSEC al clic derecho** (notifica en secreto la IP de VPN y Target activo sin exponerlo visualmente en pantalla). A la derecha agrupa el *Quick Settings* unificado (Wi-Fi, slider de volumen, batería), reloj y centro de notificaciones.
+   * **Windows 10 ([`win10.ini`](polybar/win10.ini)):** Barra inferior de 28pt con diseño rectangular Metro a la izquierda, barra de búsqueda ancha (` Escribe aquí para buscar`), escritorios 1–10, bandeja del sistema y burbuja del *Action Center* (`󰍩`).
+3. **Atajos Nativos de Windows:**
+   * <kbd>Super</kbd> + <kbd>E</kbd>: Abre el Explorador de Archivos ([`file-explorer`](bin/file-explorer)) mediante Caja GTK3 con el set de iconos Fluent `We10X-dark` y tipografía `Segoe UI`.
+   * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Abre el Administrador de Tareas ([`task-manager`](bin/task-manager)) ejecutando `btop` en ventana flotante centrada (`1050x700`) con retención de foco.
+   * <kbd>Alt</kbd> + <kbd>F4</kbd>: Cierre contextual inteligente — cierra la ventana activa (`bspc node -c`), o si el escritorio está vacío abre el Menú de Apagado interactivo.
+4. **Gestor de Barra con Memoria de Estado ([`launch.sh`](polybar/launch.sh)):**
+   * Detecta y recuerda automáticamente el modo activo mediante `~/.config/polybar/current_mode` y `~/.config/rofi/config.rasi`.
+   * Al pulsar <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> o reiniciar BSPWM, recarga con seguridad la barra Windows correspondiente sin resucitar jamás la barra superior de Parrot.
+5. **Assets & Multimedia Oficial:**
+   * Fondos de pantalla 4K oficiales extraídos de la ISO (Bloom Dark y Tema Windows 10).
+   * Familia tipográfica *Segoe UI Variable* y *Segoe Fluent Icons*.
+   * Sonidos de notificación WAV nativos de Windows reproducidos por `paplay`.
+
+---
+
 ## 🛠️ Diagnóstico de Problemas & Preguntas Frecuentes (Troubleshooting & FAQ)
 
 ### 1. 🔤 Los iconos de Polybar o la terminal se ven como cuadrados o símbolos extraños
@@ -329,10 +381,18 @@ Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
 dotfiles/
 ├── assets/                               # Capturas de pantalla y showcases del entorno
 │   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch + OSD)
+│   ├── preview_win11.png                 # Showcase de Modo Windows 11 Undercover (Fluent Mica & Dock)
+│   ├── preview_win10.png                 # Showcase de Modo Windows 10 Metro UI (Start & Taskbar)
+│   ├── preview_taskmanager.png           # Showcase de Administrador de Tareas Flotante (Btop)
 │   ├── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
 │   ├── osd_volume.png                    # Showcase del slider flotante interactivo y OSD de volumen
 │   └── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
 ├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
+│   ├── file-explorer                    # Lanzador inteligente de explorador de archivos (Caja / Dolphin / fallback)
+│   ├── task-manager                     # Lanzador del Administrador de Tareas flotante centrado (Btop)
+│   ├── mode-win11                       # Conmutador instantáneo al Modo Windows 11 Undercover
+│   ├── mode-win10                       # Conmutador instantáneo al Modo Windows 10 Metro
+│   ├── mode-normal                      # Restaurador instantáneo al entorno táctico OneDark de Pentesting
 │   ├── volume                           # Controlador CLI de audio con OSD Dunst y paso de 1%
 │   ├── brightness                       # Controlador CLI de brillo con OSD Dunst, paso de 1% y fail-safe
 │   ├── osd-slider.py                    # Popup GUI interactivo en PyQt5 para volumen y brillo con mouse
@@ -348,8 +408,10 @@ dotfiles/
 ├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # Diagnóstico y resolución de incidencias en teclado y X11
 ├── kitty.conf                           # Configuración del emulador de terminal Kitty
 ├── polybar/                             # Suite completa de Polybar
-│   ├── config.ini                       # Configuración principal de barras, módulos y paleta OneDark
-│   ├── launch.sh                        # Script de inicialización segura con logging a /tmp/polybar.log
+│   ├── config.ini                       # Barra táctica principal de pentesting (OneDark, borde superior)
+│   ├── win11.ini                        # Barra Windows 11 Fluent Mica (borde inferior, dock centrado)
+│   ├── win10.ini                        # Barra Windows 10 Metro UI (borde inferior, alineación izquierda)
+│   ├── launch.sh                        # Lanzador universal con memoria de estado y daemon setsid -f
 │   ├── fonts/                           # Fuentes TTF/OTF (Hack Nerd Font, Iosevka, feather)
 │   └── scripts/                         # Scripts operativos de Polybar
 │       ├── acersense.sh                 # Telemetría e interactividad de ventiladores (Rust backend)
@@ -358,9 +420,15 @@ dotfiles/
 │       ├── pomodoro.sh                  # Controlador Pomodoro vía sockets UNIX (pomoc)
 │       ├── target.sh                    # Rastreador de IP objetivo para pentesting con ICMP check
 │       ├── vpn.sh                       # Detección inteligente de VPN (Proton, HTB, THM, WireGuard)
-│       └── wifi-menu.sh                 # Menú interactivo de selección WiFi vía Rofi
+│       ├── wifi-menu.sh                 # Menú interactivo de selección WiFi vía Rofi
+│       ├── win11-weather.sh             # Widget del tiempo con disparador sigiloso OPSEC al clic derecho
+│       ├── win-calendar.sh              # Helper emergente de calendario mensual vía Python y Dunst
+│       └── win-show-desktop.sh          # Alternador de visibilidad de escritorio (Win + D)
 ├── rofi/                                # Configuración de Rofi
 │   ├── config.rasi                      # Configuración de modos, atajos e interfaz
+│   ├── theme-selector.sh                # Motor Undercover: inyector y conmutador universal de entornos
+│   ├── windows_11.rofi                  # Menú de inicio Windows 11 auténtico (Mica, búsqueda píldora, 6 columnas)
+│   ├── windows_10.rofi                  # Menú de inicio Windows 10 Metro auténtico (riel lateral, acento azul)
 │   └── themes/                          # Paletas y estilos visuales
 ├── .zshrc                               # Configuración de Zsh con plugins, PATH y alias ofensivos
 ├── README.md                            # Documentación técnica completa (Inglés / English)
