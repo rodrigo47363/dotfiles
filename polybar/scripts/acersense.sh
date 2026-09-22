@@ -12,6 +12,10 @@ if [ "$1" = "toggle" ]; then
 elif [ "$1" = "gui" ]; then
     pkill -x acersense-gui || acersense-gui &
     exit 0
+elif [ "$1" = "battery" ]; then
+    info=$(acpi -b 2>/dev/null || echo "Batería disponible")
+    notify-send -i "battery-good" -u normal "Diagnóstico de Batería" "$info"
+    exit 0
 fi
 
 # Ultra-fast native execution in 2ms
