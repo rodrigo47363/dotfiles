@@ -3,6 +3,7 @@
 # OSD SLIDER PRO - POPUP INTERACTIVO PARA VOLUMEN Y BRILLO (FLUENT MICA)
 # BSPWM / Polybar / Parrot OS Suite
 # Permite interacción 100% con ratón (clic directo, arrastre continuo y scroll)
+# Fix BSPWM: Inmune a focus_follows_pointer. Control por temporizador inteligente.
 # ==============================================================================
 
 import sys
@@ -13,7 +14,7 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QSlider, QPushButton
 )
-from PyQt5.QtCore import Qt, QEvent, QTimer
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QCursor, QFont, QKeyEvent
 
 class ClickableSlider(QSlider):
@@ -53,6 +54,10 @@ class ClickableSlider(QSlider):
             new_val = self._val_from_event(event)
             self.setValue(new_val)
             event.accept()
+            # Si al soltar el ratón el cursor está fuera de la ventana padre, iniciar timer de salida
+            win = self.window()
+            if hasattr(win, "close_timer") and not win.rect().contains(win.mapFromGlobal(QCursor.pos())):
+                win.close_timer.start(1500)
         else:
             super().mouseReleaseEvent(event)
 
@@ -69,7 +74,6 @@ class OsdSliderWindow(QWidget):
         self.mode = mode
         self.setObjectName(f"OsdSlider_{mode}")
         self.setWindowTitle(f"OsdSlider_{mode}")
-        self._can_close = False
 
         # Configuración de ventana flotante sin bordes
         self.setWindowFlags(
@@ -80,8 +84,14 @@ class OsdSliderWindow(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setAttribute(Qt.WA_ShowWithoutActivating, False)
 
-        # Habilitar auto-cierre con retardo para permitir mapeo limpio en BSPWM
-        QTimer.singleShot(400, lambda: setattr(self, '_can_close', True))
+        # Temporizador inteligente de cierre:
+        # Da 4 segundos iniciales para alcanzar la ventana con el ratón.
+        # Si el ratón entra (enterEvent), se cancela y se mantiene abierta.
+        # Al salir del área de la ventana (leaveEvent), espera 1.5s antes de cerrarse.
+        self.close_timer = QTimer(self)
+        self.close_timer.setSingleShot(True)
+        self.close_timer.timeout.connect(self.close)
+        self.close_timer.start(4000)
 
         # Paleta de colores Windows 11 Fluent Mica
         if self.mode == "volume":
@@ -254,10 +264,14 @@ class OsdSliderWindow(QWidget):
 
     def set_preset(self, val):
         self.slider.setValue(val)
+        if self.close_timer.isActive():
+            self.close_timer.stop()
 
     def on_slider_changed(self, val):
         self.apply_system_value(val)
         self.update_labels(val, False)
+        if self.close_timer.isActive():
+            self.close_timer.stop()
 
     def sync_from_system(self):
         val, is_muted = self.get_system_state()
@@ -307,15 +321,27 @@ class OsdSliderWindow(QWidget):
         w = self.width()
         h = self.height()
 
-        # En Windows 11 Fluent Taskbar, el panel de Quick Settings se ancla
-        # siempre en la esquina inferior derecha justo encima de la barra
+        # En Windows 11 Taskbar, el flyout de volumen/brillo se ancla en
+        # la esquina inferior derecha justo encima de la barra
         x = screen.width() - w - 16
-        y = screen.height() - h - 54
+        y = screen.height() - h - 48
 
         self.move(x, y)
 
+    def enterEvent(self, event):
+        # El ratón entra en la ventana: cancelar el temporizador de cierre
+        if self.close_timer.isActive():
+            self.close_timer.stop()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        # El ratón sale de la ventana: dar 1.5s antes de cerrar (a menos que esté arrastrando el slider)
+        if not getattr(self.slider, '_dragging', False):
+            self.close_timer.start(1500)
+        super().leaveEvent(event)
+
     def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Escape:
+        if event.key() in (Qt.Key_Escape, Qt.Key_Return):
             self.close()
         elif event.key() in (Qt.Key_Left, Qt.Key_Down):
             self.slider.setValue(max(self.slider.minimum(), self.slider.value() - 1))
@@ -325,13 +351,6 @@ class OsdSliderWindow(QWidget):
             self.toggle_system_mute()
         else:
             super().keyPressEvent(event)
-
-    def changeEvent(self, event):
-        # Auto-cerrar al perder el foco (hacer clic en cualquier otra parte del escritorio)
-        if event.type() == QEvent.ActivationChange:
-            if getattr(self, '_can_close', False) and not self.isActiveWindow():
-                self.close()
-        super().changeEvent(event)
 
 
 def manage_single_instance(mode):
