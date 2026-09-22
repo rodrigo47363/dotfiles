@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # ==============================================================================
-# OSD SLIDER PRO - POPUP INTERACTIVO PARA VOLUMEN Y BRILLO
+# OSD SLIDER PRO - POPUP INTERACTIVO PARA VOLUMEN Y BRILLO (FLUENT MICA)
 # BSPWM / Polybar / Parrot OS Suite
+# Permite interacción 100% con ratón (clic directo, arrastre continuo y scroll)
 # ==============================================================================
 
 import sys
@@ -12,43 +13,85 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QSlider, QPushButton
 )
-from PyQt5.QtCore import Qt, QEvent
+from PyQt5.QtCore import Qt, QEvent, QTimer
 from PyQt5.QtGui import QCursor, QFont, QKeyEvent
 
 class ClickableSlider(QSlider):
-    """QSlider mejorado que permite saltar directamente a la posición al hacer clic."""
+    """QSlider táctil y de ratón con alta precisión y respuesta continua:
+    Permite clic directo en cualquier punto, arrastre continuo con botón presionado y scroll."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._dragging = False
+
+    def _val_from_event(self, event):
+        w = max(1, self.width())
+        pos = max(0, min(w, event.x()))
+        span = self.maximum() - self.minimum()
+        val = self.minimum() + int(round((pos * span) / w))
+        return max(self.minimum(), min(self.maximum(), val))
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            val = self.minimum() + ((self.maximum() - self.minimum()) * event.x()) / max(1, self.width())
-            val = max(self.minimum(), min(self.maximum(), int(round(val))))
-            self.setValue(val)
-        super().mousePressEvent(event)
+            self._dragging = True
+            new_val = self._val_from_event(event)
+            self.setValue(new_val)
+            event.accept()
+        else:
+            super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self._dragging and (event.buttons() & Qt.LeftButton):
+            new_val = self._val_from_event(event)
+            self.setValue(new_val)
+            event.accept()
+        else:
+            super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self._dragging = False
+            new_val = self._val_from_event(event)
+            self.setValue(new_val)
+            event.accept()
+        else:
+            super().mouseReleaseEvent(event)
+
+    def wheelEvent(self, event):
+        delta = event.angleDelta().y()
+        step = 2 if delta > 0 else -2
+        self.setValue(max(self.minimum(), min(self.maximum(), self.value() + step)))
+        event.accept()
+
 
 class OsdSliderWindow(QWidget):
     def __init__(self, mode="volume"):
         super().__init__()
         self.mode = mode
-        self.setObjectName("MainWindow")
+        self.setObjectName(f"OsdSlider_{mode}")
+        self.setWindowTitle(f"OsdSlider_{mode}")
+        self._can_close = False
 
-        # Configuración de ventana flotante sin bordes y siempre visible
+        # Configuración de ventana flotante sin bordes
         self.setWindowFlags(
             Qt.FramelessWindowHint |
             Qt.WindowStaysOnTopHint |
-            Qt.Tool |
-            Qt.X11BypassWindowManagerHint
+            Qt.Tool
         )
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setAttribute(Qt.WA_ShowWithoutActivating, False)
 
-        # Paleta de colores One Dark & Cyberpunk
+        # Habilitar auto-cierre con retardo para permitir mapeo limpio en BSPWM
+        QTimer.singleShot(400, lambda: setattr(self, '_can_close', True))
+
+        # Paleta de colores Windows 11 Fluent Mica
         if self.mode == "volume":
-            self.accent_color = "#61afef"
-            self.secondary_color = "#56b6c2"
+            self.accent_color = "#60cdff"      # Luminous Fluent Blue
+            self.secondary_color = "#4cc2ff"
             self.title_text = "Volumen"
             self.icon_default = "󰕾"
             self.presets = [20, 40, 60, 80, 100]
         else:
-            self.accent_color = "#e5c07b"
+            self.accent_color = "#e5c07b"      # Amber Gold
             self.secondary_color = "#d19a66"
             self.title_text = "Brillo"
             self.icon_default = "󰃠"
@@ -115,11 +158,11 @@ class OsdSliderWindow(QWidget):
 
         self.title_label = QLabel(self.title_text)
         self.title_label.setObjectName("Title")
-        self.title_label.setFont(QFont("Noto Sans", 10, QFont.Bold))
+        self.title_label.setFont(QFont("Segoe UI Variable", 10, QFont.Bold))
 
         self.value_label = QLabel("0%")
         self.value_label.setObjectName("Value")
-        self.value_label.setFont(QFont("Hack Nerd Font", 12, QFont.Bold))
+        self.value_label.setFont(QFont("Segoe UI Variable", 11, QFont.Bold))
         self.value_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         header_layout.addWidget(self.icon_label)
@@ -128,9 +171,10 @@ class OsdSliderWindow(QWidget):
         header_layout.addWidget(self.value_label)
         main_layout.addLayout(header_layout)
 
-        # Fila Central: Slider interactivo
+        # Fila Central: Slider interactivo de ratón
         self.slider = ClickableSlider(Qt.Horizontal)
         self.slider.setRange(0 if self.mode == "volume" else 1, 100)
+        self.slider.setFixedHeight(28)
         self.slider.setCursor(Qt.PointingHandCursor)
         self.slider.valueChanged.connect(self.on_slider_changed)
         main_layout.addWidget(self.slider)
@@ -153,52 +197,52 @@ class OsdSliderWindow(QWidget):
 
         main_layout.addLayout(footer_layout)
 
-        # Aplicar hoja de estilos QSS Cyberpunk / One Dark
+        # Aplicar hoja de estilos QSS Windows 11 Fluent Mica
         container.setStyleSheet(f"""
             QWidget#Container {{
-                background-color: #141820;
-                border: 1.5px solid {self.accent_color};
+                background-color: #1f1f1ff6;
+                border: 1px solid #ffffff25;
                 border-radius: 12px;
             }}
             QLabel#Title {{
-                color: #e6edf3;
+                color: #ffffff;
             }}
             QLabel#Value {{
                 color: {self.accent_color};
             }}
             QSlider::groove:horizontal {{
                 border: none;
-                height: 8px;
-                background: #232936;
-                border-radius: 4px;
+                height: 6px;
+                background: #333333;
+                border-radius: 3px;
             }}
             QSlider::sub-page:horizontal {{
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {self.accent_color}, stop:1 {self.secondary_color});
-                border-radius: 4px;
+                background: {self.accent_color};
+                border-radius: 3px;
             }}
             QSlider::handle:horizontal {{
                 background: #ffffff;
-                border: 2px solid {self.accent_color};
+                border: 3px solid {self.accent_color};
                 width: 18px;
                 height: 18px;
-                margin: -5px 0;
+                margin: -6px 0;
                 border-radius: 9px;
             }}
             QSlider::handle:horizontal:hover {{
                 background: #ffffff;
-                border: 2px solid #ffffff;
+                border: 3px solid #ffffff;
             }}
             QPushButton {{
-                background-color: #1e2430;
-                color: #abb2bf;
-                border: 1px solid #2b3342;
+                background-color: #2b2b2b;
+                color: #cfcfcf;
+                border: 1px solid #383838;
                 border-radius: 6px;
-                padding: 4px 6px;
+                padding: 5px 8px;
                 font-size: 10px;
                 font-weight: bold;
             }}
             QPushButton:hover {{
-                background-color: #2b3342;
+                background-color: #383838;
                 color: #ffffff;
                 border: 1px solid {self.accent_color};
             }}
@@ -226,12 +270,12 @@ class OsdSliderWindow(QWidget):
         if self.mode == "volume":
             if is_muted:
                 self.icon_label.setText("󰖁")
-                self.icon_label.setStyleSheet("color: #e06c75;")
+                self.icon_label.setStyleSheet("color: #ff99a4;")
                 self.value_label.setText("MUTE")
-                self.value_label.setStyleSheet("color: #e06c75;")
+                self.value_label.setStyleSheet("color: #ff99a4;")
                 if hasattr(self, "mute_btn"):
                     self.mute_btn.setText("󰕾 Unmute")
-                    self.mute_btn.setStyleSheet("background-color: #e06c75; color: #ffffff;")
+                    self.mute_btn.setStyleSheet("background-color: #ff99a4; color: #1f1f1f;")
             else:
                 if val >= 70:
                     icon = "󰕾"
@@ -259,25 +303,14 @@ class OsdSliderWindow(QWidget):
             self.value_label.setStyleSheet(f"color: {self.accent_color};")
 
     def position_window(self):
-        cursor = QCursor.pos()
         screen = QApplication.primaryScreen().geometry()
         w = self.width()
         h = self.height()
 
-        # Centrar horizontalmente respecto al cursor del ratón, respetando márgenes
-        x = cursor.x() - w // 2
-        if x + w > screen.width() - 16:
-            x = screen.width() - w - 16
-        if x < 16:
-            x = 16
-
-        # Posicionamiento vertical: Justo debajo de Polybar (top 38px) o cerca del cursor
-        if cursor.y() < 60:
-            y = 38
-        else:
-            y = cursor.y() + 15
-            if y + h > screen.height() - 16:
-                y = cursor.y() - h - 10
+        # En Windows 11 Fluent Taskbar, el panel de Quick Settings se ancla
+        # siempre en la esquina inferior derecha justo encima de la barra
+        x = screen.width() - w - 16
+        y = screen.height() - h - 54
 
         self.move(x, y)
 
@@ -296,7 +329,7 @@ class OsdSliderWindow(QWidget):
     def changeEvent(self, event):
         # Auto-cerrar al perder el foco (hacer clic en cualquier otra parte del escritorio)
         if event.type() == QEvent.ActivationChange:
-            if not self.isActiveWindow():
+            if getattr(self, '_can_close', False) and not self.isActiveWindow():
                 self.close()
         super().changeEvent(event)
 
@@ -307,7 +340,6 @@ def manage_single_instance(mode):
         try:
             with open(pid_file, "r") as f:
                 old_pid = int(f.read().strip())
-            # Si el proceso anterior sigue vivo, lo terminamos (comportamiento toggle) y salimos
             os.kill(old_pid, signal.SIGTERM)
             os.remove(pid_file)
             sys.exit(0)
