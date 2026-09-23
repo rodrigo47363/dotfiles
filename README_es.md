@@ -243,11 +243,22 @@ Diseñado específicamente para flujos de trabajo de seguridad ofensiva:
 ## 🪟 Configuración de BSPWM (`bspwmrc`)
 
 Aspectos destacados implementados en [`bspwmrc`](bspwmrc):
+* **Matriz Táctica de Workspaces y Enrutamiento Automático:** Enrutamiento determinista de ventanas por clase (`WM_CLASS`) hacia 10 escritorios especializados para auditoría y desarrollo:
+  * **WS 1 (Terminal):** Consola principal acelerada por GPU (`kitty`).
+  * **WS 2 (Navegación / OSINT):** Navegadores web aislados (`Firefox`, `Chromium`, `Google Chrome`).
+  * **WS 3 (Desarrollo):** IDEs y editores de código (`Code`, `VSCodium`, `Kate`).
+  * **WS 4 (Red & Recon):** Herramientas de análisis de tráfico y escaneo (`Wireshark`, `Zenmap`).
+  * **WS 5 (Seguridad Web & Proxies):** Entornos de intercepción en mosaico automático (`Burp Suite`, `Caido`, `OWASP ZAP`).
+  * **WS 6 (Virtualización & Sandboxes):** Máquinas virtuales y emuladores (`VirtualBox`).
+  * **WS 7 (Comunicación):** Mensajería y coordinación (`Telegram Desktop`, `Discord`).
+  * **WS 8 (Media & Diseño):** Edición gráfica y audiovisual (`GIMP`, `DaVinci Resolve`, `Inkscape`, `mpv`).
+  * **WS 9 (Documentación & Notas):** Gestión de bases de conocimiento y notas Markdown (`Obsidian`).
+  * **WS 10 (Targets & Explotación):** Consolas dedicadas al objetivo activo.
+* **Autoarranque e Idempotencia de `sxhkd` (`SIGUSR1`):** Se evita la colisión de sockets y la pérdida de atajos por condición de carrera (*race condition grab collision*) verificando la existencia del proceso y enviando la señal nativa `pkill -USR1 -x sxhkd` en lugar de terminaciones abruptas.
 * **Fijación de Identidad Java:** `wmname LG3D &` para resolver incompatibilidades de renderizado y menús grises en aplicaciones Java como **Burp Suite Professional**.
-* **Gestión de Teclado y Teclas Huérfanas:** Remapeo de eventos X11 y desactivación de estados de bloqueo residuales (`xmodmap`, `numlockx`).
+* **Gestión de Teclado y Teclas Huérfanas:** Remapeo de eventos X11 (Keycode 172 $\rightarrow$ `Super_L` en `mod4`) y desactivación de capas de bloqueo residuales (`xmodmap`, `numlockx`).
 * **Hardware Touchpad:** Detección automática en bucle para habilitar *Tap-to-click* y *Natural Scrolling* mediante `libinput` en cualquier ID de dispositivo señalador.
-* **Arranque Limpio:** Verificación de instancias previas antes de lanzar `sxhkd`, `picom`, `polybar`, `dunst` y gestores de fondo de pantalla (`feh`).
-* **Reglas Flotantes OSD:** Reglas dedicadas para que los popups interactivos (`OsdSlider_volume` y `OsdSlider_brightness`) floten siempre sin bordes y con foco automático.
+* **Reglas Flotantes OSD:** Reglas dedicadas para que los popups interactivos (`OsdSlider_volume` y `OsdSlider_brightness`) y mezcladores (`pavucontrol`, `taskmanager`) floten siempre centrados y con foco automático.
 
 ---
 

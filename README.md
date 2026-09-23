@@ -243,11 +243,22 @@ Specifically engineered for penetration testing and Red Team engagements:
 ## 🪟 BSPWM Architecture Highlights (`bspwmrc`)
 
 Key configurations implemented in [`bspwmrc`](bspwmrc):
+* **Tactical Workspace Matrix & Deterministic Window Rules:** Auto-routes applications by window class (`WM_CLASS`) to 10 specialized workspaces:
+  * **WS 1 (Terminal):** Primary GPU-accelerated shell (`kitty`).
+  * **WS 2 (Browsing / OSINT):** Isolated web research (`Firefox`, `Chromium`, `Google Chrome`).
+  * **WS 3 (Development):** Code editors and IDEs (`Code`, `VSCodium`, `Kate`).
+  * **WS 4 (Network & Recon):** Packet inspection and network scanners (`Wireshark`, `Zenmap`).
+  * **WS 5 (Web Security & Proxies):** Interception proxies automatically tiled (`Burp Suite`, `Caido`, `OWASP ZAP`).
+  * **WS 6 (Virtualization & Sandboxes):** Virtual machines and isolated labs (`VirtualBox`).
+  * **WS 7 (Communications):** Encrypted chat and team coordination (`Telegram Desktop`, `Discord`).
+  * **WS 8 (Media & Design):** Creative and media tools (`GIMP`, `DaVinci Resolve`, `Inkscape`, `mpv`).
+  * **WS 9 (Documentation & Notes):** Knowledge base management (`Obsidian`).
+  * **WS 10 (Target Execution):** Dedicated exploitation and target shells.
+* **Idempotent SXHKD Lifecycle (`SIGUSR1`):** Eliminates race condition grab collisions on restart by querying active PIDs and sending POSIX `SIGUSR1` (`pkill -USR1 -x sxhkd`) rather than disruptive `pkill -9`.
 * **Java GUI Fix:** `wmname LG3D &` resolves gray/blank render issues on Java Swing/AWT applications such as **Burp Suite Professional**.
-* **X11 Keyboard State Cleanup:** Remaps orphaned keys and disables residual lock states (`xmodmap`, `numlockx`).
+* **X11 Keyboard State Cleanup:** Remaps hardware keys (Keycode 172 $\rightarrow$ `Super_L` in `mod4`) and clears residual modifier lock states (`xmodmap`, `numlockx`).
 * **Hardware Touchpad Detection:** Dynamic device loop applying *Tap-to-click* and *Natural Scrolling* via `libinput` across arbitrary pointer device IDs.
-* **Clean Process Lifecycle:** Verifies and kills orphan instances prior to spawning `sxhkd`, `picom`, `polybar`, `dunst`, and background wallpaper managers (`feh`).
-* **OSD Floating Rules:** Tailored window rules ensuring GUI sliders (`OsdSlider_volume` and `OsdSlider_brightness`) float borderless with immediate focus.
+* **OSD Floating Rules:** Tailored window rules ensuring GUI sliders (`OsdSlider_volume` and `OsdSlider_brightness`) and mixers (`pavucontrol`, `taskmanager`) float centered with immediate focus.
 
 ---
 
