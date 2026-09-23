@@ -12,6 +12,7 @@ while pgrep -u "$UID" -x polybar >/dev/null; do sleep 0.1; done
 
 export DISPLAY="${DISPLAY:-:0}"
 export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
+export PATH="$HOME/.local/bin:$PATH"
 
 MODE_FILE="$HOME/.config/polybar/current_mode"
 
