@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Toggle: Si ya está abierto Rofi, cerrarlo
+if pkill -x rofi; then
+    exit 0
+fi
+
+STATUS=$(pomoc status 2>/dev/null || echo "Apagado")
+
+OPTIONS="󰐊 Iniciar (25m)\n󰏤 Pausar / Reanudar\n󰒭 Saltar a Descanso (End)\n󰑐 Reiniciar Temporizador (Reset)\n󰑓 Reiniciar Demonio (Restart)\n⏱️ Tiempo Personalizado...\n󰚌 Apagar Demonio (Kill)"
+
+CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -i \
+    -p " 🍅 Pomodoro [$STATUS] " \
+    -theme-str 'window { width: 360px; } listview { lines: 7; }' \
+    -selected-row 0)
+
+case "$CHOICE" in
+    *"Iniciar (25m)"*)
+        pomoc start
+        ;;
+    *"Pausar / Reanudar"*)
+        pomoc toggle
+        ;;
+    *"Saltar a Descanso"*)
+        pomoc end
+        ;;
+    *"Reiniciar Temporizador"*)
+        pomoc reset
+        notify-send -u low -a "Pomoc" -i "alarm" "Pomodoro Reset" "Temporizador restablecido a IDLE" 2>/dev/null
+        ;;
+    *"Reiniciar Demonio"*)
+        pkill -x pomod
+        sleep 0.2
+        pomod &
+        notify-send -u normal -a "Pomoc" -i "alarm" "Pomodoro Daemon" "Demonio pomod reiniciado con éxito" 2>/dev/null
+        ;;
+    *"Tiempo Personalizado"*)
+        MINS=$(rofi -dmenu -i -p " Minutos de Enfoque " -theme-str 'window { width: 300px; } listview { lines: 0; }')
+        if [[ "$MINS" =~ ^[0-9]+$ ]]; then
+            pomoc start "$MINS"
+            notify-send -u normal -a "Pomoc" -i "alarm" "Pomodoro Iniciado" "Sesión personalizada de $MINS minutos" 2>/dev/null
+        fi
+        ;;
+    *"Apagar Demonio"*)
+        pomoc kill 2>/dev/null || pkill -x pomod
+        ;;
+esac

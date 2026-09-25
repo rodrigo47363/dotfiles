@@ -401,6 +401,11 @@ dotfiles/
 ├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
 │   ├── file-explorer                    # Lanzador inteligente de explorador de archivos (Caja / Dolphin / fallback)
 │   ├── task-manager                     # Lanzador del Administrador de Tareas flotante centrado (Btop)
+│   ├── powermenu                        # Menú interactivo de apagado horizontal compatible con temas Rofi
+│   ├── rofi-pomodoro                    # Menú Rofi interactivo para el control y gestión del demonio pomoc
+│   ├── toggle_nitro.sh                  # Conmutador rápido de ventiladores Acer Nitro (Turbo / Automático)
+│   ├── extract_win10_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 10
+│   ├── extract_win11_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 11
 │   ├── mode-win11                       # Conmutador instantáneo al Modo Windows 11 Undercover
 │   ├── mode-win10                       # Conmutador instantáneo al Modo Windows 10 Metro
 │   ├── mode-normal                      # Restaurador instantáneo al entorno táctico OneDark de Pentesting
@@ -409,9 +414,11 @@ dotfiles/
 │   ├── osd-slider.py                    # Popup GUI interactivo en PyQt5 para volumen y brillo con mouse
 │   ├── volume-slider                    # Wrapper lanzador/toggle del slider interactivo de volumen
 │   └── brightness-slider                # Wrapper lanzador/toggle del slider interactivo de brillo
-├── bspwmrc                              # Script maestro de inicialización de BSPWM y reglas de ventanas
+├── bspwmrc                              # Script maestro de inicialización de BSPWM, xcape y reglas
 ├── dunst/                               # Configuración del demonio de notificaciones y OSD
 │   └── dunstrc                          # Reglas visuales One Dark, barras con esquinas redondeadas y timeouts
+├── gtk-3.0/                              # Configuración global de entorno GTK3
+│   └── settings.ini                     # Sincronización de tema We10X-dark, tipografía Segoe UI y cursores
 ├── picom/                               # Configuración del compositor gráfico
 │   └── picom.conf                       # Backend GLX acelerado, sombras y desvanecimiento suave (fading)
 ├── sxhkdrc                              # Mapeo de atajos de teclado globales (Pure Super Mod4)

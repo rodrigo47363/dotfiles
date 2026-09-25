@@ -401,6 +401,11 @@ dotfiles/
 ├── bin/                                  # Modular operational scripts (~/.local/bin)
 │   ├── file-explorer                    # Dynamic file manager launcher (Caja / Dolphin / fallback)
 │   ├── task-manager                     # Floating centered task manager launcher (Btop)
+│   ├── powermenu                        # Interactive horizontal power menu compatible with Rofi themes
+│   ├── rofi-pomodoro                    # Interactive Rofi menu for pomoc Pomodoro daemon management
+│   ├── toggle_nitro.sh                  # Instant turbo fan switcher for Acer Nitro hardware
+│   ├── extract_win10_assets.py          # Windows 10 interface assets extractor & reverse engineering tool
+│   ├── extract_win11_assets.py          # Windows 11 interface assets extractor & reverse engineering tool
 │   ├── mode-win11                       # Instant switcher to Windows 11 Undercover Mode
 │   ├── mode-win10                       # Instant switcher to Windows 10 Metro Mode
 │   ├── mode-normal                      # Instant restorer to tactical pentesting OneDark Mode
@@ -409,9 +414,11 @@ dotfiles/
 │   ├── osd-slider.py                    # Lightweight PyQt5 floating GUI slider for mouse-driven adjustments
 │   ├── volume-slider                    # Toggle launcher wrapper for volume slider
 │   └── brightness-slider                # Toggle launcher wrapper for brightness slider
-├── bspwmrc                              # BSPWM initialization and window rule engine
+├── bspwmrc                              # BSPWM initialization, xcape daemon, and window rule engine
 ├── dunst/                               # Notification daemon & OSD styling
 │   └── dunstrc                          # OneDark aesthetic, rounded progress bars, and transient rules
+├── gtk-3.0/                              # Global GTK3 desktop environment configuration
+│   └── settings.ini                     # We10X-dark icon set, Segoe UI fonts, and cursor synchronization
 ├── picom/                               # Compositor configuration
 │   └── picom.conf                       # GLX backend, hardware shadows, and smooth fading transitions
 ├── sxhkdrc                              # Global keybinding daemon configuration (Pure Super Mod4)
