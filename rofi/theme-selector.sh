@@ -73,8 +73,11 @@ if [[ "$selected_file" == "windows_11.rofi" ]]; then
 elif [[ "$selected_file" == "windows_10.rofi" ]]; then
     echo -e "\e[34m[*] Activando Modo Completo Windows 10 (Metro UI)...\e[0m"
 
-    # A. Wallpaper
-    WIN10_WALLPAPER="$HOME/Downloads/Windows11_Assets/Wallpapers/Wallpaper/ThemeD/img32.jpg"
+    # A. Wallpaper oficial Hero 4K de Windows 10
+    WIN10_WALLPAPER="$HOME/Downloads/Windows10_Assets/Wallpapers/4K/Wallpaper/Windows/img0_3840x2160.jpg"
+    if [[ ! -f "$WIN10_WALLPAPER" ]]; then
+        WIN10_WALLPAPER="$HOME/Downloads/Windows10_Assets/Wallpapers/Wallpaper/Windows/img0.jpg"
+    fi
     if [[ -f "$WIN10_WALLPAPER" ]]; then
         feh --no-fehbg --bg-fill "$WIN10_WALLPAPER" 2>/dev/null
         echo "feh --no-fehbg --bg-fill '$WIN10_WALLPAPER'" > "$HOME/.fehbg"
@@ -95,8 +98,8 @@ elif [[ "$selected_file" == "windows_10.rofi" ]]; then
         "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win10.ini" "win10" >/dev/null 2>&1 &
     fi
 
-    # E. Audio
-    paplay "$HOME/Downloads/Windows11_Assets/Sounds/Windows Notify.wav" 2>/dev/null &
+    # E. Audio oficial de Windows 10
+    paplay "$HOME/Downloads/Windows10_Assets/Sounds/Windows Navigation Start.wav" 2>/dev/null &
 
     notify-send "Windows 10" "Modo Windows 10 activado al 100% (Metro UI)" -u normal
 
