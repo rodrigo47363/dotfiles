@@ -62,6 +62,12 @@ else
     sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
 fi
 
+# Emulador de tecla Super / Windows (abrir menú con pulsación solitaria de Windows)
+if which xcape >/dev/null 2>&1; then
+    killall -q xcape 2>/dev/null || true
+    xcape -e 'Super_L=Alt_L|F12' -e 'Super_R=Alt_L|F12' -t 500 &
+fi
+
 # Compositor picom
 if ! pgrep -x picom >/dev/null; then
     picom --config ~/.config/picom/picom.conf -b

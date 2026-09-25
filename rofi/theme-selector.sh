@@ -62,7 +62,7 @@ if [[ "$selected_file" == "windows_11.rofi" ]]; then
 
     # D. Barra de Tareas Polybar Windows 11 (Borde inferior, centro)
     if [[ -f "$HOME/.config/polybar/win11.ini" ]]; then
-        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win11.ini" "win11" >/dev/null 2>&1 &
+        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win11.ini" "win11" >/dev/null 2>&1
     fi
 
     # E. Audio oficial de Windows 11
@@ -95,7 +95,7 @@ elif [[ "$selected_file" == "windows_10.rofi" ]]; then
 
     # D. Polybar Windows 10 (Borde inferior, Metro)
     if [[ -f "$HOME/.config/polybar/win10.ini" ]]; then
-        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win10.ini" "win10" >/dev/null 2>&1 &
+        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win10.ini" "win10" >/dev/null 2>&1
     fi
 
     # E. Audio oficial de Windows 10
@@ -120,10 +120,17 @@ else
     bspc config normal_border_color "#4c566a" 2>/dev/null
 
     if [[ -f "$HOME/.config/polybar/config.ini" ]]; then
-        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/config.ini" "parrot" >/dev/null 2>&1 &
+        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/config.ini" "parrot" >/dev/null 2>&1
     fi
 
     notify-send "Rofi Config" "Tema restaurado a: $selected_file" -u low
+fi
+
+# 5. Asegurar emulador de tecla Windows (Super solitaria abre el Menú de Inicio)
+if which xcape >/dev/null 2>&1; then
+    if ! pgrep -x xcape >/dev/null; then
+        xcape -e 'Super_L=Alt_L|F12' -e 'Super_R=Alt_L|F12' -t 500 &
+    fi
 fi
 
 echo -e "\e[32m[+] Entorno sincronizado exitosamente con: $selected_file\e[0m"
