@@ -50,22 +50,41 @@ if [[ "$selected_file" == "windows_11.rofi" ]]; then
         echo "feh --no-fehbg --bg-fill '$WIN11_WALLPAPER'" > "$HOME/.fehbg"
     fi
 
-    # B. Iconos y Tipografía GTK
+    # B. Iconos, Tipografía, Cursor y Controles GTK
     if [[ -f "$GTK_SETTINGS" ]]; then
+        sed -i 's/^gtk-theme-name=.*/gtk-theme-name=Windows 10 Dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-icon-theme-name=.*/gtk-icon-theme-name=We10X-dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-font-name=.*/gtk-font-name=Segoe UI Variable 10/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-cursor-theme-name=.*/gtk-cursor-theme-name=Windows-10/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-decoration-layout=.*/gtk-decoration-layout=:minimize,maximize,close/' "$GTK_SETTINGS"
     fi
 
-    # C. Bordes bspwm
-    bspc config focused_border_color "#60cdff" 2>/dev/null
+    # C. Ventanas BSPWM (Edge-to-edge sin gap, bordes sutiles Windows 11)
+    bspc config window_gap 0 2>/dev/null
+    bspc config border_width 1 2>/dev/null
+    bspc config focused_border_color "#4cc2ff" 2>/dev/null
     bspc config normal_border_color "#202020" 2>/dev/null
 
-    # D. Barra de Tareas Polybar Windows 11 (Borde inferior, centro)
+    # D. Compositor Picom (Esquinas redondeadas Fluent 8px)
+    if [[ -f "$HOME/.config/picom/picom-win11.conf" ]]; then
+        cp "$HOME/.config/picom/picom-win11.conf" "$HOME/.config/picom/picom.conf"
+        pkill -x picom 2>/dev/null
+        picom --config "$HOME/.config/picom/picom.conf" -b 2>/dev/null
+    fi
+
+    # E. Terminal Kitty (Windows Terminal Dark & Consolas)
+    if [[ -f "$HOME/.config/kitty/color-win11.ini" ]]; then
+        cp "$HOME/.config/kitty/color-win11.ini" "$HOME/.config/kitty/color.ini"
+        kitty @ set-colors -a "$HOME/.config/kitty/color.ini" 2>/dev/null || true
+    fi
+
+    # F. Barra de Tareas Polybar Windows 11 (Borde inferior, centro)
     if [[ -f "$HOME/.config/polybar/win11.ini" ]]; then
         "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win11.ini" "win11" >/dev/null 2>&1
     fi
 
-    # E. Audio oficial de Windows 11
+    # G. Audio oficial y Cursor X11
+    xsetroot -cursor_name left_ptr 2>/dev/null &
     paplay "$HOME/Downloads/Windows11_Assets/Sounds/Windows Notify Messaging.wav" 2>/dev/null &
 
     notify-send "Windows 11" "Modo Windows 11 activado al 100% (Fluent Mica)" -u normal
@@ -83,22 +102,41 @@ elif [[ "$selected_file" == "windows_10.rofi" ]]; then
         echo "feh --no-fehbg --bg-fill '$WIN10_WALLPAPER'" > "$HOME/.fehbg"
     fi
 
-    # B. Iconos y Tipografía GTK
+    # B. Iconos, Tipografía, Cursor y Controles GTK
     if [[ -f "$GTK_SETTINGS" ]]; then
+        sed -i 's/^gtk-theme-name=.*/gtk-theme-name=Windows 10 Dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-icon-theme-name=.*/gtk-icon-theme-name=We10X-dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-font-name=.*/gtk-font-name=Segoe UI 10/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-cursor-theme-name=.*/gtk-cursor-theme-name=Windows-10/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-decoration-layout=.*/gtk-decoration-layout=:minimize,maximize,close/' "$GTK_SETTINGS"
     fi
 
-    # C. Bordes bspwm
+    # C. Ventanas BSPWM (Edge-to-edge sin gap, bordes azules Metro UI)
+    bspc config window_gap 0 2>/dev/null
+    bspc config border_width 1 2>/dev/null
     bspc config focused_border_color "#0078d7" 2>/dev/null
     bspc config normal_border_color "#171717" 2>/dev/null
 
-    # D. Polybar Windows 10 (Borde inferior, Metro)
+    # D. Compositor Picom (Esquinas rectas Metro 0px)
+    if [[ -f "$HOME/.config/picom/picom-win10.conf" ]]; then
+        cp "$HOME/.config/picom/picom-win10.conf" "$HOME/.config/picom/picom.conf"
+        pkill -x picom 2>/dev/null
+        picom --config "$HOME/.config/picom/picom.conf" -b 2>/dev/null
+    fi
+
+    # E. Terminal Kitty (Windows PowerShell Blue & Consolas)
+    if [[ -f "$HOME/.config/kitty/color-win10.ini" ]]; then
+        cp "$HOME/.config/kitty/color-win10.ini" "$HOME/.config/kitty/color.ini"
+        kitty @ set-colors -a "$HOME/.config/kitty/color.ini" 2>/dev/null || true
+    fi
+
+    # F. Polybar Windows 10 (Borde inferior, Metro)
     if [[ -f "$HOME/.config/polybar/win10.ini" ]]; then
         "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/win10.ini" "win10" >/dev/null 2>&1
     fi
 
-    # E. Audio oficial de Windows 10
+    # G. Audio oficial y Cursor X11
+    xsetroot -cursor_name left_ptr 2>/dev/null &
     paplay "$HOME/Downloads/Windows10_Assets/Sounds/Windows Navigation Start.wav" 2>/dev/null &
 
     notify-send "Windows 10" "Modo Windows 10 activado al 100% (Metro UI)" -u normal
@@ -111,14 +149,35 @@ else
         echo "feh --no-fehbg --bg-fill '$DEFAULT_WALLPAPER'" > "$HOME/.fehbg"
     fi
 
+    # A. Iconos, Tipografía, Cursor y Controles GTK
     if [[ -f "$GTK_SETTINGS" ]]; then
+        sed -i 's/^gtk-theme-name=.*/gtk-theme-name=ARK-Dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-icon-theme-name=.*/gtk-icon-theme-name=Flat-Remix-Green-Dark/' "$GTK_SETTINGS"
         sed -i 's/^gtk-font-name=.*/gtk-font-name=Noto Sans,  10/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-cursor-theme-name=.*/gtk-cursor-theme-name=Adwaita/' "$GTK_SETTINGS"
+        sed -i 's/^gtk-decoration-layout=.*/gtk-decoration-layout=close,maximize,minimize:/' "$GTK_SETTINGS"
     fi
 
+    # B. Ventanas BSPWM (Gaps amplios 12px, bordes tácticos OneDark)
+    bspc config window_gap 12 2>/dev/null
+    bspc config border_width 2 2>/dev/null
     bspc config focused_border_color "#81a1c1" 2>/dev/null
     bspc config normal_border_color "#4c566a" 2>/dev/null
 
+    # C. Compositor Picom (Esquinas redondeadas 15px)
+    if [[ -f "$HOME/.config/picom/picom-normal.conf" ]]; then
+        cp "$HOME/.config/picom/picom-normal.conf" "$HOME/.config/picom/picom.conf"
+        pkill -x picom 2>/dev/null
+        picom --config "$HOME/.config/picom/picom.conf" -b 2>/dev/null
+    fi
+
+    # D. Terminal Kitty (Tokyo Night / OneDark)
+    if [[ -f "$HOME/.config/kitty/color-onedark.ini" ]]; then
+        cp "$HOME/.config/kitty/color-onedark.ini" "$HOME/.config/kitty/color.ini"
+        kitty @ set-colors -a "$HOME/.config/kitty/color.ini" 2>/dev/null || true
+    fi
+
+    # E. Polybar Pentesting Superior
     if [[ -f "$HOME/.config/polybar/config.ini" ]]; then
         "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/config.ini" "parrot" >/dev/null 2>&1
     fi

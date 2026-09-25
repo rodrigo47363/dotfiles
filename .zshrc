@@ -1,8 +1,16 @@
 # ==============================================================================
-# 1. POWERLEVEL10K INSTANT PROMPT (DEBE SER LO PRIMERO)
+# 1. UNDERCOVER ENGINE & P10K INSTANT PROMPT
 # ==============================================================================
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+if [[ -f ~/.config/polybar/current_mode ]] && grep -Eq "^(win10|win11)$" ~/.config/polybar/current_mode; then
+  export IS_WINDOWS_UNDERCOVER=1
+else
+  export IS_WINDOWS_UNDERCOVER=0
+fi
+
+if [[ "$IS_WINDOWS_UNDERCOVER" -eq 0 ]]; then
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
 fi
 
 # ==============================================================================
@@ -195,13 +203,55 @@ fi
 [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ] && source /usr/share/zsh-sudo/sudo.plugin.zsh
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
+if [[ "$IS_WINDOWS_UNDERCOVER" -eq 1 ]]; then
+    # ==============================================================================
+    # 9. UNDERCOVER ENGINE: WINDOWS POWERSHELL DISGUISE & COMMAND ALIASES
+    # ==============================================================================
+    setopt prompt_subst
 
-# ==============================================================================
-# 9. POWERLEVEL10K FINALIZE (DEBE SER ABSOLUTAMENTE LO ÚLTIMO)
-# ==============================================================================
-(( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
+    # Formateador de ruta estilo Windows (C:\Users\rodrigo47363\...)
+    win_pwd() {
+        local p="$PWD"
+        p="${p/#$HOME/C:\\Users\\$USER}"
+        p="${p//\//\\}"
+        print -r -- "$p"
+    }
+
+    # Prompt idéntico a Windows PowerShell
+    export PROMPT='%F{cyan}PS %F{white}$(win_pwd)%F{white}> %f'
+    export RPROMPT=''
+
+    # Comandos y utilidades nativas de Windows
+    alias dir='ls -lah --color=auto'
+    alias cls='clear'
+    alias ipconfig='ip -c a'
+    alias systeminfo='fastfetch 2>/dev/null || uname -a'
+    alias md='mkdir -p'
+    alias rd='rmdir'
+    alias type='cat'
+    alias move='mv'
+    alias copy='cp'
+    alias del='rm -i'
+    alias tasklist='ps aux'
+    alias taskkill='kill'
+    alias start='xdg-open'
+    alias powershell='clear && echo -e "Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n"'
+
+    # Banner legítimo de Windows PowerShell al abrir consola
+    if [[ -o interactive ]] && [[ -z "$WIN_SHELL_INITIALIZED" ]]; then
+        export WIN_SHELL_INITIALIZED=1
+        echo "Windows PowerShell"
+        echo "Copyright (C) Microsoft Corporation. All rights reserved."
+        echo ""
+        echo "Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows"
+        echo ""
+    fi
+else
+    # Entorno táctico original Powerlevel10k
+    [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+    [ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
+    (( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
+fi
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/bin:$PATH"

@@ -48,28 +48,12 @@ git clone https://github.com/rodrigo47363/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Desplegar Enlaces Simbólicos / Copiar a `~/.config`
+### 2. Despliegue Automatizado en Un Solo Comando
 ```bash
-# Crear estructura base
-mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar/scripts,rofi/themes,kitty,dunst,picom} ~/.local/bin
-
-# Desplegar configuraciones
-cp -r polybar/* ~/.config/polybar/
-cp -r rofi/* ~/.config/rofi/
-cp sxhkdrc ~/.config/sxhkd/sxhkdrc
-cp bspwmrc ~/.config/bspwm/bspwmrc
-cp bspwm_resize ~/.config/bspwm/scripts/bspwm_resize
-cp kitty.conf ~/.config/kitty/kitty.conf
-cp dunst/dunstrc ~/.config/dunst/dunstrc
-cp picom/picom.conf ~/.config/picom/picom.conf
-cp bin/* ~/.local/bin/
-cp .zshrc ~/.zshrc
-
-# Asignar permisos de ejecución a los binarios y scripts
-chmod +x ~/.config/bspwm/bspwmrc ~/.config/bspwm/scripts/*
-chmod +x ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
-chmod +x ~/.local/bin/*
+chmod +x deploy.sh
+./deploy.sh
 ```
+El script maestro de despliegue se encarga de crear la estructura de directorios en `~/.config` y `~/.local`, sincronizar todas las configuraciones y scripts, instalar el esquema de cursores `Windows-10` obtenido por ingeniería inversa, vincular los binarios tácticos y actualizar la caché de fuentes e iconos de forma 100% idempotente.
 
 ---
 
@@ -313,10 +297,27 @@ O despliega el selector gráfico interactivo mediante Rofi:
    * <kbd>Super</kbd> + <kbd>D</kbd>: Minimiza / Restaura ventanas para mostrar el escritorio ([`win-show-desktop.sh`](polybar/scripts/win-show-desktop.sh)).
    * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Abre el Administrador de Tareas ([`task-manager`](bin/task-manager)) ejecutando `btop` en ventana flotante centrada (`1050x700`) con retención de foco.
    * <kbd>Alt</kbd> + <kbd>F4</kbd>: Cierre contextual inteligente — cierra la ventana activa (`bspc node -c`), o si el escritorio está vacío abre el Menú de Apagado interactivo.
-4. **Gestor de Barra con Memoria de Estado ([`launch.sh`](polybar/launch.sh)):**
+4. **Camuflaje de Terminal & Emulación Shell PowerShell:**
+   * **Prompt Dinámico de PowerShell:** Al entrar en modo Windows, Zsh oculta Powerlevel10k y presenta de forma nativa un prompt idéntico a PowerShell: `PS C:\Users\<usuario>\...>` con barras invertidas normalizadas.
+   * **Comandos y Alias Nativos de Windows:** La consola reconoce de inmediato los comandos de Windows (`dir`, `cls`, `ipconfig`, `systeminfo`, `md`, `rd`, `copy`, `move`, `tasklist`, `taskkill`, `start`).
+   * **Paletas de Color Auténticas en Kitty:**
+     * **Windows 10:** Azul clásico de Windows PowerShell (`#012456`) con texto blanco y fuente Consolas.
+     * **Windows 11:** Windows Terminal Campbell Dark (`#0c0c0c`) con cursor tipo haz de luz (beam).
+     * **Modo Normal:** Tokyo Night / OneDark (`#1a1b26`) con prompt completo Powerlevel10k.
+5. **Comportamiento de Ventanas & Ajuste Edge-to-Edge:**
+   * **Cero Gaps de Escritorio (`window_gap 0`):** En modos Windows, BSPWM elimina los espacios vacíos entre ventanas, logrando que se ajusten al ras de la pantalla y la barra de tareas como un sistema Windows maximizado real.
+   * **Bordes Sutiles de 1px:** En azul Metro `#0078d7` (Windows 10) o `#4cc2ff` (Windows 11 Fluent).
+6. **Metamorfosis del Compositor (Picom):**
+   * **Windows 10:** Esquinas rectas estrictas de 0px (`corner-radius = 0`).
+   * **Windows 11:** Esquinas redondeadas suaves de 8px estilo Fluent (`corner-radius = 8`).
+   * **Modo Normal:** Esquinas redondeadas de 15px OneDark.
+7. **Controles GTK & Esquema de Cursores X11 Nativo:**
+   * **Controles de Ventana a la Derecha:** Los botones de cerrar, minimizar y maximizar se invierten a la esquina superior derecha (`:minimize,maximize,close`).
+   * **Esquema de Cursores Legítimo Windows-10:** Tema nativo de cursores X11 (`Windows-10`) descompilado y convertido directamente de los archivos `.cur` y `.ani` de la ISO de Windows con `win2xcur`.
+8. **Gestor de Barra con Memoria de Estado ([`launch.sh`](polybar/launch.sh)):**
    * Detecta y recuerda automáticamente el modo activo mediante `~/.config/polybar/current_mode` y `~/.config/rofi/config.rasi`.
    * Al pulsar <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> o reiniciar BSPWM, recarga con seguridad la barra Windows correspondiente sin resucitar jamás la barra superior de Parrot.
-5. **Assets & Multimedia Oficial (Herramientas de Ingeniería Inversa):**
+9. **Assets & Multimedia Oficial (Herramientas de Ingeniería Inversa):**
    * **Extractores Automatizados de Activos:** [`extract_win10_assets.py`](bin/extract_win10_assets.py) y [`extract_win11_assets.py`](bin/extract_win11_assets.py) permiten descompilar imágenes ISO oficiales (`sources/install.wim`), bibliotecas PE (`.msstyles`, `.dll.mun` con 7-Zip) y registros de iconos.
    * **Fondos de Pantalla 4K Oficiales:** Extrae e integra el wallpaper original Hero 4K (`img0_3840x2160.jpg`) y Bloom Dark.
    * **Suite Tipográfica Completa:** Instalación directa y registro en Fontconfig de `Segoe UI`, `Segoe MDL2 Assets` (`segmdl2.ttf`) y `Segoe Fluent Icons`.
@@ -400,7 +401,9 @@ dotfiles/
 │   ├── preview_taskmanager.png           # Showcase de Administrador de Tareas Flotante (Btop)
 │   ├── powermenu.png                     # Menú de apagado horizontal interactivo (Neo Tokyo Edition)
 │   ├── osd_volume.png                    # Showcase del slider flotante interactivo y OSD de volumen
-│   └── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
+│   ├── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
+│   └── icons/                            # Esquemas de iconos y cursores por ingeniería inversa
+│       └── Windows-10/                   # Tema nativo de cursores X11 Windows 10 (convertido con win2xcur)
 ├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
 │   ├── file-explorer                    # Lanzador inteligente de explorador de archivos (Caja / Dolphin / fallback)
 │   ├── task-manager                     # Lanzador del Administrador de Tareas flotante centrado (Btop)
@@ -418,16 +421,24 @@ dotfiles/
 │   ├── volume-slider                    # Wrapper lanzador/toggle del slider interactivo de volumen
 │   └── brightness-slider                # Wrapper lanzador/toggle del slider interactivo de brillo
 ├── bspwmrc                              # Script maestro de inicialización de BSPWM, xcape y reglas
+├── deploy.sh                            # Motor universal de despliegue e instalación en un solo comando
 ├── dunst/                               # Configuración del demonio de notificaciones y OSD
 │   └── dunstrc                          # Reglas visuales One Dark, barras con esquinas redondeadas y timeouts
 ├── gtk-3.0/                              # Configuración global de entorno GTK3
 │   └── settings.ini                     # Sincronización de tema We10X-dark, tipografía Segoe UI y cursores
-├── picom/                               # Configuración del compositor gráfico
-│   └── picom.conf                       # Backend GLX acelerado, sombras y desvanecimiento suave (fading)
+├── kitty/                               # Suite completa de terminal GPU Kitty
+│   ├── kitty.conf                       # Configuración base, atajos de teclado y tipografía
+│   ├── color-onedark.ini                # Paleta táctica OneDark / Tokyo Night
+│   ├── color-win10.ini                  # Paleta azul oficial Windows 10 PowerShell (#012456)
+│   └── color-win11.ini                  # Paleta gris oscuro Windows 11 Terminal Campbell (#0c0c0c)
+├── picom/                               # Compositor gráfico con perfiles de metamorfosis
+│   ├── picom.conf                       # Configuración activa del compositor (enlace simbólico o copia)
+│   ├── picom-normal.conf                # Esquinas redondeadas de 15px para modo Pentesting
+│   ├── picom-win10.conf                 # Esquinas rectas estrictas de 0px para modo Metro UI
+│   └── picom-win11.conf                 # Esquinas redondeadas suaves de 8px para modo Fluent Mica
 ├── sxhkdrc                              # Mapeo de atajos de teclado globales (Pure Super Mod4)
 ├── bspwm_resize                         # Utilidad auxiliar para redimensionar ventanas en tiling
 ├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # Diagnóstico y resolución de incidencias en teclado y X11
-├── kitty.conf                           # Configuración del emulador de terminal Kitty
 ├── polybar/                             # Suite completa de Polybar
 │   ├── config.ini                       # Barra táctica principal de pentesting (OneDark, borde superior)
 │   ├── win11.ini                        # Barra Windows 11 Fluent Mica (borde inferior, dock centrado)

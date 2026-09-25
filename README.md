@@ -48,28 +48,12 @@ git clone https://github.com/rodrigo47363/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Deploy Configurations to `~/.config`
+### 2. Automated One-Command Deployment
 ```bash
-# Create directory tree
-mkdir -p ~/.config/{bspwm/scripts,sxhkd,polybar/scripts,rofi/themes,kitty,dunst,picom} ~/.local/bin
-
-# Deploy dotfiles
-cp -r polybar/* ~/.config/polybar/
-cp -r rofi/* ~/.config/rofi/
-cp sxhkdrc ~/.config/sxhkd/sxhkdrc
-cp bspwmrc ~/.config/bspwm/bspwmrc
-cp bspwm_resize ~/.config/bspwm/scripts/bspwm_resize
-cp kitty.conf ~/.config/kitty/kitty.conf
-cp dunst/dunstrc ~/.config/dunst/dunstrc
-cp picom/picom.conf ~/.config/picom/picom.conf
-cp bin/* ~/.local/bin/
-cp .zshrc ~/.zshrc
-
-# Grant executable permissions
-chmod +x ~/.config/bspwm/bspwmrc ~/.config/bspwm/scripts/*
-chmod +x ~/.config/polybar/launch.sh ~/.config/polybar/scripts/*
-chmod +x ~/.local/bin/*
+chmod +x deploy.sh
+./deploy.sh
 ```
+The automated deploy script creates all required folder structures in `~/.config` and `~/.local`, synchronizes scripts and modular configuration files, installs the reverse-engineered `Windows-10` cursor theme, links binaries, and updates system font caches idempotently.
 
 ---
 
@@ -313,10 +297,27 @@ Or trigger the interactive selector via Rofi:
    * <kbd>Super</kbd> + <kbd>D</kbd>: Toggles Show Desktop / Minimizes or restores open windows ([`win-show-desktop.sh`](polybar/scripts/win-show-desktop.sh)).
    * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Launches Task Manager ([`task-manager`](bin/task-manager)) running `btop` in a centered, floating window (`1050x700`) with persistent focus.
    * <kbd>Alt</kbd> + <kbd>F4</kbd>: Contextual close — closes active window (`bspc node -c`), or opens Power Menu if on empty desktop.
-4. **State-Aware Launcher ([`launch.sh`](polybar/launch.sh)):**
+4. **Terminal Camouflage & PowerShell Shell Emulation:**
+   * **Dynamic Prompt Disguise:** When entering Windows modes, Zsh suppresses Powerlevel10k and automatically presents an authentic Windows PowerShell prompt: `PS C:\Users\<user>\...>` with backslash path normalization.
+   * **Native Windows Command Aliases:** Terminal recognizes Windows CLI commands out of the box (`dir`, `cls`, `ipconfig`, `systeminfo`, `md`, `rd`, `copy`, `move`, `tasklist`, `taskkill`, `start`).
+   * **Authentic Terminal Colorways (Kitty):**
+     * **Windows 10:** Classic Windows PowerShell Blue (`#012456`) with white text and Consolas font.
+     * **Windows 11:** Windows Terminal Campbell Dark (`#0c0c0c`) with beam cursor.
+     * **Normal Mode:** Tokyo Night / OneDark (`#1a1b26`) with full Powerlevel10k instant prompt.
+5. **Window Management & Edge-to-Edge Snapping:**
+   * **Zero Desktop Gaps (`window_gap 0`):** In Windows modes, BSPWM eliminates tiling margins so application windows snap flush against the taskbar and screen edges like authentic Windows maximizing/snapping.
+   * **Subtle 1px Borders:** Styled in `#0078d7` (Windows 10 Metro Blue) or `#4cc2ff` (Windows 11 Fluent Blue).
+6. **Compositor Morphing (Picom):**
+   * **Windows 10:** Strict 0px sharp rectangular corners (`corner-radius = 0`).
+   * **Windows 11:** 8px subtle rounded corners (`corner-radius = 8`).
+   * **Normal Mode:** 15px smooth rounded corners.
+7. **GTK & Native X11 Windows Cursors:**
+   * **GTK Titlebar Controls:** Window control buttons automatically flip to the right-hand corner (`:minimize,maximize,close`).
+   * **Genuine Windows Cursor Theme:** Fully converted X11 cursor theme (`Windows-10`) derived directly from official ISO `.cur` and animated `.ani` assets using `win2xcur`.
+8. **State-Aware Launcher ([`launch.sh`](polybar/launch.sh)):**
    * Automatically detects active mode from `~/.config/polybar/current_mode` and `~/.config/rofi/config.rasi`.
    * Pressing <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> or restarting BSPWM safely reloads the active Windows bar without ever leaking or resurrecting the top Parrot pentesting bar.
-5. **Assets & Official Media (Reverse Engineering Tooling):**
+9. **Assets & Official Media (Reverse Engineering Tooling):**
    * **Automated Asset Extraction:** [`extract_win10_assets.py`](bin/extract_win10_assets.py) and [`extract_win11_assets.py`](bin/extract_win11_assets.py) automatically unpack and decompile official Windows ISOs (`sources/install.wim`), PE libraries (`.msstyles`, `.dll.mun` via 7-Zip), and icon registries.
    * **4K Official Wallpapers:** Authentic 4K Hero (`img0_3840x2160.jpg`) and Bloom Dark wallpapers.
    * **Complete Typography Suite:** Direct installation and Fontconfig registration of genuine `Segoe UI`, `Segoe MDL2 Assets` (`segmdl2.ttf`), and `Segoe Fluent Icons`.
@@ -400,7 +401,9 @@ dotfiles/
 │   ├── preview_taskmanager.png           # Floating Btop Task Manager window showcase
 │   ├── powermenu.png                     # Horizontal interactive power menu (Neo Tokyo Edition)
 │   ├── osd_volume.png                    # Interactive floating slider and volume OSD showcase
-│   └── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
+│   ├── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
+│   └── icons/                            # Reverse-engineered icon & cursor suites
+│       └── Windows-10/                   # Genuine X11 Windows 10 cursor theme (converted with win2xcur)
 ├── bin/                                  # Modular operational scripts (~/.local/bin)
 │   ├── file-explorer                    # Dynamic file manager launcher (Caja / Dolphin / fallback)
 │   ├── task-manager                     # Floating centered task manager launcher (Btop)
@@ -418,16 +421,24 @@ dotfiles/
 │   ├── volume-slider                    # Toggle launcher wrapper for volume slider
 │   └── brightness-slider                # Toggle launcher wrapper for brightness slider
 ├── bspwmrc                              # BSPWM initialization, xcape daemon, and window rule engine
+├── deploy.sh                            # Automated, idempotent one-command dotfiles deployment engine
 ├── dunst/                               # Notification daemon & OSD styling
 │   └── dunstrc                          # OneDark aesthetic, rounded progress bars, and transient rules
 ├── gtk-3.0/                              # Global GTK3 desktop environment configuration
 │   └── settings.ini                     # We10X-dark icon set, Segoe UI fonts, and cursor synchronization
-├── picom/                               # Compositor configuration
-│   └── picom.conf                       # GLX backend, hardware shadows, and smooth fading transitions
+├── kitty/                               # Kitty GPU terminal configuration & colorways
+│   ├── kitty.conf                       # Core configuration, keybindings, and font definitions
+│   ├── color-onedark.ini                # Tactical OneDark / Tokyo Night palette
+│   ├── color-win10.ini                  # Authentic Windows 10 PowerShell Blue palette (#012456)
+│   └── color-win11.ini                  # Authentic Windows 11 Windows Terminal Campbell palette (#0c0c0c)
+├── picom/                               # Compositor configuration & morphing profiles
+│   ├── picom.conf                       # Active compositor configuration (symlink/copy)
+│   ├── picom-normal.conf                # 15px rounded corners for Pentesting Mode
+│   ├── picom-win10.conf                 # Strict 0px rectangular corners for Metro UI Mode
+│   └── picom-win11.conf                 # 8px subtle rounded corners for Fluent Mica Mode
 ├── sxhkdrc                              # Global keybinding daemon configuration (Pure Super Mod4)
 ├── bspwm_resize                         # Tiling window resizing utility
 ├── KEYBOARD_AND_SHORTCUTS_TROUBLESHOOTING.md # X11 modifier and keyboard troubleshooting guide
-├── kitty.conf                           # Kitty GPU terminal configuration
 ├── polybar/                             # Polybar status bar suite
 │   ├── config.ini                       # Master tactical pentesting bar (OneDark, top docked)
 │   ├── win11.ini                        # Windows 11 Fluent Mica taskbar (bottom docked, center dock)
