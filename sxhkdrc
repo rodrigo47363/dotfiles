@@ -34,9 +34,6 @@ super + d
     pkill -x rofi || rofi -show drun
 super + space
     pkill -x rofi || rofi -show drun
-# Abrir menú de aplicaciones con tecla Windows solitaria (capturada via xcape)
-alt + F12
-    pkill -x rofi || rofi -show drun
 
 # Modo comandos (run)
 super + r

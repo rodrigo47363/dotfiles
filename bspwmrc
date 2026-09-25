@@ -63,9 +63,10 @@ else
 fi
 
 # Emulador de tecla Super / Windows (abrir menú con pulsación solitaria de Windows)
+# Mapea Keycode 133 (Super estándar), Keycode 172 (tecla Acer Nitro) y Keycode 134 (Super_R)
 if which xcape >/dev/null 2>&1; then
     killall -q xcape 2>/dev/null || true
-    xcape -e 'Super_L=Alt_L|F12' -e 'Super_R=Alt_L|F12' -t 500 &
+    xcape -e '#133=Super_L|d;#172=Super_L|d;#134=Super_L|d' -t 500 &
 fi
 
 # Compositor picom

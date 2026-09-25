@@ -129,7 +129,7 @@ fi
 # 5. Asegurar emulador de tecla Windows (Super solitaria abre el Menú de Inicio)
 if which xcape >/dev/null 2>&1; then
     if ! pgrep -x xcape >/dev/null; then
-        xcape -e 'Super_L=Alt_L|F12' -e 'Super_R=Alt_L|F12' -t 500 &
+        xcape -e '#133=Super_L|d;#172=Super_L|d;#134=Super_L|d' -t 500 &
     fi
 fi
 
