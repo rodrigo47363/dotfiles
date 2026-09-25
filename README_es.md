@@ -77,12 +77,12 @@ chmod +x ~/.local/bin/*
 
 ```bash
 sudo apt update -y && sudo apt install -y \
-    bspwm sxhkd polybar rofi picom feh kitty zsh tmux neovim \
+    bspwm sxhkd xcape polybar rofi picom feh kitty zsh tmux neovim \
     dunst lxpolkit numlockx suckless-tools i3lock flameshot scrot \
     x11-xserver-utils x11-utils xinput alsa-utils brightnessctl pamixer \
     eza fzf fastfetch bat jq xclip libnotify-bin curl wget plocate \
     wireguard-tools openvpn network-manager \
-    python3-pyqt5 build-essential cmake pkg-config \
+    python3-pyqt5 build-essential cmake pkg-config wimtools p7zip-full \
     zsh-syntax-highlighting zsh-autosuggestions \
     fonts-hack-ttf fonts-jetbrains-mono fonts-noto fonts-font-awesome \
     && sudo updatedb
@@ -123,7 +123,7 @@ El archivo [`sxhkdrc`](sxhkdrc) centraliza los accesos rápidos. Toda la arquite
 ### 🚀 Lanzadores y Herramientas (Rofi & Apps)
 | Atajo | Acción Operativa |
 |---|---|
-| <kbd>Super</kbd> + <kbd>D</kbd> o <kbd>Espacio</kbd> | Alternar Menú de Aplicaciones Rofi (`drun` con toggle de instancia única) |
+| <kbd>Super</kbd> (suelta) o <kbd>Super</kbd> + <kbd>D</kbd> / <kbd>Espacio</kbd> | Abrir Menú de Inicio / Alternar Lanzador Rofi (mediante `xcape` por hardware con bloqueo single-instance) |
 | <kbd>Super</kbd> + <kbd>R</kbd> | Modo ejecución de comandos Rofi (`run`) |
 | <kbd>Super</kbd> + <kbd>E</kbd> | Lanzar Explorador de Archivos (`file-explorer` - Caja / Dolphin) |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Lanzar Administrador de Tareas flotante (`task-manager` - Btop) |
@@ -308,16 +308,19 @@ O despliega el selector gráfico interactivo mediante Rofi:
    * **Windows 11 ([`win11.ini`](polybar/win11.ini)):** Barra inferior de 34pt. Incluye dock central con isotipo de Windows (`󰍲`), cápsula ` Buscar`, Vista de Tareas (`󱂬`), escritorios virtuales numéricos (1–10 con subrayado activo), accesos directos anclados (`󰉋`, ``, `󰈹`, `󰨞`) y título de ventana en foco. A la izquierda integra un widget meteorológico (` +25°C Soleado`) con **disparador táctico OPSEC al clic derecho** (notifica en secreto la IP de VPN y Target activo sin exponerlo visualmente en pantalla). A la derecha agrupa el *Quick Settings* unificado (Wi-Fi, slider de volumen, batería), reloj y centro de notificaciones.
    * **Windows 10 ([`win10.ini`](polybar/win10.ini)):** Barra inferior de 28pt con diseño rectangular Metro a la izquierda, barra de búsqueda ancha (` Escribe aquí para buscar`), escritorios 1–10, bandeja del sistema y burbuja del *Action Center* (`󰍩`).
 3. **Atajos Nativos de Windows:**
+   * <kbd>Super</kbd> (tecla Windows sola): Abre de inmediato el Menú de Inicio al soltar la tecla (gestionado por `xcape` mapeando los keycodes físicos `#133`, `#172` [Acer Nitro] y `#134` sin colisión de atajos compuestos).
    * <kbd>Super</kbd> + <kbd>E</kbd>: Abre el Explorador de Archivos ([`file-explorer`](bin/file-explorer)) mediante Caja GTK3 con el set de iconos Fluent `We10X-dark` y tipografía `Segoe UI`.
+   * <kbd>Super</kbd> + <kbd>D</kbd>: Minimiza / Restaura ventanas para mostrar el escritorio ([`win-show-desktop.sh`](polybar/scripts/win-show-desktop.sh)).
    * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Abre el Administrador de Tareas ([`task-manager`](bin/task-manager)) ejecutando `btop` en ventana flotante centrada (`1050x700`) con retención de foco.
    * <kbd>Alt</kbd> + <kbd>F4</kbd>: Cierre contextual inteligente — cierra la ventana activa (`bspc node -c`), o si el escritorio está vacío abre el Menú de Apagado interactivo.
 4. **Gestor de Barra con Memoria de Estado ([`launch.sh`](polybar/launch.sh)):**
    * Detecta y recuerda automáticamente el modo activo mediante `~/.config/polybar/current_mode` y `~/.config/rofi/config.rasi`.
    * Al pulsar <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> o reiniciar BSPWM, recarga con seguridad la barra Windows correspondiente sin resucitar jamás la barra superior de Parrot.
-5. **Assets & Multimedia Oficial:**
-   * Fondos de pantalla 4K oficiales extraídos de la ISO (Bloom Dark y Tema Windows 10).
-   * Familia tipográfica *Segoe UI Variable* y *Segoe Fluent Icons*.
-   * Sonidos de notificación WAV nativos de Windows reproducidos por `paplay`.
+5. **Assets & Multimedia Oficial (Herramientas de Ingeniería Inversa):**
+   * **Extractores Automatizados de Activos:** [`extract_win10_assets.py`](bin/extract_win10_assets.py) y [`extract_win11_assets.py`](bin/extract_win11_assets.py) permiten descompilar imágenes ISO oficiales (`sources/install.wim`), bibliotecas PE (`.msstyles`, `.dll.mun` con 7-Zip) y registros de iconos.
+   * **Fondos de Pantalla 4K Oficiales:** Extrae e integra el wallpaper original Hero 4K (`img0_3840x2160.jpg`) y Bloom Dark.
+   * **Suite Tipográfica Completa:** Instalación directa y registro en Fontconfig de `Segoe UI`, `Segoe MDL2 Assets` (`segmdl2.ttf`) y `Segoe Fluent Icons`.
+   * **Audio del Sistema y Esquemas:** Sonidos `.wav` auténticos (`Windows Navigation Start.wav`, `Windows Notify.wav`) reproducidos mediante `paplay` en transiciones de tema, además de esquemas oficiales de cursor `.cur` y `.ani`.
 
 ---
 
@@ -436,6 +439,7 @@ dotfiles/
 │       ├── gpu.sh                       # Monitoreo de GPU con detección de reposo D3cold
 │       ├── launcher                     # Lanzador Rofi con toggle single-instance
 │       ├── pomodoro.sh                  # Controlador Pomodoro vía sockets UNIX (pomoc)
+│       ├── powermenu.sh                 # Menú interactivo de apagado horizontal con herencia de tema y diálogo
 │       ├── target.sh                    # Rastreador de IP objetivo para pentesting con ICMP check
 │       ├── vpn.sh                       # Detección inteligente de VPN (Proton, HTB, THM, WireGuard)
 │       ├── wifi-menu.sh                 # Menú interactivo de selección WiFi vía Rofi

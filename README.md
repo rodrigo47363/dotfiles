@@ -77,12 +77,12 @@ chmod +x ~/.local/bin/*
 
 ```bash
 sudo apt update -y && sudo apt install -y \
-    bspwm sxhkd polybar rofi picom feh kitty zsh tmux neovim \
+    bspwm sxhkd xcape polybar rofi picom feh kitty zsh tmux neovim \
     dunst lxpolkit numlockx suckless-tools i3lock flameshot scrot \
     x11-xserver-utils x11-utils xinput alsa-utils brightnessctl pamixer \
     eza fzf fastfetch bat jq xclip libnotify-bin curl wget plocate \
     wireguard-tools openvpn network-manager \
-    python3-pyqt5 build-essential cmake pkg-config \
+    python3-pyqt5 build-essential cmake pkg-config wimtools p7zip-full \
     zsh-syntax-highlighting zsh-autosuggestions \
     fonts-hack-ttf fonts-jetbrains-mono fonts-noto fonts-font-awesome \
     && sudo updatedb
@@ -123,7 +123,7 @@ Keybindings are centralized in [`sxhkdrc`](sxhkdrc). All shortcuts use **Pure Su
 ### 🚀 Application Launchers & Tools (Rofi & Apps)
 | Shortcut | Action |
 |---|---|
-| <kbd>Super</kbd> + <kbd>D</kbd> or <kbd>Space</kbd> | Toggle Rofi Application Launcher (`drun` with single-instance lock) |
+| <kbd>Super</kbd> (alone) or <kbd>Super</kbd> + <kbd>D</kbd> / <kbd>Space</kbd> | Open Start Menu / Toggle Rofi Application Launcher (via hardware keycode-aware `xcape` with single-instance lock) |
 | <kbd>Super</kbd> + <kbd>R</kbd> | Rofi Command Runner (`run`) |
 | <kbd>Super</kbd> + <kbd>E</kbd> | Launch File Explorer (`file-explorer` - Caja / Dolphin) |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> | Launch Floating Task Manager (`task-manager` - Btop) |
@@ -308,16 +308,19 @@ Or trigger the interactive selector via Rofi:
    * **Windows 11 ([`win11.ini`](polybar/win11.ini)):** Bottom-docked at 34pt height. Features a centered dock with Start logo (`󰍲`), Search capsule (` Buscar`), Task View (`󱂬`), numeric workspace tabs (1–10 with focused underline), interactive pinned apps (`󰉋`, ``, `󰈹`, `󰨞`), and active window title. Far-left hosts a live weather widget (` +25°C Soleado`) with a **stealth OPSEC right-click trigger** (reveals active VPN and Target IP discreetly via notification). Far-right hosts a unified Quick Settings pill (Wi-Fi, Volume slider, Battery), clock, and notifications bell.
    * **Windows 10 ([`win10.ini`](polybar/win10.ini)):** Bottom-docked at 28pt height with classic left-alignment, wide search box (` Escribe aquí para buscar`), workspaces (1–10), system tray, audio/network/battery, and Action Center bubble (`󰍩`).
 3. **Native Windows Hotkeys:**
+   * <kbd>Super</kbd> (alone): Launches Start Menu immediately upon release (powered by `xcape` mapping hardware keycodes `#133`, `#172` [Acer Nitro], and `#134` without modifier collision).
    * <kbd>Super</kbd> + <kbd>E</kbd>: Launches File Explorer ([`file-explorer`](bin/file-explorer)) using GTK3 Caja with `We10X-dark` Fluent icons and `Segoe UI` fonts.
+   * <kbd>Super</kbd> + <kbd>D</kbd>: Toggles Show Desktop / Minimizes or restores open windows ([`win-show-desktop.sh`](polybar/scripts/win-show-desktop.sh)).
    * <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>: Launches Task Manager ([`task-manager`](bin/task-manager)) running `btop` in a centered, floating window (`1050x700`) with persistent focus.
    * <kbd>Alt</kbd> + <kbd>F4</kbd>: Contextual close — closes active window (`bspc node -c`), or opens Power Menu if on empty desktop.
 4. **State-Aware Launcher ([`launch.sh`](polybar/launch.sh)):**
    * Automatically detects active mode from `~/.config/polybar/current_mode` and `~/.config/rofi/config.rasi`.
    * Pressing <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> or restarting BSPWM safely reloads the active Windows bar without ever leaking or resurrecting the top Parrot pentesting bar.
-5. **Assets & Official Media:**
-   * 4K Official Wallpapers (Bloom Dark & Windows 10 Theme).
-   * Segoe UI Variable & Segoe Fluent Icons typography suite.
-   * Genuine Windows WAV notification sounds executed via `paplay`.
+5. **Assets & Official Media (Reverse Engineering Tooling):**
+   * **Automated Asset Extraction:** [`extract_win10_assets.py`](bin/extract_win10_assets.py) and [`extract_win11_assets.py`](bin/extract_win11_assets.py) automatically unpack and decompile official Windows ISOs (`sources/install.wim`), PE libraries (`.msstyles`, `.dll.mun` via 7-Zip), and icon registries.
+   * **4K Official Wallpapers:** Authentic 4K Hero (`img0_3840x2160.jpg`) and Bloom Dark wallpapers.
+   * **Complete Typography Suite:** Direct installation and Fontconfig registration of genuine `Segoe UI`, `Segoe MDL2 Assets` (`segmdl2.ttf`), and `Segoe Fluent Icons`.
+   * **System Audio & Cursors:** Authentic `.wav` sounds (`Windows Navigation Start.wav`, `Windows Notify.wav`) executed via `paplay` during transitions, plus official `.cur` and `.ani` cursor schemes.
 
 ---
 
@@ -436,6 +439,7 @@ dotfiles/
 │       ├── gpu.sh                       # NVIDIA discrete GPU telemetry with D3cold idle sleep guard
 │       ├── launcher                     # Single-instance Rofi application launcher
 │       ├── pomodoro.sh                  # UNIX socket Pomodoro timer daemon client (pomoc)
+│       ├── powermenu.sh                 # Theme-inheriting horizontal power menu with confirmation dialog
 │       ├── target.sh                    # Offensive target IP tracker with fast ICMP ping check
 │       ├── vpn.sh                       # Multi-platform VPN detection (HTB, THM, OffSec, Proton)
 │       ├── wifi-menu.sh                 # Interactive WiFi selection and connection utility

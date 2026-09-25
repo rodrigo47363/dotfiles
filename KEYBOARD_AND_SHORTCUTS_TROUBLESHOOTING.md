@@ -20,6 +20,7 @@ Documento técnico de análisis, depuración y resolución definitiva ante fallo
    * [3. Limpieza de Stale Lockfiles en Rofi](#3-limpieza-de-stale-lockfiles-en-rofi)
    * [4. Recarga Idempotente de sxhkd sin Condiciones de Carrera](#4-recarga-idempotente-de-sxhkd-sin-condiciones-de-carrera)
    * [5. Expansión Numérica Explícita para Workspaces en BSPWM](#5-expansión-numérica-explícita-para-workspaces-en-bspwm)
+   * [6. Emulación de Pulsación Solitaria de Tecla Windows (xcape por Keycodes)](#6-emulación-de-pulsación-solitaria-de-tecla-windows-xcape-por-keycodes)
 5. [Configuración Final Lista para Producción](#-configuración-final-lista-para-producción)
 6. [Cheat Sheet Definitivo de Atajos](#-cheat-sheet-definitivo-de-atajos)
 7. [Checklist de Verificación Rápida](#-checklist-de-verificación-rápida)
@@ -159,6 +160,20 @@ super + ctrl + shift + {1,2,3,4,5,6,7,8,9,0}
 
 ---
 
+### 6. Emulación de Pulsación Solitaria de Tecla Windows (xcape por Keycodes)
+Para que al presionar y soltar la tecla física de Windows (<kbd>Super</kbd>) se despliegue de inmediato el menú de inicio / lanzador de aplicaciones sin colisionar con atajos compuestos (`Super + E`, `Super + Return`), se integra **`xcape`**.
+
+Dado que en laptops como la **Acer Nitro** el hardware emite `keycode 172`, el demonio se lanza vinculando explícitamente los códigos numéricos de hardware:
+
+```bash
+xcape -e '#133=Super_L|d;#172=Super_L|d;#134=Super_L|d' -t 500 &
+```
+
+* **Mapeo:** Vincula `keycode 133` (Super estándar), `keycode 172` (tecla física Nitro/Super) y `keycode 134` (Super derecha) para disparar la combinación sintética `Super_L + d`, capturada limpiamente por `sxhkd`.
+* **Timeout (`-t 500`):** Si la tecla se mantiene presionada más de 500 ms o se combina con otra tecla, el evento solitario se cancela sin colisiones.
+
+---
+
 ## 🚀 Configuración Final Lista para Producción
 
 ### Archivo: `~/.config/bspwm/bspwmrc`
@@ -243,7 +258,7 @@ $HOME/.config/polybar/launch.sh &
 ### 🚀 Lanzadores y Terminal
 | Atajo | Acción |
 | :--- | :--- |
-| <kbd>Win</kbd> + <kbd>D</kbd> o <kbd>Win</kbd> + <kbd>Espacio</kbd> | Lanzador de aplicaciones Rofi (`drun`) |
+| <kbd>Win</kbd> (suelta) o <kbd>Win</kbd> + <kbd>D</kbd> / <kbd>Espacio</kbd> | Lanzador de aplicaciones Rofi (`drun` con emulación `xcape`) |
 | <kbd>Win</kbd> + <kbd>R</kbd> | Rofi modo comandos (`run`) |
 | <kbd>Win</kbd> + <kbd>Tab</kbd> | Conmutador de ventanas activas (`window`) |
 | <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Espacio</kbd> | Rofi modo combinado (`combi`) |
