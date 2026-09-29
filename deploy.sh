@@ -21,7 +21,8 @@ echo -e "\e[34m[*] Creando estructura de directorios en ~/.config y ~/.local...\
 mkdir -p "$CONFIG_DIR"/{bspwm/scripts,sxhkd,polybar/scripts,rofi/{themes,themes/catppuccin},kitty,dunst,picom,gtk-3.0} \
          "$LOCAL_BIN" \
          "$LOCAL_SHARE"/icons \
-         "$LOCAL_SHARE"/fonts
+         "$LOCAL_SHARE"/fonts \
+         "$LOCAL_SHARE"/applications
 
 # 2. Desplegar configuraciones maestras
 echo -e "\e[34m[*] Desplegando configuraciones y temas...\e[0m"
@@ -46,14 +47,20 @@ if [[ -d "$DOTFILES_DIR/assets/icons/Windows-10" ]]; then
     cp -r "$DOTFILES_DIR/assets/icons/Windows-10" "$LOCAL_SHARE/icons/"
 fi
 
-# 5. Permisos de ejecución
+# 5. Desplegar accesos de escritorio personalizados (Desktop Entries)
+if [[ -d "$DOTFILES_DIR/applications" ]]; then
+    echo -e "\e[34m[*] Desplegando entradas desktop optimizadas en ~/.local/share/applications...\e[0m"
+    cp -r "$DOTFILES_DIR/applications/"* "$LOCAL_SHARE/applications/"
+fi
+
+# 6. Permisos de ejecución
 echo -e "\e[34m[*] Asignando permisos de ejecución a scripts y demonios...\e[0m"
 chmod +x "$CONFIG_DIR"/bspwm/bspwmrc "$CONFIG_DIR"/bspwm/scripts/* 2>/dev/null || true
 chmod +x "$CONFIG_DIR"/polybar/launch.sh "$CONFIG_DIR"/polybar/scripts/* 2>/dev/null || true
 chmod +x "$CONFIG_DIR"/rofi/theme-selector.sh 2>/dev/null || true
 chmod +x "$LOCAL_BIN"/* 2>/dev/null || true
 
-# 6. Actualizar cachés de fuentes e iconos
+# 7. Actualizar cachés de fuentes e iconos
 echo -e "\e[34m[*] Regenerando cachés del sistema (Fontconfig & GTK)...\e[0m"
 fc-cache -f >/dev/null 2>&1 || true
 

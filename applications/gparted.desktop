@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=GParted
+GenericName=Partition Editor
+GenericName[es]=Editor de particiones
+Comment=Create, reorganize, and delete partitions
+Comment[es]=Cree, reorganice y borre particiones
+Exec=/usr/sbin/gparted %f
+Icon=gparted
+Terminal=false
+Type=Application
+Categories=GNOME;System;Filesystem;
+StartupNotify=true

@@ -54,4 +54,4 @@ configuration {
     kb-cancel: "Escape,Control+g,Control+bracketleft";
 }
 
-@theme "~/.config/rofi/themes/neo_tokyo.rofi"
+@theme "/home/rodrigo47363/.config/rofi/themes/neo_tokyo.rofi"
