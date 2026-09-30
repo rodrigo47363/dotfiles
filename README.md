@@ -450,6 +450,18 @@ The environment includes a rich, modular collection of custom-designed Rofi laun
 ### 7. 🔋 NVIDIA discrete GPU causes high battery drain while idle (Hybrid Laptops)
 * **Remedy:** The telemetry script [`polybar/scripts/gpu.sh`](polybar/scripts/gpu.sh) features an integrated D3cold power gate check. When `/sys/bus/pci/devices/*/power/runtime_status` is `suspended`, it halts calls to `nvidia-smi`, enabling the NVIDIA card to stay powered down (0W consumption) until 3D or CUDA workloads demand it.
 
+### 8. 🎬 Stremio renders as a black window or only redraws where the mouse hovers
+* **Symptom:** Stremio opens with a black window or only reveals interface cards when the mouse pointer moves over them (*dirty-rect rendering bug*).
+* **Cause:** Obsolete WebKitGTK environment variables (`WEBKIT_DISABLE_COMPOSITING_MODE=1` or `WEBKIT_DISABLE_DMABUF_RENDERER=1`) inherited from legacy workarounds. Under WebKitGTK 6.0 and X11, disabling accelerated compositing drops the engine into an uncomposited software mode that fails to trigger full-window redraws, painting only damaged rectangles underneath the cursor.
+* **Remedy:** The integrated launcher [`bin/stremio-fix.sh`](bin/stremio-fix.sh) (mapped to <kbd>Super</kbd> + <kbd>V</kbd>) cleans orphan server instances and invokes Flatpak with native hardware-accelerated EGL/GLX compositing:
+  ```bash
+  stremio-fix.sh
+  ```
+  If stale environment overrides were previously applied to Flatpak, reset them with:
+  ```bash
+  flatpak override --user --reset com.stremio.Stremio
+  ```
+
 ---
 
 ## 📁 Repository Directory Structure

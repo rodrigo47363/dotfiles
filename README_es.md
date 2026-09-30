@@ -450,6 +450,18 @@ El entorno cuenta con una suite modular de temas diseñados para Rofi y menús d
 ### 7. 🔋 La GPU dedicada NVIDIA agota la batería en laptops híbridas
 * **Solución:** El script [`polybar/scripts/gpu.sh`](polybar/scripts/gpu.sh) implementa un guardia de suspensión D3cold. Si el estado en `/sys/bus/pci/devices/*/power/runtime_status` es `suspended`, se omite la ejecución de `nvidia-smi`, permitiendo que la gráfica dedicada permanezca en ultra bajo consumo de energía (0W) hasta que una aplicación 3D o CUDA la requiera explícitamente.
 
+### 8. 🎬 Stremio se muestra en negro o solo redibuja sobre la trayectoria del cursor
+* **Síntoma:** Stremio abre con la ventana completamente negra o solo revela las tarjetas y menús cuando el puntero del mouse pasa por encima (*fallo de redibujado por rectángulos dañados o dirty-rects*).
+* **Causa:** Variables de entorno obsoletas (`WEBKIT_DISABLE_COMPOSITING_MODE=1` o `WEBKIT_DISABLE_DMABUF_RENDERER=1`) heredadas de parches antiguos. En versiones modernas de WebKitGTK 6.0 bajo X11, deshabilitar la composición acelerada fuerza un fallback por software que no emite eventos de redibujado para la ventana completa, pintando únicamente la caja delimitadora del cursor.
+* **Solución:** El lanzador integrado [`bin/stremio-fix.sh`](bin/stremio-fix.sh) (asignado a <kbd>Super</kbd> + <kbd>V</kbd>) elimina instancias zombi del servidor local y ejecuta Stremio con el pipeline nativo de aceleración gráfica por hardware EGL/GLX:
+  ```bash
+  stremio-fix.sh
+  ```
+  Si se configuraron overrides obsoletos previamente en Flatpak, restablece la configuración limpia con:
+  ```bash
+  flatpak override --user --reset com.stremio.Stremio
+  ```
+
 ---
 
 ## 📁 Estructura del Repositorio
