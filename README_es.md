@@ -476,6 +476,7 @@ dotfiles/
 │   ├── task-manager                     # Lanzador del Administrador de Tareas flotante centrado (Btop)
 │   ├── powermenu                        # Menú interactivo de apagado horizontal compatible con temas Rofi
 │   ├── rofi-pomodoro                    # Menú Rofi interactivo para el control y gestión del demonio pomoc
+│   ├── stremio-fix.sh                   # Lanzador optimizado Flatpak y gestor de renderizado para Stremio
 │   ├── toggle_nitro.sh                  # Conmutador rápido de ventiladores Acer Nitro (Turbo / Automático)
 │   ├── extract_win10_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 10
 │   ├── extract_win11_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 11
