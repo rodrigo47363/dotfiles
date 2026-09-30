@@ -160,6 +160,7 @@ else
 
     # B. Ventanas BSPWM (Gaps amplios 12px, bordes tácticos OneDark)
     bspc config window_gap 12 2>/dev/null
+    bspc config bottom_padding 0 2>/dev/null
     bspc config border_width 2 2>/dev/null
     bspc config focused_border_color "#81a1c1" 2>/dev/null
     bspc config normal_border_color "#4c566a" 2>/dev/null

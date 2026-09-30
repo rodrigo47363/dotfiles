@@ -1,0 +1,134 @@
+/************************************************
+ * ROFI Modern Theme 2026 
+ * ado_rose.rofi BY Rodrigo47363
+ * Style: Ado Blue Rose / Electric Cyan & Midnight Slate
+ * Mode: Local Test Theme (Undercover & Ricing)
+ ***********************************************/
+
+* {
+    /* Paleta Ado Blue Rose (Aoi Bara / Cyan Neón & Midnight Slate) */
+    bg0:            #070a12e6; /* Abismo oscuro translúcido (90% opacidad) */
+    bg1:            #0e1424;   /* Midnight Slate profundo (inputbar / tarjetas) */
+    bg2:            #172036;   /* Azul cobalto oscuro (elementos hover / contenedor) */
+    fg0:            #f1f5f9;   /* Blanco tiza / luz de luna */
+    fg1:            #94a3b8;   /* Slate blue para metadata y placeholders */
+    
+    accent:         #00d2ff;   /* Cian Eléctrico / Resplandor Rosa Ado */
+    accent-alt:     #2563eb;   /* Azul Zafiro / Royal Blue profundo */
+    gold:           #e3b341;   /* Dorado Voyager / Símbolo de sabiduría científica */
+    urgent:         #ff2a6d;   /* Carmesí / Spider-Man Neon Accent */
+    border-glow:    #00b4d8;   /* Borde cyan brillante */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0;
+    padding:            0;
+    spacing:            0;
+    font:               "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @accent; /* Contorno cyan eléctrico de la Rosa Azul */
+    border-radius:      14px;    /* Esquinas suaves estilo tarjeta moderna */
+    width:              640px;
+    location:           center;
+    anchor:             center;
+}
+
+mainbox {
+    padding:            14px;
+    children:           [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:   @bg1;
+    border:             1px;
+    border-color:       @accent-alt;
+    border-radius:      10px;
+    margin:             0px 0px 14px 0px;
+    padding:            10px 12px;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   @accent;
+    text-color:         #070a12; /* Máximo contraste: texto oscuro sobre cyan */
+    padding:            5px 14px;
+    border-radius:      7px;
+    margin:             0px 10px 0px 0px;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:        "󰮯 Ado Rose · Buscar apps, fórmulas o payloads...";
+    placeholder-color:  @fg1;
+    vertical-align:     0.5;
+    text-color:         @fg0;
+}
+
+listview {
+    fixed-height:       false;
+    lines:              8;
+    columns:            1;
+    scrollbar:          false;
+    spacing:            5px;
+}
+
+element {
+    padding:            9px 14px;
+    border-radius:      9px;
+    cursor:             pointer;
+    background-color:   transparent;
+    text-color:         @fg0;
+}
+
+element normal.normal {
+    background-color:   transparent;
+    text-color:         @fg0;
+}
+
+/* Selección activa con fondo cyan neón y tipografía oscura */
+element selected.normal {
+    background-color:   @accent;
+    text-color:         #070a12;
+}
+
+/* Elementos activos o estados especiales */
+element normal.active {
+    background-color:   @bg2;
+    text-color:         @accent;
+}
+
+element selected.active {
+    background-color:   @accent;
+    text-color:         #070a12;
+}
+
+element normal.urgent {
+    text-color:         @urgent;
+}
+
+element selected.urgent {
+    background-color:   @urgent;
+    text-color:         #ffffff;
+}
+
+element-text {
+    background-color:   inherit;
+    text-color:         inherit;
+    vertical-align:     0.5;
+}
+
+element-icon {
+    size:               26px;
+    cursor:             inherit;
+    padding:            0px 12px 0px 0px;
+}
+
+/* Reset exhaustivo */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}

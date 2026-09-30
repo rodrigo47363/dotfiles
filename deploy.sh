@@ -28,6 +28,7 @@ mkdir -p "$CONFIG_DIR"/{bspwm/scripts,sxhkd,polybar/scripts,rofi/{themes,themes/
 echo -e "\e[34m[*] Desplegando configuraciones y temas...\e[0m"
 cp -r "$DOTFILES_DIR"/polybar/* "$CONFIG_DIR"/polybar/
 cp -r "$DOTFILES_DIR"/rofi/* "$CONFIG_DIR"/rofi/
+cp -r "$DOTFILES_DIR"/rofi/*.rofi "$CONFIG_DIR"/rofi/themes/ 2>/dev/null || true
 cp "$DOTFILES_DIR"/sxhkdrc "$CONFIG_DIR"/sxhkd/sxhkdrc
 cp "$DOTFILES_DIR"/bspwmrc "$CONFIG_DIR"/bspwm/bspwmrc
 cp "$DOTFILES_DIR"/bspwm_resize "$CONFIG_DIR"/bspwm/scripts/bspwm_resize
@@ -45,6 +46,13 @@ cp -r "$DOTFILES_DIR"/bin/* "$LOCAL_BIN"/
 if [[ -d "$DOTFILES_DIR/assets/icons/Windows-10" ]]; then
     echo -e "\e[34m[*] Instalando esquema de cursores Windows-10 en ~/.local/share/icons...\e[0m"
     cp -r "$DOTFILES_DIR/assets/icons/Windows-10" "$LOCAL_SHARE/icons/"
+fi
+
+# 4.1 Desplegar colección de wallpapers por categorías
+if [[ -d "$DOTFILES_DIR/assets/wallpapers" ]]; then
+    echo -e "\e[34m[*] Desplegando colección de wallpapers en ~/Pictures/Wallpapers...\e[0m"
+    mkdir -p "$HOME/Pictures/Wallpapers"
+    cp -r "$DOTFILES_DIR"/assets/wallpapers/* "$HOME/Pictures/Wallpapers/"
 fi
 
 # 5. Desplegar accesos de escritorio personalizados (Desktop Entries)
