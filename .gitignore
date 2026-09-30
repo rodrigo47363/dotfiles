@@ -1,0 +1,57 @@
+# ==============================================================================
+# 🛡️ OPSEC & SENSITIVE DATA DEFENSIVE GITIGNORE
+# ==============================================================================
+
+# Archives, compressed backups & local dumps
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+*.iso
+*.wim
+*.bak
+*.old
+*.swp
+*.tmp
+*~
+
+# SSH Keys, PGP, Certificates and API secrets
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+id_ecdsa
+id_ecdsa.pub
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.kdbx
+.env
+.env.*
+!.env.example
+
+# Shell history & session artifacts
+.zsh_history*
+.bash_history*
+.python_history
+.node_repl_history
+.wget-hsts
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.pytest_cache/
+
+# OS and runtime runtime artifacts
+.cache/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log

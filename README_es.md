@@ -66,6 +66,7 @@ sudo apt update -y && sudo apt install -y \
     x11-xserver-utils x11-utils xinput alsa-utils brightnessctl pamixer \
     eza fzf fastfetch bat jq xclip libnotify-bin curl wget plocate \
     wireguard-tools openvpn network-manager \
+    bluez bluez-tools rfkill blueman gparted \
     python3-pyqt5 build-essential cmake pkg-config wimtools p7zip-full \
     zsh-syntax-highlighting zsh-autosuggestions \
     fonts-hack-ttf fonts-jetbrains-mono fonts-noto fonts-font-awesome \
@@ -164,7 +165,7 @@ La barra de estado está estructurada en tres secciones ergonómicas:
 ```ini
 modules-left   = launcher bspwm xwindow
 modules-center = target vpn pomodoro
-modules-right  = filesystem cpu temperature gpu acersense memory backlight pulseaudio wlan eth battery date powermenu systray
+modules-right  = acersense cpu gpu memory backlight pulseaudio bluetooth wlan eth battery date powermenu systray
 ```
 
 ### 🎯 Módulos Centrales Ofensivos
@@ -208,6 +209,13 @@ Diseñado específicamente para flujos de trabajo de seguridad ofensiva:
 
 ### 💻 Módulos de Hardware y Rendimiento
 
+* **Suite de Telemetría y Gestor Bluetooth ([`bluetooth.sh`](polybar/scripts/bluetooth.sh) & [`bluetooth-menu.sh`](polybar/scripts/bluetooth-menu.sh)):**
+  * Monitoreo en tiempo real del estado de radio mediante BlueZ (`bluetoothctl`) y fallback a nivel de kernel con `rfkill`.
+  * Muestra iconos de estado dinámicos (`󰂲 off/none`, `󰂯 on`, `󰂱 connected: <Alias>`).
+  * **Click Izquierdo:** Abre el flyout interactivo de Rofi ([`bluetooth-menu.sh`](polybar/scripts/bluetooth-menu.sh)) para escanear, emparejar, conectar o desconectar dispositivos, con anclaje adaptativo (noreste en modo normal, sureste en modos Windows).
+  * **Click Derecho:** Conmuta encendido/apagado (*toggle power*) del adaptador Bluetooth.
+  * **Click Central:** Abre el administrador gráfico de Bluetooth (`blueman-manager`).
+  * Integración transparente en los tres modos de escritorio: Pentesting (`config.ini`), Windows 10 (`win10.ini`) y Windows 11 (`win11.ini`).
 * **GPU NVIDIA con D3cold Sleep Guard ([`gpu.sh`](polybar/scripts/gpu.sh)):**
   * Lee `/sys/bus/pci/devices/*/power/runtime_status`.
   * Si la GPU dedicada NVIDIA está suspendida en bajo consumo (`suspended`), muestra `󰢮 GPU Off` en gris `#5c6370` y **evita ejecutar `nvidia-smi`**, impidiendo que la GPU se despierte y ahorrando batería crítica en portátiles híbridos.
@@ -394,6 +402,9 @@ O despliega el selector gráfico interactivo mediante Rofi:
 
 ```text
 dotfiles/
+├── .gitignore                            # Exclusiones de seguridad OPSEC, volcados de laboratorio y claves
+├── applications/                         # Entradas Desktop integradas (~/.local/share/applications)
+│   └── gparted.desktop                   # Acceso optimizado para GParted con privilegios y localización
 ├── assets/                               # Capturas de pantalla y showcases del entorno
 │   ├── preview.png                       # Showcase principal del escritorio (BSPWM + Polybar + Fastfetch + OSD)
 │   ├── preview_win11.png                 # Showcase de Modo Windows 11 Undercover (Fluent Mica & Dock)
@@ -447,6 +458,8 @@ dotfiles/
 │   ├── fonts/                           # Fuentes TTF/OTF (Hack Nerd Font, Iosevka, feather)
 │   └── scripts/                         # Scripts operativos de Polybar
 │       ├── acersense.sh                 # Telemetría e interactividad de ventiladores (Rust backend)
+│       ├── bluetooth.sh                 # Controlador y telemetría Bluetooth con fallback rfkill
+│       ├── bluetooth-menu.sh            # Menú interactivo Rofi Fluent Flyout para Bluetooth
 │       ├── gpu.sh                       # Monitoreo de GPU con detección de reposo D3cold
 │       ├── launcher                     # Lanzador Rofi con toggle single-instance
 │       ├── pomodoro.sh                  # Controlador Pomodoro vía sockets UNIX (pomoc)

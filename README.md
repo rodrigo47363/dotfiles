@@ -66,6 +66,7 @@ sudo apt update -y && sudo apt install -y \
     x11-xserver-utils x11-utils xinput alsa-utils brightnessctl pamixer \
     eza fzf fastfetch bat jq xclip libnotify-bin curl wget plocate \
     wireguard-tools openvpn network-manager \
+    bluez bluez-tools rfkill blueman gparted \
     python3-pyqt5 build-essential cmake pkg-config wimtools p7zip-full \
     zsh-syntax-highlighting zsh-autosuggestions \
     fonts-hack-ttf fonts-jetbrains-mono fonts-noto fonts-font-awesome \
@@ -164,7 +165,7 @@ The top status bar is divided into three functional zones:
 ```ini
 modules-left   = launcher bspwm xwindow
 modules-center = target vpn pomodoro
-modules-right  = filesystem cpu temperature gpu acersense memory backlight pulseaudio wlan eth battery date powermenu systray
+modules-right  = acersense cpu gpu memory backlight pulseaudio bluetooth wlan eth battery date powermenu systray
 ```
 
 ### 🎯 Offensive Security Core Modules
@@ -208,6 +209,13 @@ Specifically engineered for penetration testing and Red Team engagements:
 
 ### 💻 Hardware & Performance Telemetry
 
+* **Bluetooth Telemetry & Management Suite ([`bluetooth.sh`](polybar/scripts/bluetooth.sh) & [`bluetooth-menu.sh`](polybar/scripts/bluetooth-menu.sh)):**
+  * Real-time wireless radio telemetry via BlueZ (`bluetoothctl`) and kernel-level fallback via `rfkill`.
+  * Renders dynamic status icons and device aliases (`󰂲 off/none`, `󰂯 on`, `󰂱 connected: <Alias>`).
+  * **Left Click:** Opens the interactive Rofi Fluent Flyout ([`bluetooth-menu.sh`](polybar/scripts/bluetooth-menu.sh)) to scan, pair, connect, or disconnect peripherals, featuring adaptive dock positioning (northeast in normal mode, southeast in Windows 10/11 modes).
+  * **Right Click:** Toggles Bluetooth radio power on/off instantly.
+  * **Middle Click:** Launches the desktop graphical Bluetooth manager (`blueman-manager`).
+  * Consistent integration across all Polybar bars: Pentesting (`config.ini`), Windows 10 (`win10.ini`), and Windows 11 (`win11.ini`).
 * **NVIDIA GPU with D3cold Sleep Guard ([`gpu.sh`](polybar/scripts/gpu.sh)):**
   * Reads `/sys/bus/pci/devices/*/power/runtime_status`.
   * If the discrete GPU is power-gated in deep sleep (`suspended`), it outputs `󰢮 GPU Off` in muted gray `#5c6370` and **strictly skips invoking `nvidia-smi`**, preventing the discrete GPU from waking up and conserving critical battery life.
@@ -394,6 +402,9 @@ Or trigger the interactive selector via Rofi:
 
 ```text
 dotfiles/
+├── .gitignore                            # Defensive OPSEC exclusions, laboratory dumps, and secrets
+├── applications/                         # Integrated desktop entries (~/.local/share/applications)
+│   └── gparted.desktop                   # Optimized GParted launcher with root privileges and i18n
 ├── assets/                               # Environment screenshots and showcases
 │   ├── preview.png                       # Primary desktop showcase (BSPWM + Polybar + Fastfetch + OSD)
 │   ├── preview_win11.png                 # Windows 11 Undercover Mode showcase (Fluent Mica & Dock)
@@ -447,6 +458,8 @@ dotfiles/
 │   ├── fonts/                           # TTF/OTF typography suite (Hack Nerd Font, Iosevka, feather)
 │   └── scripts/                         # Tactical Polybar scripts
 │       ├── acersense.sh                 # AcerSense fan telemetry & MAX turbo switcher (Rust backend)
+│       ├── bluetooth.sh                 # Bluetooth status & power controller with rfkill fallback
+│       ├── bluetooth-menu.sh            # Adaptive Rofi Fluent Flyout Bluetooth menu
 │       ├── gpu.sh                       # NVIDIA discrete GPU telemetry with D3cold idle sleep guard
 │       ├── launcher                     # Single-instance Rofi application launcher
 │       ├── pomodoro.sh                  # UNIX socket Pomodoro timer daemon client (pomoc)
