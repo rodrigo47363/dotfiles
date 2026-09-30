@@ -333,6 +333,59 @@ Or trigger the interactive selector via Rofi:
 
 ---
 
+## 🎨 Rofi Theme Suite & Visual Catalog (Undercover & Aesthetic Gallery)
+
+The environment includes a rich, modular collection of custom-designed Rofi launcher themes and Undercover Start Menus. Switch between any theme on-the-fly using the interactive theme switcher (<kbd>Super</kbd> launcher or terminal) or via CLI arguments:
+
+```bash
+# Interactive dynamic selector
+~/.config/rofi/theme-selector.sh
+
+# Direct instant switch
+~/.config/rofi/theme-selector.sh ado_rose.rofi
+```
+
+### 🌸 Character & Aesthetic Suite
+
+| Theme & Specs | Preview |
+| :--- | :--- |
+| **Ado Rose ([`ado_rose.rofi`](rofi/ado_rose.rofi))**<br>• **Aesthetic:** Ado Aoi Bara / Cyber-Noir<br>• **Colors:** Electric Cyan (`#00d2ff`), Midnight Slate (`#0e1424`), Pure White<br>• **Features:** Rounded 14px card, blue rose prompt, high contrast | <img src="assets/rofi/ado_rose.png" width="400" alt="Ado Rose Theme"> |
+| **Kuromi Goth ([`kuromi_goth.rofi`](rofi/kuromi_goth.rofi))**<br>• **Aesthetic:** Kawaii-Goth & Dark Aesthetic<br>• **Colors:** Lavender Violet (`#b48ead`), Absolute Black (`#000000`), Hot Pink<br>• **Features:** 12px rounded borders, purple badge | <img src="assets/rofi/kuromi_goth.png" width="400" alt="Kuromi Goth Theme"> |
+| **Cinnamoroll Cloud ([`cinnamoroll_cloud.rofi`](rofi/cinnamoroll_cloud.rofi))**<br>• **Aesthetic:** Fluffy Pastel Day Sky<br>• **Colors:** Soft Cloud Blue (`#8aadf4`), Cream White (`#f5f5f5`)<br>• **Features:** High legibility, floating pill search | <img src="assets/rofi/cinnamoroll_cloud.png" width="400" alt="Cinnamoroll Cloud Theme"> |
+| **Cinnamoroll Night ([`cinnamoroll_night.rofi`](rofi/cinnamoroll_night.rofi))**<br>• **Aesthetic:** Starry Night Pastel Dark<br>• **Colors:** Midnight Blue (`#11152c`), Sky Blue Pastel (`#8aadf4`), Soft Rose<br>• **Features:** Dark mode aesthetic with celestial vibes | <img src="assets/rofi/cinnamoroll_night.png" width="400" alt="Cinnamoroll Night Theme"> |
+| **My Melody Soft ([`mymelody_soft.rofi`](rofi/mymelody_soft.rofi))**<br>• **Aesthetic:** Soft Kawaii Pastel<br>• **Colors:** Pastel Pink (`#f5bde6`), Soft White (`#fcfcfc`), Charcoal<br>• **Features:** Sweet, friendly contrast | <img src="assets/rofi/mymelody_soft.png" width="400" alt="My Melody Soft Theme"> |
+| **Pompompurin Café ([`pompompurin_cafe.rofi`](rofi/pompompurin_cafe.rofi))**<br>• **Aesthetic:** Cozy Café & Pudding Caramel<br>• **Colors:** Warm Yellow (`#f9e2af`), Dark Chocolate (`#181825`)<br>• **Features:** High-contrast cozy dark palette | <img src="assets/rofi/pompompurin_cafe.png" width="400" alt="Pompompurin Cafe Theme"> |
+
+### 🚀 Cyberpunk, Space & Red Team Suite
+
+| Theme & Specs | Preview |
+| :--- | :--- |
+| **Stellar Void ([`stellar_void.rofi`](rofi/stellar_void.rofi))**<br>• **Aesthetic:** Deep Space Nebula & Plasma<br>• **Colors:** Electric Cyan (`#00ffff`), Nebula Violet (`#8a2be2`), Supernova Orange<br>• **Features:** 15px futuristic curves, plasma accent | <img src="assets/rofi/stellar_void.png" width="400" alt="Stellar Void Theme"> |
+| **Neo Tokyo ([`neo_tokyo.rofi`](rofi/neo_tokyo.rofi))**<br>• **Aesthetic:** Cyberpunk 2077 Night City<br>• **Colors:** Cyberpunk Magenta (`#ff007f`), Deep Midnight Navy (`#0d0f18`), Cyan<br>• **Features:** Neon glow border, floating app list | <img src="assets/rofi/neo_tokyo.png" width="400" alt="Neo Tokyo Theme"> |
+| **Hacker Green ([`hacker_green.rofi`](rofi/hacker_green.rofi))**<br>• **Aesthetic:** Classic Matrix Terminal<br>• **Colors:** Phosphor Terminal Green (`#00ff66`), Pitch Black (`#0a0a0a`)<br>• **Features:** Ultra high contrast, terminal aesthetic | <img src="assets/rofi/hacker_green.png" width="400" alt="Hacker Green Theme"> |
+| **Red Team Audit ([`red_audit.rofi`](rofi/red_audit.rofi))**<br>• **Aesthetic:** Offensive Security & Breach Operations<br>• **Colors:** Blood Red (`#ff3333`), Pitch Black (`#0a0a0e`), Warning Orange<br>• **Features:** Aggressive high-impact engagement palette | <img src="assets/rofi/red_audit.png" width="400" alt="Red Audit Theme"> |
+| **Modern Blue ([`modern_blue.rofi`](rofi/modern_blue.rofi))**<br>• **Aesthetic:** Sleek Minimalist Developer<br>• **Colors:** Sapphire Blue (`#3b82f6`), Dark Slate (`#0f172a`), Clean White<br>• **Features:** Universal clean corporate/dev look | <img src="assets/rofi/modern_blue.png" width="400" alt="Modern Blue Theme"> |
+| **Mantec Corporate ([`mantec_corporate.rofi`](rofi/mantec_corporate.rofi))**<br>• **Aesthetic:** Executive Dark Glass<br>• **Colors:** Ice Blue (`#7aa2f7`), Midnight Obsidian (`#1a1b26`)<br>• **Features:** Subtle borders, distraction-free | <img src="assets/rofi/mantec_corporate.png" width="400" alt="Mantec Corporate Theme"> |
+
+### 🎭 Red Team Undercover Start Menus
+
+| Theme & Specs | Preview |
+| :--- | :--- |
+| **Windows 11 Fluent Mica ([`windows_11.rofi`](rofi/windows_11.rofi))**<br>• **Aesthetic:** Windows 11 Sun Valley Start Menu<br>• **Placement:** Centered floating bottom dock<br>• **Features:** 6-column pinned apps grid, Mica transparency, official icons | <img src="assets/rofi/windows_11.png" width="400" alt="Windows 11 Start Menu"> |
+| **Windows 10 Metro UI ([`windows_10.rofi`](rofi/windows_10.rofi))**<br>• **Aesthetic:** Windows 10 Metro Start Menu<br>• **Placement:** Bottom-left anchored (`south west`)<br>• **Features:** Strict 0px rectangular corners, left utility rail (``, ``, ``, `⏻`), `#0078d7` blue | <img src="assets/rofi/windows_10.png" width="400" alt="Windows 10 Start Menu"> |
+
+### ⚡ Minimalist & Community Classics
+
+| Theme & Specs | Preview |
+| :--- | :--- |
+| **Spotlight Dark (`spotlight-dark.rasi`)**<br>• macOS Spotlight inspired search bar | <img src="assets/rofi/spotlight-dark.png" width="400" alt="Spotlight Dark"> |
+| **Launchpad Fullscreen (`launchpad.rasi`)**<br>• Fullscreen application launcher grid | <img src="assets/rofi/launchpad.png" width="400" alt="Launchpad Fullscreen"> |
+| **Squared Nord (`squared-nord.rasi`)**<br>• Clean arctic Nord palette with square geometric cards | <img src="assets/rofi/squared-nord.png" width="400" alt="Squared Nord"> |
+| **Simple Tokyo Night (`simple-tokyonight.rasi`)**<br>• Compact, ultra-fast floating single-column launcher | <img src="assets/rofi/simple-tokyonight.png" width="400" alt="Simple Tokyo Night"> |
+| **Nord Minimal (`nord.rasi`)**<br>• Minimalist Frost & Polar Night floating prompt | <img src="assets/rofi/nord.png" width="400" alt="Nord Minimal"> |
+
+---
+
 ## 🛠️ Troubleshooting & Frequently Asked Questions (FAQ)
 
 ### 1. 🔤 Polybar or terminal icons display as missing glyphs or square boxes
@@ -413,6 +466,8 @@ dotfiles/
 │   ├── powermenu.png                     # Horizontal interactive power menu (Neo Tokyo Edition)
 │   ├── osd_volume.png                    # Interactive floating slider and volume OSD showcase
 │   ├── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
+│   ├── rofi/                             # High-resolution visual showcase gallery for all Rofi themes
+│   ├── wallpapers/                       # Complete 4K/2K wallpaper collection (Ado, Spider-Noir, Kuromi, Science)
 │   └── icons/                            # Reverse-engineered icon & cursor suites
 │       └── Windows-10/                   # Genuine X11 Windows 10 cursor theme (converted with win2xcur)
 ├── bin/                                  # Modular operational scripts (~/.local/bin)
