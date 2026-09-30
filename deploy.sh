@@ -75,5 +75,5 @@ fc-cache -f >/dev/null 2>&1 || true
 echo -e "\e[32m========================================================\e[0m"
 echo -e "\e[32m  ✅  Despliegue completado con éxito al 1000%.\e[0m"
 echo -e "\e[32m  💡  Recarga BSPWM (Super+Alt+R) o cambia de modo con:\e[0m"
-echo -e "\e[33m      mode-win10   |   mode-win11   |   mode-normal\e[0m"
+echo -e "\e[33m      mode-win10   |   mode-win11   |   mode-ado   |   mode-normal\e[0m"
 echo -e "\e[32m========================================================\e[0m"

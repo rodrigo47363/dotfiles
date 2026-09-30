@@ -278,6 +278,7 @@ Switch your entire desktop personality in milliseconds:
 ```bash
 mode-win11   # Activates Full Windows 11 Fluent Mica environment
 mode-win10   # Activates Full Windows 10 Metro UI environment
+mode-ado     # Activates Ado Blue Rose Cyber-Noir aesthetic environment
 mode-normal  # Restores 100% of your tactical pentesting OneDark environment
 ```
 
@@ -480,6 +481,7 @@ dotfiles/
 │   ├── extract_win11_assets.py          # Windows 11 interface assets extractor & reverse engineering tool
 │   ├── mode-win11                       # Instant switcher to Windows 11 Undercover Mode
 │   ├── mode-win10                       # Instant switcher to Windows 10 Metro Mode
+│   ├── mode-ado                         # Instant switcher to Ado Cyber-Noir / Blue Rose Mode
 │   ├── mode-normal                      # Instant restorer to tactical pentesting OneDark Mode
 │   ├── volume                           # Volume CLI controller with Dunst OSD and 1% step
 │   ├── brightness                       # Brightness CLI controller with Dunst OSD, 1% step, and floor safety

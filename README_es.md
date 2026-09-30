@@ -278,6 +278,7 @@ Cambia la personalidad completa de tu estación de trabajo en milisegundos:
 ```bash
 mode-win11   # Activa el entorno completo Windows 11 Fluent Mica
 mode-win10   # Activa el entorno completo Windows 10 Metro UI
+mode-ado     # Activa el entorno completo Ado Blue Rose Cyber-Noir
 mode-normal  # Restaura al 100% el entorno táctico de pentesting OneDark
 ```
 
@@ -480,6 +481,7 @@ dotfiles/
 │   ├── extract_win11_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 11
 │   ├── mode-win11                       # Conmutador instantáneo al Modo Windows 11 Undercover
 │   ├── mode-win10                       # Conmutador instantáneo al Modo Windows 10 Metro
+│   ├── mode-ado                         # Conmutador instantáneo al Modo Ado Cyber-Noir / Rosa Azul
 │   ├── mode-normal                      # Restaurador instantáneo al entorno táctico OneDark de Pentesting
 │   ├── volume                           # Controlador CLI de audio con OSD Dunst y paso de 1%
 │   ├── brightness                       # Controlador CLI de brillo con OSD Dunst, paso de 1% y fail-safe

@@ -141,6 +141,44 @@ elif [[ "$selected_file" == "windows_10.rofi" ]]; then
 
     notify-send "Windows 10" "Modo Windows 10 activado al 100% (Metro UI)" -u normal
 
+elif [[ "$selected_file" == "ado_rose.rofi" ]]; then
+    echo -e "\e[34m[*] Activando Modo Ado Blue Rose (Aoi Bara)...\e[0m"
+
+    # A. Wallpaper Ado Rose 4K
+    ADO_WALLPAPER="$HOME/Pictures/Wallpapers/Personajes/Ado/ado_blue_4k.jpg"
+    if [[ -f "$ADO_WALLPAPER" ]]; then
+        feh --no-fehbg --bg-fill "$ADO_WALLPAPER" 2>/dev/null
+        echo "feh --no-fehbg --bg-fill '$ADO_WALLPAPER'" > "$HOME/.fehbg"
+    fi
+
+    # B. Ventanas BSPWM (Bordes cian eléctrico #00d2ff, gap 10px, sin padding inferior)
+    bspc config window_gap 10 2>/dev/null
+    bspc config bottom_padding 0 2>/dev/null
+    bspc config border_width 2 2>/dev/null
+    bspc config focused_border_color "#00d2ff" 2>/dev/null
+    bspc config active_border_color "#2563eb" 2>/dev/null
+    bspc config normal_border_color "#0e1424" 2>/dev/null
+
+    # C. Compositor Picom
+    if [[ -f "$HOME/.config/picom/picom-normal.conf" ]]; then
+        cp "$HOME/.config/picom/picom-normal.conf" "$HOME/.config/picom/picom.conf"
+        pkill -x picom 2>/dev/null
+        picom --config "$HOME/.config/picom/picom.conf" -b 2>/dev/null
+    fi
+
+    # D. Terminal Kitty (Tokyo Night / OneDark)
+    if [[ -f "$HOME/.config/kitty/color-onedark.ini" ]]; then
+        cp "$HOME/.config/kitty/color-onedark.ini" "$HOME/.config/kitty/color.ini"
+        kitty @ set-colors -a "$HOME/.config/kitty/color.ini" 2>/dev/null || true
+    fi
+
+    # E. Polybar Pentesting Superior
+    if [[ -f "$HOME/.config/polybar/config.ini" ]]; then
+        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/config.ini" "parrot" >/dev/null 2>&1
+    fi
+
+    notify-send "Ado Rose" "Modo Ado Rose activado al 100% (Aoi Bara)" -u normal
+
 else
     # --- RESTAURACIÓN AUTOMÁTICA DE ENTORNO PENTESTING / HACKER ---
     DEFAULT_WALLPAPER="$HOME/Pictures/Wallpapers/rodrigo47363.png"
