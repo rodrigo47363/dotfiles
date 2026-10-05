@@ -462,6 +462,19 @@ The environment includes a rich, modular collection of custom-designed Rofi laun
   flatpak override --user --reset com.stremio.Stremio
   ```
 
+### 9. 🤖 Microsoft Edge Copilot / Chat sidebar does not open on click (Linux)
+* **Symptom:** Clicking the Copilot icon on Microsoft Edge's toolbar fails to open the sidebar with no error displayed.
+* **Cause:** Linux builds of Microsoft Edge (.deb / Flatpak) omit provisioning the `HubApps` JSON manifest in user profiles (`~/.config/microsoft-edge/Default/HubApps`). Without this manifest defining sidebar app identifiers (Copilot UUID `cd4688a9-e888-48ea-ad81-76193d56b1be`), sidebar RPC invocations fail silently.
+* **Remedy:** Run the automated utility [`bin/edge-copilot-fix.sh`](bin/edge-copilot-fix.sh) or deploy via `./deploy.sh`:
+  ```bash
+  edge-copilot-fix.sh
+  ```
+  This deploys the verified `HubApps` manifest to all active Edge profiles and restores Copilot sidebar functionality upon restarting the browser (`killall msedge`).
+
+### 10. 🪟 Windows leave unwanted empty space or margins (BSPWM Gaps)
+* **Configuration:** Optimized for dense security audit workflows and full display utilization, `window_gap 0` and `split_ratio 0.50` are standardized in [`bspwmrc`](bspwmrc).
+* **Dynamic Control:** To toggle gaps on the fly, execute `bspc config window_gap <value>` (e.g., `12` for aesthetic spacing or `0` for maximum screen real estate).
+
 ---
 
 ## 📁 Repository Directory Structure
@@ -481,6 +494,8 @@ dotfiles/
 │   ├── osd_brightness.png                # Interactive floating slider and brightness OSD showcase
 │   ├── rofi/                             # High-resolution visual showcase gallery for all Rofi themes
 │   ├── wallpapers/                       # Complete 4K/2K wallpaper collection (Ado, Spider-Noir, Kuromi, Science)
+│   ├── edge/                             # Browser support resources and manifests for Linux
+│   │   └── HubApps                       # Pre-provisioned sidebar and Copilot manifest (Linux fix)
 │   └── icons/                            # Reverse-engineered icon & cursor suites
 │       └── Windows-10/                   # Genuine X11 Windows 10 cursor theme (converted with win2xcur)
 ├── bin/                                  # Modular operational scripts (~/.local/bin)
@@ -488,6 +503,7 @@ dotfiles/
 │   ├── task-manager                     # Floating centered task manager launcher (Btop)
 │   ├── powermenu                        # Interactive horizontal power menu compatible with Rofi themes
 │   ├── rofi-pomodoro                    # Interactive Rofi menu for pomoc Pomodoro daemon management
+│   ├── edge-copilot-fix.sh              # Manifest provisioner & injector for Microsoft Edge Copilot on Linux
 │   ├── stremio-fix.sh                   # Optimized Flatpak launcher & GPU renderer manager for Stremio
 │   ├── toggle_nitro.sh                  # Instant turbo fan switcher for Acer Nitro hardware
 │   ├── extract_win10_assets.py          # Windows 10 interface assets extractor & reverse engineering tool

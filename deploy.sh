@@ -72,6 +72,12 @@ chmod +x "$LOCAL_BIN"/* 2>/dev/null || true
 echo -e "\e[34m[*] Regenerando cachés del sistema (Fontconfig & GTK)...\e[0m"
 fc-cache -f >/dev/null 2>&1 || true
 
+# 8. Aprovisionar Microsoft Edge Copilot (Fix HubApps para Linux)
+if command -v microsoft-edge >/dev/null 2>&1 || [[ -d "$CONFIG_DIR/microsoft-edge" ]]; then
+    echo -e "\e[34m[*] Verificando aprovisionamiento de Copilot en Microsoft Edge...\e[0m"
+    "$LOCAL_BIN"/edge-copilot-fix.sh >/dev/null 2>&1 || true
+fi
+
 echo -e "\e[32m========================================================\e[0m"
 echo -e "\e[32m  ✅  Despliegue completado con éxito al 1000%.\e[0m"
 echo -e "\e[32m  💡  Recarga BSPWM (Super+Alt+R) o cambia de modo con:\e[0m"

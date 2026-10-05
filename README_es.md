@@ -462,6 +462,19 @@ El entorno cuenta con una suite modular de temas diseñados para Rofi y menús d
   flatpak override --user --reset com.stremio.Stremio
   ```
 
+### 9. 🤖 El botón de Copilot / Chat en Microsoft Edge no abre al hacer clic (Linux)
+* **Síntoma:** Al hacer clic en el icono de Copilot en la barra de herramientas de Microsoft Edge para Linux, el panel lateral no se despliega ni emite respuesta visual.
+* **Causa:** Las versiones empaquetadas de Microsoft Edge para Linux (.deb / Flatpak) no incluyen el manifiesto JSON `HubApps` en el perfil del usuario (`~/.config/microsoft-edge/Default/HubApps`). Sin este manifiesto que define los identificadores y endpoints de las herramientas laterales (Copilot ID `cd4688a9-e888-48ea-ad81-76193d56b1be`), el evento de invocación de la barra lateral falla silenciosamente.
+* **Solución:** Utilizar la utilidad automatizada [`bin/edge-copilot-fix.sh`](bin/edge-copilot-fix.sh) o desplegar los dotfiles con `./deploy.sh`:
+  ```bash
+  edge-copilot-fix.sh
+  ```
+  La herramienta aprovisiona de forma idempotente el archivo `HubApps` verificado en todos los perfiles de Edge existentes y restaura el acceso inmediato a Copilot tras reiniciar el navegador (`killall msedge`).
+
+### 10. 🪟 Ventanas con espacios vacíos o separación no deseada (Gaps en BSPWM)
+* **Configuración:** Por diseño optimizado para pantallas de auditoría y máxima superficie de visualización, se estandarizó `window_gap 0` y `split_ratio 0.50` en [`bspwmrc`](bspwmrc).
+* **Control dinámico:** Si deseas alternar márgenes en tiempo real, puedes ajustarlo con `bspc config window_gap <valor>` (ej. `12` para estética espaciada o `0` para máxima densidad informativa).
+
 ---
 
 ## 📁 Estructura del Repositorio
@@ -481,6 +494,8 @@ dotfiles/
 │   ├── osd_brightness.png                # Showcase del slider flotante interactivo y OSD de brillo
 │   ├── rofi/                             # Galería en alta resolución de capturas para todos los temas Rofi
 │   ├── wallpapers/                       # Colección clasificada de wallpapers 4K/2K (Ado, Spider-Noir, Kuromi, Ciencia)
+│   ├── edge/                             # Componentes y manifiestos de soporte para navegadores en Linux
+│   │   └── HubApps                       # Manifiesto aprovisionador de barra lateral y Copilot (Linux fix)
 │   └── icons/                            # Esquemas de iconos y cursores por ingeniería inversa
 │       └── Windows-10/                   # Tema nativo de cursores X11 Windows 10 (convertido con win2xcur)
 ├── bin/                                  # Scripts y utilidades operativas de usuario (~/.local/bin)
@@ -488,6 +503,7 @@ dotfiles/
 │   ├── task-manager                     # Lanzador del Administrador de Tareas flotante centrado (Btop)
 │   ├── powermenu                        # Menú interactivo de apagado horizontal compatible con temas Rofi
 │   ├── rofi-pomodoro                    # Menú Rofi interactivo para el control y gestión del demonio pomoc
+│   ├── edge-copilot-fix.sh              # Aprovisionador e inyector del manifiesto HubApps para Copilot en Linux
 │   ├── stremio-fix.sh                   # Lanzador optimizado Flatpak y gestor de renderizado para Stremio
 │   ├── toggle_nitro.sh                  # Conmutador rápido de ventiladores Acer Nitro (Turbo / Automático)
 │   ├── extract_win10_assets.py          # Extractor e ingeniería inversa de activos de interfaz de Windows 10
