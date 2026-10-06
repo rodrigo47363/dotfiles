@@ -209,7 +209,7 @@ if [[ "$IS_WINDOWS_UNDERCOVER" -eq 1 ]]; then
     # ==============================================================================
     setopt prompt_subst
 
-    # Formateador de ruta estilo Windows (C:\Users\rodrigo47363\...)
+    # Formateador de ruta estilo Windows (C:\Users\<username>\...)
     win_pwd() {
         local p="$PWD"
         p="${p/#$HOME/C:\\Users\\$USER}"
@@ -263,5 +263,15 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 
 # Generated for pdtm. Do not edit.
-export PATH=$PATH:/home/rodrigo47363/.pdtm/go/bin
+export PATH="$PATH:$HOME/.pdtm/go/bin"
+
+export AGY_CLI_HIDE_ACCOUNT_INFO=true
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
 

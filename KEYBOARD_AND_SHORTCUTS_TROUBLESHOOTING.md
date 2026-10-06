@@ -237,7 +237,7 @@ if [ -n "$TOUCHPAD_ID" ]; then
     xinput set-prop "$TOUCHPAD_ID" "libinput Tapping Enabled" 1
 fi
 
-[ -f ~/Wallpaper/rodrigo47363.png ] && feh --bg-fill ~/Wallpaper/rodrigo47363.png &
+[ -f "$HOME/.fehbg" ] && "$HOME/.fehbg" &
 $HOME/.config/polybar/launch.sh &
 ```
 

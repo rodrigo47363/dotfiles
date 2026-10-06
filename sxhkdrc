@@ -19,11 +19,11 @@ super + shift + Return
 
 # Explorador de archivos (Windows Explorer -> Win + E)
 super + e
-    /home/rodrigo47363/.local/bin/file-explorer &
+    $HOME/.local/bin/file-explorer &
 
 # Administrador de tareas (Windows Task Manager -> Ctrl + Shift + Esc)
 ctrl + shift + Escape
-    /home/rodrigo47363/.local/bin/task-manager &
+    $HOME/.local/bin/task-manager &
 
 ########################
 # ROFI LAUNCHERS       #
@@ -49,7 +49,7 @@ super + shift + space
 
 # Cerrar ventana activa o Menú de apagado (Comportamiento Windows Alt + F4)
 alt + F4
-    [ -n "$(bspc query -N -d -n .window.focused)" ] && bspc node -c || /home/rodrigo47363/.local/bin/powermenu
+    [ -n "$(bspc query -N -d -n .window.focused)" ] && bspc node -c || $HOME/.local/bin/powermenu
 
 ########################
 # SYSTEM & POLYBAR     #
@@ -77,32 +77,32 @@ shift + @Print
 
 # Brillo (OSD y barra animada)
 XF86MonBrightnessUp
-    /home/rodrigo47363/.local/bin/brightness up
+    $HOME/.local/bin/brightness up
 XF86MonBrightnessDown
-    /home/rodrigo47363/.local/bin/brightness down
+    $HOME/.local/bin/brightness down
 
 # Audio (OSD y barra animada)
 super + Up
-    /home/rodrigo47363/.local/bin/volume up
+    $HOME/.local/bin/volume up
 super + Down
-    /home/rodrigo47363/.local/bin/volume down
+    $HOME/.local/bin/volume down
 super + shift + m
-    /home/rodrigo47363/.local/bin/volume mute
+    $HOME/.local/bin/volume mute
 
 XF86AudioRaiseVolume
-    /home/rodrigo47363/.local/bin/volume up
+    $HOME/.local/bin/volume up
 XF86AudioLowerVolume
-    /home/rodrigo47363/.local/bin/volume down
+    $HOME/.local/bin/volume down
 XF86AudioMute
-    /home/rodrigo47363/.local/bin/volume mute
+    $HOME/.local/bin/volume mute
 XF86AudioMicMute
-    /home/rodrigo47363/.local/bin/volume mic
+    $HOME/.local/bin/volume mic
 
 # Sliders interactivos flotantes (Toggle con ratón o teclado)
 super + alt + v
-    /home/rodrigo47363/.local/bin/volume-slider
+    $HOME/.local/bin/volume-slider
 super + alt + b
-    /home/rodrigo47363/.local/bin/brightness-slider
+    $HOME/.local/bin/brightness-slider
 
 ########################
 # CUSTOM PENTEST APPS  #
@@ -118,7 +118,7 @@ super + ctrl + r
 super + ctrl + s
     bash "$HOME/.config/polybar/scripts/pomodoro.sh" stop &
 super + alt + p
-    /home/rodrigo47363/.local/bin/rofi-pomodoro &
+    $HOME/.local/bin/rofi-pomodoro &
 
 # Herramientas ofensivas y navegador
 super + shift + f
@@ -128,11 +128,11 @@ super + shift + b
 
 # Centro de control AcerSense / NitroSense
 super + shift + a
-    /home/rodrigo47363/.local/bin/acersense-gui &
+    $HOME/.local/bin/acersense-gui &
 
 # Lanzar Stremio (Integrado con wrapper fix)
 super + v
-    /home/rodrigo47363/.local/bin/stremio-fix.sh &
+    $HOME/.local/bin/stremio-fix.sh &
 
 ########################
 # BSPWM WINDOW & NODES #
@@ -237,17 +237,17 @@ super + ctrl + shift + {h,j,k,l}
 
 # Tecla física NitroSense [N] (Comportamiento idéntico a Windows -> Abrir App)
 XF86Launch1
-    /home/rodrigo47363/.local/bin/acersense-gui &
+    $HOME/.local/bin/acersense-gui &
 
 # XF86Presentation (No es un keysym X11 estándar)
 # XF86Presentation
-#     /home/rodrigo47363/.local/bin/acersense-gui &
+#     $HOME/.local/bin/acersense-gui &
 
 # Atajo con Tecla Windows: Super + N (Abrir App)
 super + n
-    /home/rodrigo47363/.local/bin/acersense-gui &
+    $HOME/.local/bin/acersense-gui &
 
 # Atajo alternativo: Super + Shift + N (Alternar Turbo / Auto sin abrir ventana)
 super + shift + n
-    /home/rodrigo47363/.local/bin/toggle_nitro.sh
+    $HOME/.local/bin/toggle_nitro.sh
 

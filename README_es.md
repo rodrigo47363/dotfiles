@@ -37,6 +37,7 @@ Como estándar de seguridad operativa (OPSEC):
 1. **Política Zero-Trust:** Ninguna clave privada SSH (`id_rsa`, `id_ed25519`), token de API (`ghp_`, `AWS_*`), cookie de sesión o historial de shell (`.zsh_history`, `.bash_history`) debe ser rastreado en Git.
 2. **Exclusión de volcados:** El archivo `.gitignore` debe excluir volcados comprimidos (`.rar`, `.zip`, `.tar.gz`) que contengan copias de respaldo locales.
 3. **Manejo de credenciales de red:** Toda configuración de red o VPN rastreada utiliza interfaces genéricas y variables dinámicas para evitar filtrar subredes internas.
+4. **Portabilidad Multi-Usuario Universal:** Todas las configuraciones (`sxhkdrc`, `bspwmrc`, `polybar`, `rofi`, perfiles de shell y herramientas CLI) resuelven dinámicamente el contexto de usuario (`$HOME`, `$USER` y expansiones POSIX `~`), eliminando rutas absolutas con nombres de usuario fijos y permitiendo un despliegue inmediato para cualquier usuario.
 
 ---
 

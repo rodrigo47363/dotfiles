@@ -7,7 +7,7 @@
 wmname LG3D &
 [ -f "$HOME/.Xmodmap" ] && xmodmap "$HOME/.Xmodmap"
 numlockx off 2>/dev/null || xset -led named "Num Lock" 2>/dev/null || true
-rm -f /run/user/$UID/rofi*.pid /tmp/rodrigo47363-rofi.lock 2>/dev/null || true
+rm -f /run/user/$UID/rofi*.pid /tmp/${USER}-rofi.lock 2>/dev/null || true
 
 # ==========================================
 # 2. CONFIGURACIÓN BSPWM

@@ -37,6 +37,7 @@ To adhere to strict Operational Security (OPSEC) practices:
 1. **Zero-Trust Tracking:** Private SSH keys (`id_rsa`, `id_ed25519`), API secrets (`ghp_`, `AWS_*`), browser cookies, and shell history files (`.zsh_history`, `.bash_history`) are strictly excluded.
 2. **Backup Sanitization:** Local archive dumps (`.rar`, `.zip`, `.tar.gz`) containing unredacted system backups are ignored via `.gitignore`.
 3. **Network Sanitization:** All tracked network and VPN scripts utilize generic interfaces and dynamic extraction to prevent internal corporate/lab subnet leakage.
+4. **Universal Multi-User Portability:** All configurations (`sxhkdrc`, `bspwmrc`, `polybar`, `rofi`, shell profiles, and CLI tools) dynamically resolve user contexts (`$HOME`, `$USER`, and `~` POSIX expansion), eliminating hardcoded username paths and enabling seamless deployment across any user account.
 
 ---
 

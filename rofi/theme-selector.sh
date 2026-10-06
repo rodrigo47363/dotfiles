@@ -32,7 +32,7 @@ if [[ ! -f "$THEME_DIR/$selected_file" ]]; then
 fi
 
 # 3. Inyección en Rofi
-NEW_THEME_PATH="${THEME_DIR}/${selected_file}"
+NEW_THEME_PATH="~/.config/rofi/themes/${selected_file}"
 if grep -Eq "^[[:space:]]*@theme" "$CONFIG_FILE"; then
     sed -i "s|^[[:space:]]*@theme.*|@theme \"${NEW_THEME_PATH}\"|" "$CONFIG_FILE"
 else
@@ -182,7 +182,10 @@ elif [[ "$selected_file" == "ado_rose.rofi" ]]; then
 else
     # --- RESTAURACIÓN AUTOMÁTICA DE ENTORNO PENTESTING / HACKER ---
     DEFAULT_WALLPAPER="$HOME/Pictures/Wallpapers/rodrigo47363.png"
-    if [[ -f "$DEFAULT_WALLPAPER" ]]; then
+    if [[ ! -f "$DEFAULT_WALLPAPER" ]]; then
+        DEFAULT_WALLPAPER=$(find "$HOME/Pictures/Wallpapers" -type f \( -name "*.png" -o -name "*.jpg" \) 2>/dev/null | head -n 1)
+    fi
+    if [[ -n "$DEFAULT_WALLPAPER" && -f "$DEFAULT_WALLPAPER" ]]; then
         feh --no-fehbg --bg-fill "$DEFAULT_WALLPAPER" 2>/dev/null
         echo "feh --no-fehbg --bg-fill '$DEFAULT_WALLPAPER'" > "$HOME/.fehbg"
     fi

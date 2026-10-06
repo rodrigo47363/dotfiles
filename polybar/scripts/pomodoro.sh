@@ -35,7 +35,7 @@ case "$1" in
         exit 0
         ;;
     menu)
-        /home/rodrigo47363/.local/bin/rofi-pomodoro &
+        $HOME/.local/bin/rofi-pomodoro &
         exit 0
         ;;
     stop)

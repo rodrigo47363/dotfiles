@@ -11,9 +11,10 @@ import glob
 import shutil
 import subprocess
 
-ISO_MOUNT = "/media/rodrigo47363/CCCOMA_X64FRE_EN-GB_DV9"
+CURRENT_USER = os.environ.get("USER", os.path.basename(os.path.expanduser("~")))
+ISO_MOUNT = f"/media/{CURRENT_USER}/CCCOMA_X64FRE_EN-GB_DV9"
 WIM_PATH = os.path.join(ISO_MOUNT, "sources/install.wim")
-OUTPUT_BASE = "/home/rodrigo47363/Downloads/Windows10_Assets"
+OUTPUT_BASE = os.path.expanduser("~/Downloads/Windows10_Assets")
 
 WALLPAPERS_DIR = os.path.join(OUTPUT_BASE, "Wallpapers")
 FONTS_DIR = os.path.join(OUTPUT_BASE, "Fonts")
