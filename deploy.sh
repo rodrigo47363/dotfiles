@@ -37,6 +37,7 @@ cp "$DOTFILES_DIR"/dunst/dunstrc "$CONFIG_DIR"/dunst/dunstrc
 cp -r "$DOTFILES_DIR"/picom/* "$CONFIG_DIR"/picom/
 cp "$DOTFILES_DIR"/gtk-3.0/settings.ini "$CONFIG_DIR"/gtk-3.0/settings.ini
 cp "$DOTFILES_DIR"/.zshrc "$HOME"/.zshrc
+[[ -f "$DOTFILES_DIR"/.p10k.zsh ]] && cp "$DOTFILES_DIR"/.p10k.zsh "$HOME"/.p10k.zsh
 
 # 3. Desplegar binarios y utilidades CLI
 echo -e "\e[34m[*] Desplegando binarios tácticos en ~/.local/bin...\e[0m"
