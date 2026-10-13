@@ -3,6 +3,7 @@
 # ==========================================
 # 1. ENTORNO Y FIXES
 # ==========================================
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
 # Cambiamos wmname para compatibilidad con aplicaciones Java (ej: BurpSuite)
 wmname LG3D &
 [ -f "$HOME/.Xmodmap" ] && xmodmap "$HOME/.Xmodmap"
