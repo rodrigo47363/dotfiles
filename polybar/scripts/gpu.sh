@@ -18,13 +18,16 @@ fi
 # para evitar despertarla innecesariamente y ahorrar batería en laptops híbridas
 for dev in /sys/bus/pci/devices/*; do
     if [ -f "$dev/vendor" ] && [ "$(cat "$dev/vendor" 2>/dev/null)" = "0x10de" ]; then
-        if [ -f "$dev/power/runtime_status" ]; then
-            if [ "$(cat "$dev/power/runtime_status" 2>/dev/null)" = "suspended" ]; then
-                echo "%{F#5c6370}󰢮 GPU Off%{F-}"
-                exit 0
+        # Asegurar que se analiza la controladora gráfica (Class 0x03* - VGA/3D), no el audio HDMI
+        if [ -f "$dev/class" ] && [[ "$(cat "$dev/class" 2>/dev/null)" =~ ^0x03 ]]; then
+            if [ -f "$dev/power/runtime_status" ]; then
+                if [ "$(cat "$dev/power/runtime_status" 2>/dev/null)" = "suspended" ]; then
+                    echo "%{F#5c6370}󰢮 GPU Off%{F-}"
+                    exit 0
+                fi
             fi
+            break
         fi
-        break
     fi
 done
 

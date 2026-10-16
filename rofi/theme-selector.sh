@@ -62,6 +62,10 @@ if [[ "$selected_file" == "windows_11.rofi" ]]; then
     # C. Ventanas BSPWM (Edge-to-edge sin gap, bordes sutiles Windows 11)
     bspc config window_gap 0 2>/dev/null
     bspc config border_width 1 2>/dev/null
+    for m in $(bspc query -M 2>/dev/null); do
+        bspc config -m "$m" top_padding 0 2>/dev/null
+        bspc config -m "$m" bottom_padding 0 2>/dev/null
+    done
     bspc config focused_border_color "#4cc2ff" 2>/dev/null
     bspc config normal_border_color "#202020" 2>/dev/null
 
@@ -114,6 +118,10 @@ elif [[ "$selected_file" == "windows_10.rofi" ]]; then
     # C. Ventanas BSPWM (Edge-to-edge sin gap, bordes azules Metro UI)
     bspc config window_gap 0 2>/dev/null
     bspc config border_width 1 2>/dev/null
+    for m in $(bspc query -M 2>/dev/null); do
+        bspc config -m "$m" top_padding 0 2>/dev/null
+        bspc config -m "$m" bottom_padding 0 2>/dev/null
+    done
     bspc config focused_border_color "#0078d7" 2>/dev/null
     bspc config normal_border_color "#171717" 2>/dev/null
 
@@ -179,6 +187,37 @@ elif [[ "$selected_file" == "ado_rose.rofi" ]]; then
 
     notify-send "Ado Rose" "Modo Ado Rose activado al 100% (Aoi Bara)" -u normal
 
+elif [[ "$selected_file" == "suika_melon.rofi" ]]; then
+    echo -e "\e[34m[*] Activando Modo Suika Detective (Dr. Stone)...\e[0m"
+
+    # A. Ventanas BSPWM (Bordes verde corteza sandía #52b788, foco ámbar #ffd166, gap 10px)
+    bspc config window_gap 10 2>/dev/null
+    bspc config bottom_padding 0 2>/dev/null
+    bspc config border_width 2 2>/dev/null
+    bspc config focused_border_color "#52b788" 2>/dev/null
+    bspc config active_border_color "#ffd166" 2>/dev/null
+    bspc config normal_border_color "#16261d" 2>/dev/null
+
+    # B. Compositor Picom
+    if [[ -f "$HOME/.config/picom/picom-normal.conf" ]]; then
+        cp "$HOME/.config/picom/picom-normal.conf" "$HOME/.config/picom/picom.conf"
+        pkill -x picom 2>/dev/null
+        picom --config "$HOME/.config/picom/picom.conf" -b 2>/dev/null
+    fi
+
+    # C. Terminal Kitty (Suika Watermelon & Quartz Colors)
+    if [[ -f "$HOME/.config/kitty/color-suika.ini" ]]; then
+        cp "$HOME/.config/kitty/color-suika.ini" "$HOME/.config/kitty/color.ini"
+        kitty @ set-colors -a "$HOME/.config/kitty/color.ini" 2>/dev/null || true
+    fi
+
+    # D. Polybar Pentesting Superior
+    if [[ -f "$HOME/.config/polybar/config.ini" ]]; then
+        "$HOME/.config/polybar/launch.sh" "$HOME/.config/polybar/config.ini" "parrot" >/dev/null 2>&1
+    fi
+
+    notify-send "Suika Detective" "Modo Suika Recon activado (Dr. Stone Science)" -u normal
+
 else
     # --- RESTAURACIÓN AUTOMÁTICA DE ENTORNO PENTESTING / HACKER ---
     DEFAULT_WALLPAPER="$HOME/Pictures/Wallpapers/rodrigo47363.png"
@@ -203,6 +242,10 @@ else
     bspc config window_gap 12 2>/dev/null
     bspc config bottom_padding 0 2>/dev/null
     bspc config border_width 2 2>/dev/null
+    for m in $(bspc query -M 2>/dev/null); do
+        bspc config -m "$m" top_padding 0 2>/dev/null
+        bspc config -m "$m" bottom_padding 0 2>/dev/null
+    done
     bspc config focused_border_color "#81a1c1" 2>/dev/null
     bspc config normal_border_color "#4c566a" 2>/dev/null
 

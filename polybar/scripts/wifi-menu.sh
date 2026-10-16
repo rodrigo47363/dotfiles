@@ -28,14 +28,29 @@ if pgrep -f "rofi.*(Wi-Fi|wifi)" > /dev/null 2>&1; then
 fi
 pkill -x rofi 2>/dev/null
 
-# Tema Rofi Flyout vertical Windows 11 Fluent (esquina inferior derecha)
-ROFI_WIFI_THEME='
+# 0.5. Detección de Posicionamiento según Modo Activo de Polybar
+MODE_FILE="$HOME/.config/polybar/current_mode"
+current_mode="parrot"
+[ -f "$MODE_FILE" ] && current_mode=$(cat "$MODE_FILE" 2>/dev/null)
+
+if [ "$current_mode" = "win11" ] || [ "$current_mode" = "win10" ]; then
+    LOCATION="southeast"
+    ANCHOR="southeast"
+    Y_OFFSET="-52px"
+else
+    LOCATION="northeast"
+    ANCHOR="northeast"
+    Y_OFFSET="38px"
+fi
+
+# Tema Rofi Flyout vertical adaptativo
+ROFI_WIFI_THEME="
 window {
     width: 440px;
-    location: southeast;
-    anchor: southeast;
+    location: $LOCATION;
+    anchor: $ANCHOR;
     x-offset: -12px;
-    y-offset: -52px;
+    y-offset: $Y_OFFSET;
     border: 1px;
     border-color: #ffffff20;
     border-radius: 12px;
@@ -57,15 +72,15 @@ inputbar {
     children: [ prompt, entry ];
 }
 prompt {
-    font: "Hack Nerd Font 10";
+    font: \"Hack Nerd Font 10\";
     text-color: #60cdff;
     margin: 0px 6px 0px 0px;
     vertical-align: 0.5;
 }
 entry {
-    font: "Segoe UI Variable 10";
+    font: \"Segoe UI Variable 10\";
     text-color: #ffffff;
-    placeholder: "Buscar red Wi-Fi...";
+    placeholder: \"Buscar red Wi-Fi...\";
     placeholder-color: #8c8c8c;
     vertical-align: 0.5;
 }
@@ -102,20 +117,20 @@ element-icon {
 element-text {
     horizontal-align: 0.0;
     vertical-align: 0.5;
-    font: "Segoe UI Variable 10";
+    font: \"Segoe UI Variable 10\";
     background-color: transparent;
     text-color: inherit;
     cursor: pointer;
 }
-'
+"
 
-ROFI_PASS_THEME='
+ROFI_PASS_THEME="
 window {
     width: 380px;
-    location: southeast;
-    anchor: southeast;
+    location: $LOCATION;
+    anchor: $ANCHOR;
     x-offset: -12px;
-    y-offset: -52px;
+    y-offset: $Y_OFFSET;
     border: 1px;
     border-color: #ffffff20;
     border-radius: 12px;
@@ -136,19 +151,19 @@ inputbar {
     children: [ prompt, entry ];
 }
 prompt {
-    font: "Hack Nerd Font 10";
+    font: \"Hack Nerd Font 10\";
     text-color: #60cdff;
     margin: 0px 6px 0px 0px;
     vertical-align: 0.5;
 }
 entry {
-    font: "Segoe UI Variable 10";
+    font: \"Segoe UI Variable 10\";
     text-color: #ffffff;
-    placeholder: "Introduce la contraseña...";
+    placeholder: \"Introduce la contraseña...\";
     placeholder-color: #8c8c8c;
     vertical-align: 0.5;
 }
-'
+"
 
 # 1. Comprobar si el radio Wi-Fi está apagado
 if [ "$(nmcli radio wifi)" = "disabled" ]; then

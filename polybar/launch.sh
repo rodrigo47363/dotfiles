@@ -81,6 +81,19 @@ else
     fi
 fi
 
+# 3.5. Limpieza asimétrica de márgenes en BSPWM (Evita saltos y rebotes de ventanas)
+if command -v bspc >/dev/null 2>&1; then
+    for m in $(bspc query -M 2>/dev/null); do
+        if [ "$BAR_NAME" = "win11" ] || [ "$BAR_NAME" = "win10" ]; then
+            # Barra inferior: solo limpiar margen superior (evita que las ventanas salten hacia abajo)
+            bspc config -m "$m" top_padding 0 2>/dev/null
+        else
+            # Barra superior: solo limpiar margen inferior (evita que las ventanas salten hacia arriba)
+            bspc config -m "$m" bottom_padding 0 2>/dev/null
+        fi
+    done
+fi
+
 # 4. Lanzar barra en sesión independiente y desasociada (Soporte Multimonitor)
 if command -v xrandr >/dev/null 2>&1; then
     monitors=$(xrandr --query 2>/dev/null | grep " connected" | cut -d" " -f1)

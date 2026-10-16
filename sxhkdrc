@@ -55,9 +55,11 @@ alt + F4
 # SYSTEM & POLYBAR     #
 ########################
 
-# Reiniciar Polybar (Super + Alt + R o Super + Shift + R)
+# Reiniciar BSPWM y componentes en caliente (Super + Alt + R)
 super + alt + r
-    bash "$HOME/.config/polybar/launch.sh"
+    bspc wm -r
+
+# Reiniciar únicamente Polybar (Super + Shift + R)
 super + shift + r
     bash "$HOME/.config/polybar/launch.sh"
 

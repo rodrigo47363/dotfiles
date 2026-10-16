@@ -33,10 +33,20 @@ get_status() {
         return
     fi
 
+    # Si el servicio Bluetooth está inactivo, reportar apagado inmediatamente sin bloquear D-Bus
+    if command -v systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet bluetooth; then
+        if [ "$icon_mode" = "--icon" ]; then
+            echo "%{F#5c6370}󰂲%{F-}"
+        else
+            echo "%{F#5c6370}󰂲 off%{F-}"
+        fi
+        return
+    fi
+
     # Si bluetoothctl (BlueZ) está disponible, inspeccionar estado de conexión y dispositivos
     if command -v bluetoothctl >/dev/null 2>&1; then
         local powered
-        powered=$(bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')
+        powered=$(timeout 0.5 bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')
         if [ "$powered" != "yes" ]; then
             if [ "$icon_mode" = "--icon" ]; then
                 echo "%{F#5c6370}󰂲%{F-}"
@@ -48,7 +58,7 @@ get_status() {
 
         # Comprobar si hay dispositivos conectados
         local connected_devices
-        connected_devices=$(bluetoothctl devices Connected 2>/dev/null)
+        connected_devices=$(timeout 0.5 bluetoothctl devices Connected 2>/dev/null)
 
         if [ -n "$connected_devices" ]; then
             local count
@@ -63,7 +73,7 @@ get_status() {
                     dev_name=$(echo "$connected_devices" | cut -d' ' -f3-)
                     [ ${#dev_name} -gt 12 ] && dev_name="${dev_name:0:10}.."
 
-                    battery=$(bluetoothctl info "$dev_mac" 2>/dev/null | grep -i "Battery Percentage" | awk -F'[()]' '{print $2}')
+                    battery=$(timeout 0.5 bluetoothctl info "$dev_mac" 2>/dev/null | grep -i "Battery Percentage" | awk -F'[()]' '{print $2}')
                     if [ -n "$battery" ]; then
                         echo "%{F#61afef}󰂱%{F-} $dev_name ($battery%)"
                     else
@@ -87,15 +97,21 @@ get_status() {
 
 # 2. Toggle rápido de encendido / apagado (Clic derecho)
 toggle_power() {
+    if command -v systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet bluetooth; then
+        notify-send -i bluetooth-active-symbolic -u low "Bluetooth 󰂯" "Iniciando servicio Bluetooth..."
+        sudo systemctl start bluetooth 2>/dev/null || systemctl start bluetooth 2>/dev/null
+        sleep 0.5
+    fi
+
     if command -v bluetoothctl >/dev/null 2>&1; then
         local powered
-        powered=$(bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')
+        powered=$(timeout 0.5 bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')
         if [ "$powered" = "yes" ]; then
-            bluetoothctl power off >/dev/null 2>&1
+            timeout 1 bluetoothctl power off >/dev/null 2>&1
             notify-send -i bluetooth-disabled-symbolic -u low "Bluetooth 󰂲" "Radio Bluetooth desactivado"
         else
             rfkill unblock bluetooth 2>/dev/null
-            bluetoothctl power on >/dev/null 2>&1
+            timeout 1 bluetoothctl power on >/dev/null 2>&1
             notify-send -i bluetooth-active-symbolic -u low "Bluetooth 󰂯" "Radio Bluetooth activado"
         fi
     else

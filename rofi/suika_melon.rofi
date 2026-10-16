@@ -1,0 +1,135 @@
+/************************************************
+ * ROFI Modern Theme 2026 
+ * suika_melon.rofi BY Rodrigo47363
+ * Style: Suika Detective (Dr. Stone)
+ * Palette: Watermelon Rind (#52B788), Quartz Lens (#FFD166), Melon Pulp (#FF5C77) & Deep Forest (#0F1A14)
+ * Mode: Tactical Reconnaissance & Science Ricing
+ ***********************************************/
+
+* {
+    /* Paleta Suika (Dr. Stone Science & Recon) */
+    bg0:            #0f1a14f2; /* Verde bosque profundo translúcido (95% opacidad) */
+    bg1:            #16261d;   /* Pizarra musgo oscura (inputbar / contenedores) */
+    bg2:            #1e3327;   /* Verde clorofila oscuro (elementos hover) */
+    fg0:            #f0f7f2;   /* Blanco menta limpio / alta legibilidad */
+    fg1:            #a8cfb8;   /* Salvia suave para metadata y placeholders */
+    
+    accent:         #52b788;   /* Verde corteza de sandía / clorofila activa */
+    accent-alt:     #40916c;   /* Verde esmeralda vegetal */
+    quartz:         #ffd166;   /* Ámbar cuarzo / Lentes de corrección de Senku */
+    urgent:         #ff5c77;   /* Carmesí pulpa de sandía / Alertas y estados críticos */
+    border-glow:    #74c69d;   /* Resplandor vegetal de corteza */
+
+    background-color:   transparent;
+    text-color:         @fg0;
+    margin:             0;
+    padding:            0;
+    spacing:            0;
+    font:               "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @accent; /* Contorno verde corteza sandía */
+    border-radius:      14px;    /* Curvatura orgánica moderna */
+    width:              640px;
+    location:           center;
+    anchor:             center;
+}
+
+mainbox {
+    padding:            14px;
+    children:           [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:   @bg1;
+    border:             1px;
+    border-color:       @accent-alt;
+    border-radius:      10px;
+    margin:             0px 0px 14px 0px;
+    padding:            10px 12px;
+    children:           [ prompt, entry ];
+}
+
+prompt {
+    background-color:   @accent;
+    text-color:         #0f1a14; /* Máximo contraste: texto oscuro sobre verde corteza */
+    padding:            5px 14px;
+    border-radius:      7px;
+    margin:             0px 10px 0px 0px;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    placeholder:        "🍉 Suika Recon · Buscar apps, fórmulas químicas o herramientas...";
+    placeholder-color:  @fg1;
+    vertical-align:     0.5;
+    text-color:         @fg0;
+}
+
+listview {
+    fixed-height:       false;
+    lines:              8;
+    columns:            1;
+    scrollbar:          false;
+    spacing:            5px;
+}
+
+element {
+    padding:            9px 14px;
+    border-radius:      9px;
+    cursor:             pointer;
+    background-color:   transparent;
+    text-color:         @fg0;
+}
+
+element normal.normal {
+    background-color:   transparent;
+    text-color:         @fg0;
+}
+
+/* Selección activa con verde sandía y texto oscuro de alto contraste */
+element selected.normal {
+    background-color:   @accent;
+    text-color:         #0f1a14;
+}
+
+/* Elementos activos o estados especiales (resaltado ámbar cuarzo) */
+element normal.active {
+    background-color:   @bg2;
+    text-color:         @quartz;
+}
+
+element selected.active {
+    background-color:   @quartz;
+    text-color:         #0f1a14;
+}
+
+element normal.urgent {
+    text-color:         @urgent;
+}
+
+element selected.urgent {
+    background-color:   @urgent;
+    text-color:         #ffffff;
+}
+
+element-text {
+    background-color:   inherit;
+    text-color:         inherit;
+    vertical-align:     0.5;
+}
+
+element-icon {
+    size:               26px;
+    cursor:             inherit;
+    padding:            0px 12px 0px 0px;
+}
+
+/* Reset exhaustivo */
+element.normal.normal, element.alternate.normal, element.alternate.urgent, element.alternate.active {
+    background-color: transparent;
+    text-color: inherit;
+}

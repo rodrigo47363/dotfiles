@@ -107,12 +107,14 @@ element-text {
 }
 "
 
-# 3. Comprobar si Bluetooth está desactivado (apagado / bloqueado)
+# 3. Comprobar si Bluetooth está desactivado (servicio apagado / rfkill / bluez powered off)
 is_off=false
-if rfkill list -n -o SOFT bluetooth 2>/dev/null | grep -qw "blocked"; then
+if command -v systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet bluetooth; then
+    is_off=true
+elif rfkill list -n -o SOFT bluetooth 2>/dev/null | grep -qw "blocked"; then
     is_off=true
 elif command -v bluetoothctl >/dev/null 2>&1; then
-    if [ "$(bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')" != "yes" ]; then
+    if [ "$(timeout 0.5 bluetoothctl show 2>/dev/null | grep -i "Powered:" | awk '{print $2}')" != "yes" ]; then
         is_off=true
     fi
 fi
@@ -139,9 +141,9 @@ if command -v bluetoothctl >/dev/null 2>&1; then
     fi
 
     # Dispositivos conectados actualmente
-    CONNECTED=$(bluetoothctl devices Connected 2>/dev/null)
+    CONNECTED=$(timeout 0.5 bluetoothctl devices Connected 2>/dev/null)
     # Todos los dispositivos emparejados
-    PAIRED=$(bluetoothctl devices Paired 2>/dev/null)
+    PAIRED=$(timeout 0.5 bluetoothctl devices Paired 2>/dev/null)
 
     DEVICE_ENTRIES=""
 
@@ -197,11 +199,11 @@ if command -v bluetoothctl >/dev/null 2>&1; then
     if [ -n "$TARGET_MAC" ]; then
         if [[ "$CHOICE_LINE" == *"[Conectado]"* ]]; then
             notify-send -i bluetooth "Bluetooth" "Desconectando $TARGET_MAC..."
-            bluetoothctl disconnect "$TARGET_MAC" >/dev/null 2>&1
+            timeout 3 bluetoothctl disconnect "$TARGET_MAC" >/dev/null 2>&1
             notify-send -i bluetooth "Bluetooth" "Desconectado exitosamente"
         else
             notify-send -i bluetooth "Bluetooth" "Conectando con $TARGET_MAC..."
-            if bluetoothctl connect "$TARGET_MAC" >/dev/null 2>&1; then
+            if timeout 6 bluetoothctl connect "$TARGET_MAC" >/dev/null 2>&1; then
                 notify-send -i bluetooth "Bluetooth ✅" "Conexión establecida"
             else
                 notify-send -u critical -i bluetooth "Bluetooth ❌" "Fallo al conectar dispositivo"
